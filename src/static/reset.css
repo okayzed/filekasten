@@ -1,0 +1,39 @@
+p {
+  margin-left: 0px;
+}
+
+
+.rfloat {
+  float: right;
+}
+
+.lfloat {
+  float: left;
+}
+
+.mrl {
+  margin-right: 10px;
+}
+
+.mll {
+  margin-left: 10px;
+}
+
+.mbl {
+  margin-bottom: 10px;
+}
+
+
+code {
+  line-height: inherit;
+}
+
+.clearfix {
+    overflow: auto;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}

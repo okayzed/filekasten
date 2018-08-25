@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class='mrl rfloat'> {{ total }} pages total </div>
+
+<div class='container newspaper'>
+  {% for ns in keys %}
+    <div class='namespace'>
+      <h2>{{ ns }}</h2>
+      <ul>
+      {% for page in namespaces[ns] %}
+        <li><a href="{{ page.name }}">{{ page.title or page.name }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

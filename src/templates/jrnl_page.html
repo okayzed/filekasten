@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<body class='grayed'>
+  <div class='container'>
+    {% for entry in entries %}
+      <div class='jrnl'>
+        <div class='rfloat timestamp'>
+          <a href="{{ url_for("get_wiki_page", name=entry.name) }}">
+            {{ entry.created | format_datetime}}
+          </a>
+        </div>
+        <div class='title'> {{ (render(entry.title)) | safe }} </div>
+        <div class='text'>{{ (render(entry.content)) | safe }} </div>
+
+      </div>
+    {% endfor %}
+  </div>
+
+</body>
+
+{% endblock %}

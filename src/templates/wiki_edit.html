@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>Editing {{ name }}</h1>
+
+<link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
+<link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
+
+<div class='container editor clearfix'>
+  <form action="{{ url_for('post_edit_page', name=name) }}" method='post'>
+    <div>
+      name: <br />
+      <input class='title' type="text" name="title" value={{ name }}> </input>
+    </div>
+    <div>
+      namespace: <br />
+      <input class='title' type="text" name="namespace" value={{ namespace }}> </input>
+    </div>
+
+    <div>
+      metadata: <br />
+      <textarea class='text' name="metadata">{{ yaml_dump(metadata)}}</textarea>
+    </div>
+
+    <div>
+      content: <br />
+      <textarea class='text' name="text">{{ content|safe }}</textarea>
+    </div>
+
+
+    <button type='submit'> 
+      save
+    </button>
+  </form>
+</div>
+
+{% endblock %}

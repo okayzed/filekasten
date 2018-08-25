@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>Append to page</h1>
+
+<link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
+<link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
+
+<div class='container editor clearfix'>
+  <form action="{{ url_for('post_append_page') }}" method='post'>
+    <div>
+      page: <br />
+
+      <span style='margin-left: 4px'>
+        <select class='page' name="name"> 
+          {% for page in pages %}
+            <option value={{page.name}}>
+              {{page.name}}
+            </option>
+          {% endfor %}
+        </select>
+      </span>
+    </div>
+
+    <div>
+      url: <br />
+      <input class='title' type="text" name="url" value={{ url }}> </input>
+    </div>
+    <div>
+      title: <br />
+      <input class='title' type="text" name="title" value={{ title }}> </input>
+    </div>
+
+    <div>
+      quote: <br />
+      <textarea class='quote' name="quote">{{ quote }}</textarea>
+    </div>
+    <div>
+      comments: <br/>
+      <textarea class='text' name="comments"></textarea>
+    </div>
+
+
+    <button type='submit'> 
+      save
+    </button>
+  </form>
+</div>
+
+<script type="text/javascript" src="/static/chosen/chosen.jquery.min.js"> </script>
+<link rel="stylesheet" href={{ url_for('static', filename="chosen/chosen.min.css") }} />
+
+<script>
+  $(function() {
+    $("select.page").chosen({max_selected_options: 1, width: 800});
+  });
+</script>
+{% endblock %}
+

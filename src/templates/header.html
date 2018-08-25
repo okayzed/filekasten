@@ -1,0 +1,15 @@
+
+<div class="header clearfix">
+  <a href={{ url_for('get_wiki_index') }}>home</a>
+  <a href={{ url_for('get_jrnl') }}>jrnl</a>
+  <a href={{ url_for('get_edit_page', name='new') }}>new page</a>
+
+  {% include "searchbar.html" %}
+
+  <div class='clearfix'>
+    <small class='rfloat' style="clear: both;">
+      Rendered in {{ g.request_time() }}
+    </small>
+  </div>
+
+</div>
