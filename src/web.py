@@ -109,7 +109,10 @@ def get_wiki_index():
 
 @app.route('/wiki/<name>/')
 def get_wiki_page(name):
-    cur = models.Page.get(models.Page.name == name)
+    try:
+        cur = models.Page.get(models.Page.name == name)
+    except models.Page.DoesNotExist:
+        return flask.redirect(flask.url_for("get_edit_page", name=name))
 
     page = marshall_page(cur)
 
@@ -124,7 +127,7 @@ def get_edit_page(name):
         cur = models.Page.get(models.Page.name == name)
         page = marshall_page(cur)
         metadata = page.metadata
-        text = page.content
+        text = page.text
         namespace = page.namespace
     except:
         cur = None
@@ -206,8 +209,15 @@ def post_append_page():
     quote = args.get('quote')
     comments = args.get('comments')
 
+    append_text = "\n-------\n[%s](%s) - %s\n%s\n\n%s" % (url, url, title, quote.replace("\n", "\n>"), comments)
 
-    return flask.redirect(flask.url_for("get_wiki_page", name=name))
+    cur.text += append_text
+
+    cur.save()
+    search.index(cur)
+
+
+    return flask.redirect(flask.url_for("get_wiki_page", name=name, ts=time.now()))
 
 @app.route('/jrnl/')
 def get_jrnl():

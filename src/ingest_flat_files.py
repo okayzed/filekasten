@@ -52,6 +52,7 @@ def path_walker(dir, visited=None, namespace=None):
     with open(fname, "r") as f:
       content = f.read()
 
+    print "INGESTING", fname, "INTO", namespace
     try:
       oldpage = models.Page.get(models.Page.name == file)
     except models.Page.DoesNotExist:
