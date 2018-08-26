@@ -2,7 +2,12 @@
 
 {% block body %}
 
-<h1>Append to page</h1>
+<div class="clearfix">
+  <h1>Append to page</h1>
+  <button type='submit' class='lfloat' >
+    save
+  </button>
+</div>
 
 <link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
 <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
@@ -13,9 +18,9 @@
       page: <br />
 
       <span style='margin-left: 4px'>
-        <select class='page' name="name"> 
+        <select class='page' name="name">
           {% for page in pages %}
-            <option value={{page.name}}>
+            <option value={{page.name}} {{ "selected" if page.name == "SCRATCH" }}>
               {{page.name}}
             </option>
           {% endfor %}
@@ -42,19 +47,11 @@
     </div>
 
 
-    <button type='submit'> 
+    <button type='submit'>
       save
     </button>
   </form>
 </div>
 
-<script type="text/javascript" src="/static/chosen/chosen.jquery.min.js"> </script>
-<link rel="stylesheet" href={{ url_for('static', filename="chosen/chosen.min.css") }} />
-
-<script>
-  $(function() {
-    $("select.page").chosen({max_selected_options: 1, width: 800});
-  });
-</script>
 {% endblock %}
 

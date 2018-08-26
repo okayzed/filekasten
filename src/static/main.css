@@ -40,8 +40,12 @@ body {
   background-color: #ededed;
 }
 
+.filename,
 .timestamp {
   color: gray;
+  font-family: monospace;
+  line-height: 1.2em;
+  font-size: small;
 }
 
 .snippet {

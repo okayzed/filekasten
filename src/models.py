@@ -1,7 +1,9 @@
 from peewee import *
 from playhouse.sqlite_ext import *
 DATABASE="db/wiki.sqlite3"
-database = SqliteDatabase(DATABASE)
+database = SqliteDatabase(DATABASE, pragmas={
+  'journal_mode': 'wal',
+})
 
 
 # model definitions -- the standard "pattern" is to define a base model class
@@ -20,8 +22,8 @@ class Page(BaseModel):
     journal = BooleanField()
     hidden = BooleanField()
 
-    created = TimestampField()
-    updated = TimestampField()
+    created = TimestampField(index=True)
+    updated = TimestampField(index=True)
 
 class PageIndex(FTSModel):
     rowid = RowIDField()

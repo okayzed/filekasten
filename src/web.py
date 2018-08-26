@@ -156,10 +156,11 @@ def get_append_page():
     url = args.get('url', '')
     quote = args.get('quote', '')
 
-    pages = list(models.Page.select(models.Page.name, models.Page.namespace).execute());
+    pages = list(models.Page.select(models.Page.name, models.Page.namespace,
+        models.Page.journal, models.Page.hidden).execute());
+
     append_to = []
     for page in pages:
-        hide = False
         if page.journal or page.hidden:
             continue
 

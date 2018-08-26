@@ -15,12 +15,12 @@
       filename: {{ page.filename }}
   </div>
 
-  <div class='lfloat timestamp'>
+  <div class='timestamp'>
       created: {{ page.created | format_datetime}}
   </div>
 
   {% if page.updated != page.created %}
-    <div class='lfloat timestamp'>
+    <div class='timestamp'>
         updated: {{ page.updated | format_datetime}}
     </div>
   {% endif %}
