@@ -9,7 +9,7 @@ clean:
 				${PYTHON} src/models.py
 
 ingest:
-				${PYTHON} src/ingest_flat_files.py -y config/local.yaml
+				${PYTHON} src/ingest_flat_files.py -y config/local.yaml 2>&1 > ~/.jotiki.err
 
 make exgest:
 				rm -fr ${EXPORT_DIR}/* || true
