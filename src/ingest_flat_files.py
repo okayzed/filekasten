@@ -86,7 +86,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
         except:
           created = created.toordinal()
       else:
-        created = stats.st_ctime
+        created = stats.st_mtime
 
 
       page = models.Page(
