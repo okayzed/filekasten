@@ -15,15 +15,10 @@ class BaseModel(Model):
 class Page(BaseModel):
     name = CharField(unique=True)
     filename = CharField(unique=True)
-    text = TextField()
-    type = CharField()
-    title = CharField()
     namespace = CharField()
 
     created = TimestampField()
     updated = TimestampField()
-
-    edit_count = IntegerField()
 
 class PageIndex(FTSModel):
     rowid = RowIDField()

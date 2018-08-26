@@ -5,16 +5,19 @@ sys.setdefaultencoding("utf-8")
 
 
 def index(page):
+    with open(page.filename) as f:
+        content = f.read()
+
     try:
         et = models.PageIndex.get(models.PageIndex.rowid == page.id)
     except models.PageIndex.DoesNotExist:
         et = None
 
-    content = page.text
     if type(content) != unicode:
-        content = unicode(page.text, "utf-8")
+        content = unicode(content, "utf-8")
 
     if not et:
+        print "INSERTING PAGE INDEX", page.name
         sql = models.PageIndex.insert(
             name=page.name, 
             content=content,
@@ -23,7 +26,7 @@ def index(page):
         sql.execute()
 
     else:
-        print "UPDATING PAGE", page.name
+        print "UPDATING PAGE INDEX", page.name
         et.update(
             name=page.name,
             content=content,

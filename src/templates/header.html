@@ -2,7 +2,6 @@
 <div class="header clearfix">
   <a href={{ url_for('get_wiki_index') }}>home</a>
   <a href={{ url_for('get_jrnl') }}>jrnl</a>
-  <a href={{ url_for('get_edit_page', name='new') }}>new page</a>
 
   {% include "searchbar.html" %}
 
@@ -12,4 +11,30 @@
     </small>
   </div>
 
+  {% if filefinder %}
+    <input class='formcontrol filefind' name="namesearch" type="text" placeholder="find file..." />
+  {% endif %}
+
+
 </div>
+
+{% if filefinder %}
+<script>
+  $(".filefind").on("change paste keydown blur focus", function() {
+    $(".namespace").hide();
+    var val = $(this).val();
+    var show_all = val == "";
+    $("li").each(function() {
+      var text = $(this).text().toLowerCase();
+
+      if (show_all || text.indexOf(val) != -1) {
+        $(this).show();
+        $(this).closest(".namespace").show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+
+</script>
+{% endif %}

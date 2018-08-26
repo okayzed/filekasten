@@ -1,0 +1,9 @@
+dirs: 
+  ~/Notes: ""
+  ~/Sync/notes: ""
+  ~/Sync/quotes: rambles
+  ~/Sync/plans: plans
+  ~/.local/share/sjrn: sjrn
+  ~/tonka/src/phisicist/_posts/: phil/pub
+  ~/tonka/src/idealogue/site/_ideas/: ideas
+  ~/tonka/src/logv.github.io/_posts/: logv_site

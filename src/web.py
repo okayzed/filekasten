@@ -41,12 +41,13 @@ def before_request():
 
 
 def marshall_page(cur):
-    text = cur.text
+    with open(cur.filename) as f:
+        text = f.read()
+
     post = frontmatter.loads(text)
 
     meta = post.metadata
     created = meta.get("created", cur.created)
-    title = meta.get("title", cur.title)
 
     ts = None
     if created:
@@ -59,17 +60,21 @@ def marshall_page(cur):
             ts = created
 
     cur.created = meta.get("created", ts)
-    cur.title = meta.get("title", title)
 
     cur.content = post.content
     cur.metadata = meta
+    cur.title = meta.get("title", "")
 
     return cur
 
+from md_ext import XListExtension
+
 def render_markdown(text):
     return markdown.markdown(text,
+        tab_length=2,
         extensions=[
             WikiLinkExtension(base_url='/wiki/'),
+	    XListExtension(),
             "markdown_checklist.extension",
             "markdown.extensions.footnotes",
             "markdown.extensions.sane_lists",
@@ -105,7 +110,8 @@ def get_wiki_index():
     ns_keys = namespaces.keys()
     ns_keys.sort()
 
-    return flask.render_template("index.html", namespaces=namespaces, keys=ns_keys, total=count)
+    return flask.render_template("index.html", namespaces=namespaces, keys=ns_keys, total=count,
+        filefinder=True)
 
 @app.route('/wiki/<name>/')
 def get_wiki_page(name):
@@ -116,59 +122,23 @@ def get_wiki_page(name):
 
     page = marshall_page(cur)
 
-    if cur.type == "markdown":
-        text = render_markdown(page.content)
+    text = render_markdown(page.content)
 
     return flask.render_template("wiki_page.html", content=text, meta=page, page=cur)
 
 @app.route("/wiki/<name>/edit")
 def get_edit_page(name):
-    try:
-        cur = models.Page.get(models.Page.name == name)
-        page = marshall_page(cur)
-        metadata = page.metadata
-        text = page.text
-        namespace = page.namespace
-    except:
-        cur = None
-        page = {}
-        metadata = {}
-        text = ""
-        namespace = ""
+    print "GETTING PAGE", name
+    cur = models.Page.get(models.Page.name == name)
+    page = marshall_page(cur)
+    metadata = page.metadata
+    namespace = page.namespace
+
+    print "PAGE IS", cur
 
 
-    if cur and cur.type == "markdown":
-        text = render_markdown(page.content)
-
-    return flask.render_template("wiki_edit.html",
-        content=text, metadata=metadata, yaml_dump=yaml_dump, name=name,
-        namespace=namespace)
-
-@app.route("/wiki/<name>/edit", methods=["POST"])
-def post_edit_page(name):
-    print "POST EDIT PAGE", name
-    args = flask.request.form
-    namespace = args.get('namespace')
-
-    try:
-        cur = models.Page.get(models.Page.name == name)
-    except:
-        cur = models.Page(
-            name=name,
-            type="markdown",
-            title=name,
-            filename="%s/%s" % (namespace, name),
-            edit_count=0)
-
-    cur.text = args.get('text', "")
-    cur.namespace = namespace
-    cur.edit_count = cur.edit_count+1
-    cur.text = "---\n%s\n\n---\n\n%s" % (args.get("metadata"), cur.text.encode("utf-8"))
-    cur.save()
-
-    print type(cur.text)
-
-    search.index(cur)
+    import editor
+    status = editor.open(cur.filename)
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name))
 
@@ -210,14 +180,13 @@ def post_append_page():
     comments = args.get('comments')
 
     append_text = "\n-------\n[%s](%s) - %s\n%s\n\n%s" % (url, url, title, quote.replace("\n", "\n>"), comments)
+    with open(cur.filename, "a") as f:
+        f.write(append_text)
 
-    cur.text += append_text
-
-    cur.save()
     search.index(cur)
 
 
-    return flask.redirect(flask.url_for("get_wiki_page", name=name, ts=time.now()))
+    return flask.redirect(flask.url_for("get_wiki_page", name=name, ts=time.time()))
 
 @app.route('/jrnl/')
 def get_jrnl():
