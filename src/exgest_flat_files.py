@@ -19,7 +19,8 @@ def marshall_post(cur):
     page = marshall_page(cur)
     post.content = page.text.encode('ascii', 'ignore')
     post.metadata.update(get_dictionary_from_model(cur))
-    del post.metadata["text"]
+    if "text" in post.metadata:
+        del post.metadata["text"]
 
     return post
 

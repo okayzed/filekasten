@@ -68,6 +68,7 @@ def marshall_page(cur):
     cur.content = post.content
     cur.metadata = meta
     cur.title = meta.get("title", "")
+    cur.text = text
 
     return cur
 
@@ -92,7 +93,8 @@ def index():
 
 @app.route('/wiki/')
 def get_wiki_index():
-    cur = models.Page.select()
+    cur = models.Page.select(models.Page.name, models.Page.namespace,
+        models.Page.journal, models.Page.hidden)
     count = 0
 
     namespaces = {}
@@ -179,7 +181,9 @@ def post_append_page():
     quote = args.get('quote')
     comments = args.get('comments')
 
-    append_text = "\n-------\n[%s](%s) - %s\n%s\n\n%s" % (url, url, title, quote.replace("\n", "\n>"), comments)
+    now = datetimeformat(datetime.datetime.fromtimestamp(time.time()))
+
+    append_text = "\n-------\n**%s**\n[%s](%s) - %s\n>%s\n\n%s" % (now, url, url, title, quote.replace("\n", "\n>"), comments)
     with open(cur.filename, "a") as f:
         f.write(append_text)
 
@@ -190,10 +194,14 @@ def post_append_page():
 
 @app.route('/jrnl/')
 def get_jrnl():
-    jrnl = models.Page.select().where(models.Page.journal == True).execute()
+    jrnl = (models.Page
+        .select()
+        .where(models.Page.journal == True)
+        .order_by(models.Page.updated.desc())
+        .limit(100)
+        .execute())
 
     entries = map(marshall_page, jrnl)
-    entries.sort(key=lambda w: w.created, reverse=True)
 
     return flask.render_template("jrnl_page.html", entries=entries, render=render_markdown)
 

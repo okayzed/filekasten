@@ -9,11 +9,28 @@
 
 </h1> 
 
+<div class="clearfix container">
+
+  <div class='filename'>
+      filename: {{ page.filename }}
+  </div>
+
+  <div class='lfloat timestamp'>
+      created: {{ page.created | format_datetime}}
+  </div>
+
+  {% if page.updated != page.created %}
+    <div class='lfloat timestamp'>
+        updated: {{ page.updated | format_datetime}}
+    </div>
+  {% endif %}
+</div>
+
 <link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
 <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
 
 <div class='container'>
-  <div class="{{ 'newspaper' if content|length > 4000 else 'singlecol' }}">
+  <div class="{{ 'newspaper' if content|length > 3000 else 'singlecol' }}">
     {{ content|safe }}
   </div>
 </div>
