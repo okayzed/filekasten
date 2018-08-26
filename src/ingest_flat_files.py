@@ -106,6 +106,7 @@ if __name__ == "__main__":
       dirs = d.get('dirs')
       for k in dirs:
         v = dirs[k]
+        print "READING DIR", k, "INTO", v
         path = os.path.expanduser(k)
         path_walker(path,namespace=v)
 

@@ -3,7 +3,9 @@
   <a href={{ url_for('get_wiki_index') }}>home</a>
   <a href={{ url_for('get_jrnl') }}>jrnl</a>
 
-  {% include "searchbar.html" %}
+  {% if not filefinder %}
+    {% include "searchbar.html" %}
+  {% endif %}
 
   <div class='clearfix'>
     <small class='rfloat' style="clear: both;">
@@ -12,7 +14,9 @@
   </div>
 
   {% if filefinder %}
-    <input class='formcontrol filefind' name="namesearch" type="text" placeholder="find file..." />
+    <form method="get" action="/search/?q=">
+      <input type="text" id="search" name="q" class="formcontrol filefind" placeholder="search"/>
+    </form>
   {% endif %}
 
 
@@ -20,7 +24,7 @@
 
 {% if filefinder %}
 <script>
-  $(".filefind").on("change paste keydown blur focus", function() {
+  $(".filefind").on("change paste keyup blur focus", function() {
     $(".namespace").hide();
     var val = $(this).val();
     var show_all = val == "";
