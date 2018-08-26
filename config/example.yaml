@@ -1,0 +1,8 @@
+dirs: 
+  ~/Notes: ""
+  ~/Sync/notes: ""
+  ~/Sync/plans: journal
+
+hidden:
+  - journal
+  

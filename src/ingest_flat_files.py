@@ -20,7 +20,7 @@ def main():
   pass
 
 
-def path_walker(dir, visited=None, namespace=None):
+def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
   if not visited:
     visited = {}
 
@@ -46,7 +46,7 @@ def path_walker(dir, visited=None, namespace=None):
 
     if os.path.isdir(fname) and not fname in visited:
       visited[fname] = True
-      path_walker(fname, visited, namespace=os.path.join(namespace, file))
+      path_walker(fname, visited, namespace=os.path.join(namespace, file),journals=journals, hidden=hidden)
       continue
 
     visited[fname] = True
@@ -72,7 +72,12 @@ def path_walker(dir, visited=None, namespace=None):
         search.index(oldpage)
     else:
       print "INGESTING", fname, "INTO", namespace
-      mp = frontmatter.loads(content)
+      try:
+          mp = frontmatter.loads(content)
+      except:
+          mp = frontmatter.loads('')
+          mp.content = content
+
       created = mp.metadata.get('created')
 
       if created:
@@ -92,6 +97,8 @@ def path_walker(dir, visited=None, namespace=None):
         namespace=namespace,
         type="markdown",
         updated=stats.st_mtime,
+        journal=namespace in journals,
+        hidden=namespace in hidden,
         )
 
       page.save()
@@ -103,12 +110,15 @@ if __name__ == "__main__":
     with open(args.yaml) as f:
       d = yaml.load(f.read())
 
+      journals = set(d.get('journal', []))
+      hidden = set(d.get('hidden', []))
+
       dirs = d.get('dirs')
       for k in dirs:
         v = dirs[k]
         print "READING DIR", k, "INTO", v
         path = os.path.expanduser(k)
-        path_walker(path,namespace=v)
+        path_walker(path,namespace=v,journals=journals,hidden=hidden)
 
 
   if args.dir:

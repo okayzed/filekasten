@@ -44,7 +44,11 @@ def marshall_page(cur):
     with open(cur.filename) as f:
         text = f.read()
 
-    post = frontmatter.loads(text)
+    post = frontmatter.loads("")
+    try:
+        post = frontmatter.loads(text)
+    except:
+        post.content = text
 
     meta = post.metadata
     created = meta.get("created", cur.created)
@@ -77,7 +81,8 @@ def render_markdown(text):
 	    XListExtension(),
             "markdown_checklist.extension",
             "markdown.extensions.footnotes",
-            "markdown.extensions.sane_lists",
+            "markdown.extensions.codehilite",
+            "markdown.extensions.fenced_code",
             "markdown.extensions.tables"]
     )
 
@@ -92,7 +97,7 @@ def get_wiki_index():
 
     namespaces = {}
     for page in cur:
-        if page.namespace.find("jrnl") != -1 or page.namespace.find("sjrn") != -1:
+        if page.journal or page.hidden:
             continue
 
         if not page.namespace in namespaces:
@@ -151,14 +156,9 @@ def get_append_page():
 
     pages = list(models.Page.select(models.Page.name, models.Page.namespace).execute());
     append_to = []
-    hidden = ["jrnl", "sjrn", "rambles"]
     for page in pages:
         hide = False
-        for h in hidden:
-            if page.namespace.find(h) != -1:
-                hide = True
-                continue
-        if hide:
+        if page.journal or page.hidden:
             continue
 
         append_to.append(page)
@@ -190,11 +190,9 @@ def post_append_page():
 
 @app.route('/jrnl/')
 def get_jrnl():
-    sjrn = models.Page.select().where(models.Page.namespace == "sjrn").execute()
-    jrnl = models.Page.select().where(models.Page.namespace == "jrnl").execute()
+    jrnl = models.Page.select().where(models.Page.journal == True).execute()
 
-    entries  = map(marshall_page, sjrn)
-    entries.extend(map(marshall_page, jrnl))
+    entries = map(marshall_page, jrnl)
     entries.sort(key=lambda w: w.created, reverse=True)
 
     return flask.render_template("jrnl_page.html", entries=entries, render=render_markdown)
@@ -259,4 +257,3 @@ def get_search():
 
 if __name__ == "__main__":
     app.run(use_debugger=True)
-

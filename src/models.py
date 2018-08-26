@@ -17,6 +17,9 @@ class Page(BaseModel):
     filename = CharField(unique=True)
     namespace = CharField()
 
+    journal = BooleanField()
+    hidden = BooleanField()
+
     created = TimestampField()
     updated = TimestampField()
 

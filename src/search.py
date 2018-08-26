@@ -17,7 +17,7 @@ def index(page):
         content = unicode(content, "utf-8")
 
     if not et:
-        print "INSERTING PAGE INDEX", page.name
+        print "INDEXING", page.name
         sql = models.PageIndex.insert(
             name=page.name, 
             content=content,
@@ -26,7 +26,7 @@ def index(page):
         sql.execute()
 
     else:
-        print "UPDATING PAGE INDEX", page.name
+        print "UPD INDEXING", page.name
         et.update(
             name=page.name,
             content=content,
