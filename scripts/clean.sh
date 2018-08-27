@@ -1,2 +1,2 @@
 source pypy/bin/activate
-make ingest
+make cleanfiles

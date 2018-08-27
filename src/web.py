@@ -47,7 +47,9 @@ def readfile(fname):
     return rv
 
 def marshall_page(cur):
-    text = readfile(cur.filename)
+    text = ""
+    if cur.filename:
+        text = readfile(cur.filename)
 
     post = frontmatter.loads("")
     try:
@@ -130,7 +132,7 @@ def get_wiki_page(name):
     try:
         cur = models.Page.get(models.Page.name == name)
     except models.Page.DoesNotExist:
-        return flask.redirect(flask.url_for("get_edit_page", name=name))
+        cur = models.Page(name=name)
 
     page = marshall_page(cur)
     popup = flask.request.args.get("popup")

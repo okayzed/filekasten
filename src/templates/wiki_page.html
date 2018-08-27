@@ -3,13 +3,15 @@
 {% block body %}
 
 <h1 class="clearfix">{{ page.title or page.name }}
-  <a href="{{url_for("get_edit_page", name=page.name) }}">
-    <small class=''>edit</small>
-  </a>
+  {% if page.filename %}
+    <a href="{{url_for("get_edit_page", name=page.name) }}">
+      <small class=''>edit</small>
+    </a>
+  {% endif %}
 
 </h1> 
 
-<div class="clearfix container">
+<div class="clearfix mll">
 
   <div class='filename'>
       filename: {{ page.filename }}
@@ -29,7 +31,7 @@
 <link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
 <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
 
-<div class='container'>
+<div class=''>
   <div class="{{ 'newspaper' if content|length > 3000 else 'singlecol' }}">
     {{ content|safe }}
   </div>

@@ -8,8 +8,8 @@
       <a href={{ url_for('get_wiki_page', name=result.name) }}> {{highlight_search(result.title or result.name, query) | safe}} </a>
       </b>
       <div class='mll mbl clearfix'>
-        <div class='lfloat timestamp'> created: {{ result.created }} </div>
-        <div class='mll lfloat timestamp'> updated: {{ result.updated }} </div>
+        <div class='lfloat timestamp'> created: {{ result.created  | format_datetime }} </div>
+        <div class='mll lfloat timestamp'> updated: {{ result.updated  | format_datetime }} </div>
       </div>
 
       {% for snip in result.snippets %}
