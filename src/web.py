@@ -20,10 +20,6 @@ import search
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
 
-from werkzeug.contrib.cache import SimpleCache
-cache = SimpleCache()
-
-
 app = flask.Flask(__name__)
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
@@ -45,11 +41,9 @@ def before_request():
 
 
 def readfile(fname):
-    rv = cache.get(fname)
-    if rv is None:
-        with open(fname) as f:
-            rv = f.read()
-            cache.set(fname, rv)
+    with open(fname) as f:
+        rv = f.read()
+
     return rv
 
 def marshall_page(cur):
@@ -139,10 +133,11 @@ def get_wiki_page(name):
         return flask.redirect(flask.url_for("get_edit_page", name=name))
 
     page = marshall_page(cur)
+    popup = flask.request.args.get("popup")
 
     text = render_markdown(page.content)
 
-    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur)
+    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, popup=popup)
 
 @app.route("/wiki/<name>/edit")
 def get_edit_page(name):
