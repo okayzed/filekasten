@@ -65,7 +65,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
 
       if oldpage.updated < mt:
         (oldpage
-          .update(updated=now)
+          .update(updated=mt)
           .where(models.Page.name==file)
           .execute())
 

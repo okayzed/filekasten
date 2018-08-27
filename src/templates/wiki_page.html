@@ -7,6 +7,7 @@
     <a href="{{url_for("get_edit_page", name=page.name) }}">
       <small class=''>edit</small>
     </a>
+
   {% endif %}
 
 </h1> 
@@ -14,7 +15,9 @@
 <div class="clearfix mll">
 
   <div class='filename'>
-      filename: {{ page.filename }}
+      filename: 
+      <a href="{{url_for("get_terminal_page", name=page.name) }}">
+        {{page.filename|format_dirname}}</a>/{{page.filename|format_filename}}
   </div>
 
   <div class='timestamp'>

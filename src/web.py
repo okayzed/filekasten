@@ -29,6 +29,8 @@ def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     return value.strftime(format)
 
 app.jinja_env.filters['format_datetime'] = datetimeformat
+app.jinja_env.filters['format_dirname'] = os.path.dirname
+app.jinja_env.filters['format_filename'] = os.path.basename
 
 def yaml_dump(dict):
     s = yaml.dump(dict, default_flow_style=False)
@@ -140,6 +142,22 @@ def get_wiki_page(name):
     text = render_markdown(page.content)
 
     return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, popup=popup)
+
+@app.route("/wiki/<name>/terminal")
+def get_terminal_page(name):
+    print "TERMINAL", name
+    cur = models.Page.get(models.Page.name == name)
+    page = marshall_page(cur)
+    metadata = page.metadata
+    namespace = page.namespace
+
+    print "PAGE IS", cur
+
+
+    import editor
+    os.system("xfce4-terminal --working-directory='%s'" % (os.path.dirname(cur.filename)))
+
+    return flask.redirect(flask.url_for("get_wiki_page", name=name))
 
 @app.route("/wiki/<name>/edit")
 def get_edit_page(name):

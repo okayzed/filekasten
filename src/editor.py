@@ -17,7 +17,8 @@ def edit(content=''):
     return (status, text)
 
 def open(fname):
-    terminal = "xfce4-terminal -x"
+    basedir = os.path.dirname(fname)
+    terminal = "xfce4-terminal --working-directory='%s' -x" % basedir
 
     if not os.path.exists(fname):
         raise Exception("Path does not exist")

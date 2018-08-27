@@ -1,2 +1,2 @@
-source dev/bin/activate
+source pypy/bin/activate
 make exgest

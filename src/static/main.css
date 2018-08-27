@@ -40,12 +40,16 @@ body {
   background-color: #ededed;
 }
 
-.filename,
-.timestamp {
+.container .filename,
+.container .timestamp {
   color: gray;
   font-family: monospace;
   line-height: 1.2em;
   font-size: small;
+}
+
+.filename a {
+  font-family: monospace;
 }
 
 .snippet {
