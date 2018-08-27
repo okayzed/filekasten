@@ -20,6 +20,10 @@ import search
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
 
+from werkzeug.contrib.cache import SimpleCache
+cache = SimpleCache()
+
+
 app = flask.Flask(__name__)
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
@@ -40,9 +44,16 @@ def before_request():
     flask.g.request_time = lambda: "%.5fs" % (time.time() - flask.g.request_start_time)
 
 
+def readfile(fname):
+    rv = cache.get(fname)
+    if rv is None:
+        with open(fname) as f:
+            rv = f.read()
+            cache.set(fname, rv)
+    return rv
+
 def marshall_page(cur):
-    with open(cur.filename) as f:
-        text = f.read()
+    text = readfile(cur.filename)
 
     post = frontmatter.loads("")
     try:
@@ -195,14 +206,18 @@ def post_append_page():
 
 @app.route('/jrnl/')
 def get_jrnl():
+    n = flask.request.args.get('n', 30)
+
     jrnl = (models.Page
         .select()
         .where(models.Page.journal == True)
-        .order_by(models.Page.updated.desc())
-        .limit(100)
+        .order_by(models.Page.created.desc())
+        .limit(n)
         .execute())
 
+
     entries = map(marshall_page, jrnl)
+    entries.sort(key=lambda w: w.created, reverse=True)
 
     return flask.render_template("jrnl_page.html", entries=entries, render=render_markdown)
 

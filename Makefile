@@ -1,5 +1,5 @@
 EXPORT_DIR="export"
-PYTHON=python
+PYTHON=pypy
 
 web:
 				find ./src -name "*.py" -o -name "*.html" -o -name "*.css" | entr -r ${PYTHON} src/web.py
@@ -9,7 +9,7 @@ clean:
 				${PYTHON} src/models.py
 
 ingest:
-				${PYTHON} src/ingest_flat_files.py -y config/local.yaml 2>&1 > ~/.jotiki.err
+				${PYTHON} src/ingest_flat_files.py -y config/local.yaml 2>&1 > ingest.err
 
 make exgest:
 				rm -fr ${EXPORT_DIR}/* || true
