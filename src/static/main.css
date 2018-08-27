@@ -151,3 +151,22 @@ li p {
 .tt-highlight {
 	color: #ffaadd;
 }
+
+.breadcrumbs {
+  margin-left: 10px;
+}
+
+.crumb {
+  display: inline-block;
+  padding: 5px;
+  background-color: #aaddff;
+  margin-right: 5px;
+  font-size: 70%;
+}
+.crumb:nth-child(2) {
+  background-color: #aaffdd;
+
+}
+.home.crumb {
+  background-color: #ffaadd;
+}

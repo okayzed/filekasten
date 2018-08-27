@@ -1,3 +1,4 @@
+import re
 import os
 import datetime
 import time
@@ -12,6 +13,7 @@ import jinja2
 import frontmatter
 
 import models
+import breadcrumbs
 
 import yaml
 import search
@@ -21,6 +23,8 @@ CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
 
 app = flask.Flask(__name__)
+
+app.secret_key = "a_secret_key_delivered"
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     if type(value) == int or type(value) == float:
@@ -40,6 +44,7 @@ def yaml_dump(dict):
 def before_request():
     flask.g.request_start_time = time.time()
     flask.g.request_time = lambda: "%.5fs" % (time.time() - flask.g.request_start_time)
+    flask.g.render_breadcrumbs = breadcrumbs.render_breadcrumbs
 
 
 def readfile(fname):
@@ -102,6 +107,7 @@ def index():
 
 @app.route('/wiki/')
 def get_wiki_index():
+    breadcrumbs.add("index")
     cur = models.Page.select(models.Page.name, models.Page.namespace,
         models.Page.journal, models.Page.hidden)
     count = 0
@@ -131,6 +137,9 @@ def get_wiki_index():
 
 @app.route('/wiki/<name>/')
 def get_wiki_page(name):
+
+    breadcrumbs.add(name)
+
     try:
         cur = models.Page.get(models.Page.name == name)
     except models.Page.DoesNotExist:
@@ -268,6 +277,7 @@ def make_snippets(page, query, highlight_search):
 def get_search():
     args = flask.request.args
     query = args.get('q')
+    breadcrumbs.add("search: " + query)
 
     results = (models.Page.select()
         .join(
@@ -277,7 +287,6 @@ def get_search():
 
         )
 
-    import re
 
     query_re = re.compile(query, re.IGNORECASE)
     def highlight_search(line, query):
@@ -291,6 +300,7 @@ def get_search():
 
     return flask.render_template("search_results.html",
         results=results,
+        search=query,
         highlight_search=highlight_search,
         query=query)
 
