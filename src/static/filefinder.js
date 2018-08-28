@@ -1,6 +1,7 @@
+var FILE_FINDER = false;
 $(function() {
   var newForm = $("<form method='POST' action='/new/' class='newpage' > <input type='hidden' name='name' class='name' /> </form>");
-  var newFile = $("<a class='mll' >Create Page</a>");
+  var newFile = $("<a class='mll' >Add Page</a>");
   newFile.on("click", function() {
       newForm.find("input.name").val(NEW_PAGE);
       newForm.submit();
@@ -26,13 +27,36 @@ $(function() {
           $(this).hide();
         }
       });
+
+      $(".namespace").each(function() {
+        var ns = $(this);
+        var text = ns.find("h2").text().toLowerCase();
+        if (show_all || text.indexOf(val) != -1) {
+          ns.find("li").show();
+          ns.show();
+        }
+      });
     }
 
 
     NEW_PAGE = val;
     if (val) {
       newFile.show();
-      newFile.text("Create page '" + val + "'");
+      var tokens = val.split("/");
+      var filename, namespace;
+      if (tokens.length == 1) {
+        filename = tokens[0];
+      } else {
+        namespace = tokens.slice(0, tokens.length - 1).join("/");
+        filename = tokens[tokens.length-1];
+
+      }
+
+      if (namespace) {
+        newFile.text("Add page '" + filename + "' in namespace '" + namespace + "'");
+      } else {
+        newFile.text("Add page '" + filename + "'");
+      }
     }
 
   });
