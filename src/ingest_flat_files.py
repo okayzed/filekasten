@@ -56,7 +56,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
       content = f.read()
 
     try:
-      oldpage = models.Page.get(models.Page.name == file)
+      oldpage = models.Page.get(models.Page.filename == aname)
     except models.Page.DoesNotExist:
       oldpage = None
 
@@ -66,7 +66,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
       if oldpage.updated < mt:
         (oldpage
           .update(updated=mt)
-          .where(models.Page.name==file)
+          .where(models.Page.filename == aname)
           .execute())
 
         search.index(oldpage)

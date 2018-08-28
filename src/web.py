@@ -145,14 +145,22 @@ def get_wiki_page(name):
 
     breadcrumbs.add(name)
 
-    i = flask.request.args.get("i", 0)
+    i = flask.request.args.get("i", -1)
+    fname = flask.request.args.get("fname")
 
     try:
-        pages = list(models.Page.select().where(models.Page.name == name))
+        if fname:
+            pages = list(models.Page.select().where(models.Page.filename == fname))
+        else:
+            pages = list(models.Page.select().where(models.Page.name == name))
+
         if not pages:
             raise models.Page.DoesNotExist('')
 
         if len(pages) > 1:
+            if i == -1:
+                return flask.render_template("wiki_select_page.html", pages=pages)
+
             cur = pages[i] 
         else:
             cur = pages[0]
