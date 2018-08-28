@@ -26,7 +26,6 @@ def render_breadcrumbs(*args):
 
 def add(name):
     crumbs = flask.session.get("breadcrumbs", [])
-    print "ADDING", name, "TO BREADCRUMBS"
     crumb = Crumb(name, flask.request.url)
     crumbs.append(crumb)
     if len(crumbs) > 50:

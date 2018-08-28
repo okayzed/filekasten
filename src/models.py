@@ -15,7 +15,7 @@ class BaseModel(Model):
 
 # the user model specifies its fields (or columns) declaratively, like django
 class Page(BaseModel):
-    name = CharField(unique=True)
+    name = CharField()
     filename = CharField(unique=True)
     namespace = CharField()
 
@@ -24,6 +24,13 @@ class Page(BaseModel):
 
     created = TimestampField(index=True)
     updated = TimestampField(index=True)
+
+    class Meta:
+        indexes = (
+            (('namespace', 'name'), True),
+        )
+        # create a unique on from/to/date
+
 
 class PageIndex(FTSModel):
     rowid = RowIDField()

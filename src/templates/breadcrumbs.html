@@ -1,0 +1,14 @@
+<div class="clearfix breadcrumbs">
+
+  <span class='home crumb'><a tabindex="-1" href='{{ url_for('get_wiki_index') }}'>wiki home</a></span>
+  {% for crumb in crumbs %}
+    <span class='crumb'><a tabindex="-1" href='{{ crumb.url }}'>{{crumb.name}}</a>
+      <form tabindex="-1" action="/breadcrumbs/remove" method="POST">
+        <input type='hidden' name='name' value='{{ crumb.name }}' />
+        
+        <button tabindex="-1" type="submit" class='closer'>x</button>
+      </form>
+    </span>
+  {% endfor %}
+
+</div>

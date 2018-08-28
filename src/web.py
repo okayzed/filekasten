@@ -22,6 +22,8 @@ import search
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
 
+NOTE_DIR = os.path.expanduser("~/Notes")
+
 app = flask.Flask(__name__)
 
 app.secret_key = "a_secret_key_delivered"
@@ -33,8 +35,8 @@ def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     return value.strftime(format)
 
 app.jinja_env.filters['format_datetime'] = datetimeformat
-app.jinja_env.filters['format_dirname'] = os.path.dirname
-app.jinja_env.filters['format_filename'] = os.path.basename
+app.jinja_env.filters['format_dirname'] = lambda w: os.path.dirname(w or "???")
+app.jinja_env.filters['format_filename'] = lambda w: os.path.basename(w or "???")
 
 def yaml_dump(dict):
     s = yaml.dump(dict, default_flow_style=False)
@@ -48,10 +50,13 @@ def before_request():
 
 
 def readfile(fname):
-    with open(fname) as f:
-        rv = f.read()
+    try:
+        with open(fname) as f:
+            rv = f.read()
 
-    return rv
+        return rv
+    except:
+        return ""
 
 def marshall_page(cur):
     text = ""
@@ -140,8 +145,18 @@ def get_wiki_page(name):
 
     breadcrumbs.add(name)
 
+    i = flask.request.args.get("i", 0)
+
     try:
-        cur = models.Page.get(models.Page.name == name)
+        pages = list(models.Page.select().where(models.Page.name == name))
+        if not pages:
+            raise models.Page.DoesNotExist('')
+
+        if len(pages) > 1:
+            cur = pages[i] 
+        else:
+            cur = pages[0]
+
     except models.Page.DoesNotExist:
         cur = models.Page(name=name)
 
@@ -228,10 +243,59 @@ def post_append_page():
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name, ts=time.time()))
 
-@app.route('/breadcrumbs/<name>/remove', methods=["POST"])
-def delete_breadcrumb(name):
-    breadcrumbs.remove(name)
-    return flask.redirect(flask.url_for("get_wiki_index", name=name, ts=time.time()))
+# TODO: create new page
+@app.route("/new/", methods=["POST"])
+def post_new_page():
+    args = flask.request.form
+    name = args.get('name')
+
+    page = models.Page.select().where(models.Page.name == name)
+    if len(page) == 0:
+        name = os.path.normpath(name)
+        if name.find("..") != -1 or name[0] == '/':
+            print "INVALID PATH", name
+            return "INVALID PAGE NAME: %s, PLEASE REMOVE THE '..' and leading '/'" % (name)
+
+        namespace, pagename = os.path.split(name)
+        path = os.path.join(NOTE_DIR, namespace)
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        page_path = os.path.join(path, pagename)
+
+        aname = os.path.abspath(page_path)
+        with open(page_path, "a") as f:
+            f.write("")
+
+        created = time.time()
+        page = models.Page(
+          name=pagename,
+          title='',
+          created=created,
+          filename=aname,
+          namespace=namespace,
+          journal=False,
+          hidden=False,
+          type="markdown",
+          updated=created
+          )
+        search.index(page)
+
+        page.save()
+    else:
+        print "PAGE ALREADY EXISTS", name
+        pagename = name
+
+    return flask.redirect(flask.url_for("get_wiki_page", name=pagename, ts=time.time()))
+
+    
+
+@app.route('/breadcrumbs/remove', methods=["POST"])
+def delete_breadcrumb():
+    name = flask.request.form.get('name')
+    if name:
+        breadcrumbs.remove(name)
+    return flask.redirect(flask.url_for("get_wiki_index"))
 
 
 @app.route('/jrnl/')
