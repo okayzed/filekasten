@@ -5,7 +5,7 @@
   {% for result in results %}
     <div class='result mll col-md-8'> 
       <b>
-      <a href={{ url_for('get_wiki_page', name=result.name) }}> {{highlight_search(result.title or result.name, query) | safe}} </a>
+      <a href={{ url_for('get_wiki_page', name=result.name, id=result.id) }}> {{highlight_search(result.title or result.name, query) | safe}} </a>
       </b>
       <div class='mll mbl clearfix'>
         <div class='lfloat timestamp'> created: {{ result.created  | format_datetime }} </div>

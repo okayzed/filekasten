@@ -114,7 +114,7 @@ def index():
 def get_wiki_index():
     breadcrumbs.add("index")
     cur = models.Page.select(models.Page.name, models.Page.namespace,
-        models.Page.journal, models.Page.hidden)
+        models.Page.journal, models.Page.hidden, models.Page.id)
     count = 0
 
     namespaces = {}
@@ -146,11 +146,11 @@ def get_wiki_page(name):
     breadcrumbs.add(name)
 
     i = flask.request.args.get("i", -1)
-    fname = flask.request.args.get("fname")
+    id = flask.request.args.get("id")
 
     try:
-        if fname:
-            pages = list(models.Page.select().where(models.Page.filename == fname))
+        if id:
+            pages = list(models.Page.select().where(models.Page.id == id))
         else:
             pages = list(models.Page.select().where(models.Page.name == name))
 
@@ -189,7 +189,7 @@ def get_terminal_page(name):
     import editor
     os.system("xfce4-terminal --working-directory='%s'" % (os.path.dirname(cur.filename)))
 
-    return flask.redirect(flask.url_for("get_wiki_page", name=name))
+    return flask.redirect(flask.url_for("get_wiki_page", name=name, id=page.id))
 
 @app.route("/wiki/<name>/edit")
 def get_edit_page(name):
@@ -205,7 +205,7 @@ def get_edit_page(name):
     import editor
     status = editor.open(cur.filename)
 
-    return flask.redirect(flask.url_for("get_wiki_page", name=name))
+    return flask.redirect(flask.url_for("get_wiki_page", name=name, id=cur.id))
 
 @app.route("/append/")
 def get_append_page():
@@ -249,7 +249,7 @@ def post_append_page():
     search.index(cur)
 
 
-    return flask.redirect(flask.url_for("get_wiki_page", name=name, ts=time.time()))
+    return flask.redirect(flask.url_for("get_wiki_page", name=name, id=cur.id, ts=time.time()))
 
 # TODO: create new page
 @app.route("/new/", methods=["POST"])
@@ -294,7 +294,7 @@ def post_new_page():
         print "PAGE ALREADY EXISTS", name
         pagename = name
 
-    return flask.redirect(flask.url_for("get_wiki_page", name=pagename, ts=time.time()))
+    return flask.redirect(flask.url_for("get_wiki_page", name=pagename, id=page.id, ts=time.time()))
 
     
 

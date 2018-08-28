@@ -10,7 +10,9 @@
       <h2>{{ ns }}</h2>
       <ul>
       {% for page in namespaces[ns] %}
-        <li><a class='wikilink' href="{{ page.name }}">{{ page.title or page.name }}</a></li>
+        <li><a class='wikilink' href="{{ url_for('get_wiki_page', name=page.name, id=page.id) }}">
+          {{ page.title or page.name }}
+        </a></li>
       {% endfor %}
       </ul>
     </div>

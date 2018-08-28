@@ -31,9 +31,6 @@
   {% endif %}
 </div>
 
-<link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
-<link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
-
 <div class=''>
   <div class="{{ 'newspaper' if content|length > 3000 else 'singlecol' }}">
     {{ content|safe }}

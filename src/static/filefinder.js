@@ -14,13 +14,14 @@ $(function() {
   $(".filefind").on("change paste keyup blur focus", function() {
 
     var val = $(this).val();
+    var lval = val.toLowerCase();
     if (FILE_FINDER) {
       $(".namespace").hide();
       var show_all = val == "";
       $("li").each(function() {
         var text = $(this).text().toLowerCase();
 
-        if (show_all || text.indexOf(val) != -1) {
+        if (show_all || text.indexOf(lval) != -1) {
           $(this).show();
           $(this).closest(".namespace").show();
         } else {
@@ -31,7 +32,7 @@ $(function() {
       $(".namespace").each(function() {
         var ns = $(this);
         var text = ns.find("h2").text().toLowerCase();
-        if (show_all || text.indexOf(val) != -1) {
+        if (show_all || text.indexOf(lval) != -1) {
           ns.find("li").show();
           ns.show();
         }
