@@ -35,4 +35,7 @@ def add(name):
     flask.session["breadcrumbs"] = crumbs
 
 
-
+def remove(name):
+    crumbs = flask.session.get("breadcrumbs", [])
+    crumbs = filter(lambda w: w.get("name") != name, crumbs)
+    flask.session["breadcrumbs"] = crumbs

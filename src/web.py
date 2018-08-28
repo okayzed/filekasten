@@ -228,6 +228,12 @@ def post_append_page():
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name, ts=time.time()))
 
+@app.route('/breadcrumbs/<name>/remove', methods=["POST"])
+def delete_breadcrumb(name):
+    breadcrumbs.remove(name)
+    return flask.redirect(flask.url_for("get_wiki_index", name=name, ts=time.time()))
+
+
 @app.route('/jrnl/')
 def get_jrnl():
     n = flask.request.args.get('n', 30)
@@ -290,7 +296,7 @@ def get_search():
 
     query_re = re.compile(query, re.IGNORECASE)
     def highlight_search(line, query):
-        return query_re.sub("<s>%s</s>" % (query), line)
+        return query_re.sub("<b class='match'>%s</b>" % (query), line)
 
     for r in results:
         page = marshall_page(r)

@@ -98,12 +98,14 @@ form {
 }
 
 s {
-  text-decoration: none;
-  font-weight: bold;
-  background-color: #ffaadd;
+  text-decoration: strikethrough;
 }
 
 a s {
+  background-color: #ffaadd;
+}
+
+b.match {
   background-color: #ffaadd;
 }
 
@@ -170,3 +172,21 @@ li p {
 .home.crumb {
   background-color: #ffaadd;
 }
+
+.crumb form {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+  background-color: inherit;
+  border: 0px;
+}
+
+.crumb form button {
+  padding: 0px;
+  margin: 0px;
+  font-size: 70%;
+  margin-left: 5px;
+  background-color: inherit;
+}
+
+

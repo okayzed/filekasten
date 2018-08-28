@@ -17,7 +17,7 @@ class XUListProcessor(Preprocessor):
         for line in lines:
             m = MYREGEX.match(line)
             if m:
-                line = "* <s>%s</s>" % (line)
+                line = "* <s class='strikethrough'>%s</s>" % (line)
             new_lines.append(line)
         return new_lines
 
