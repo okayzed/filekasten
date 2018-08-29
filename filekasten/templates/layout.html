@@ -1,3 +1,7 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
 <title>{% block title %}{% endblock %}</title>
 
 <script type="text/javascript" src="/static/jquery-3.3.1.min.js"> </script>
@@ -5,7 +9,7 @@
 <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
 <link rel="stylesheet" href={{ url_for('static', filename="reset.css") }} />
 <link rel="stylesheet" href={{ url_for('static', filename="scrollers.css") }} />
-
+</head>
 
 <body class='container'>
 {% block header %}
@@ -16,3 +20,5 @@
 
 {% block body %} {% endblock %}
 </body>
+
+</html>

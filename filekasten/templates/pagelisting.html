@@ -1,0 +1,16 @@
+<div class='container newspaper pagelisting {{ "hidden" if not filefinder }}' >
+  {% for ns in keys %}
+    <div class='namespace'>
+      <h2>{{ ns }}</h2>
+      <ul>
+      {% for page in namespaces[ns] %}
+        <li><a class='wikilink' href="{{ url_for('get_wiki_page', name=page.name, id=page.id) }}">
+          {{ page.title or page.name }}
+        </a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>
+
+

@@ -1,0 +1,3 @@
+include filekasten/templates/*.html
+include filekasten/static/*.css
+include filekasten/static/*.js

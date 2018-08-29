@@ -4,6 +4,5 @@ markdown-checklist
 Markdown
 Jinja2
 python-frontmatter
-html2text
 babel
 flask_peewee

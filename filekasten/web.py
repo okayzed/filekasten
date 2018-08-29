@@ -2,14 +2,11 @@ import re
 import os
 import datetime
 import time
-import html2text
 
 import markdown
 from markdown.extensions.wikilinks import WikiLinkExtension
 
-import babel.dates
 import flask
-import jinja2
 import frontmatter
 
 import models

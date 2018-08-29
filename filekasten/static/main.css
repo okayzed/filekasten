@@ -1,6 +1,7 @@
 body {
   margin: auto;
   padding-bottom: 20px;
+	padding-left: 10px;
 }
 
 .namespace {
@@ -11,9 +12,15 @@ body {
 }
 
 .newspaper {
+	-webkit-column-count: 3; /* Chrome, Safari, Opera */
+
   column-count: 3;
   column-rule: 1px solid lightblue;
 
+}
+
+input {
+	height: 3em;
 }
 
 .singlecol {
@@ -163,7 +170,6 @@ li p {
   padding: 5px;
   background-color: #aaddff;
   margin-right: 5px;
-  font-size: 70%;
 }
 .crumb:nth-child(2) {
   background-color: #aaffdd;
@@ -188,8 +194,24 @@ form.newpage,
   font-size: 70%;
   margin-left: 5px;
   background-color: inherit;
+	border: 0px;
+	padding: 5px;
+}
+
+.crumb form button:hover {
+	background-color: lightgray;
 }
 
 .pagelisting.hidden {
   display: none;
+}
+
+h2 {
+	font-size: 2em;
+	margin: 0px;
+	margin-left: 10px;
+}
+
+.total {
+	padding-right: 10px;
 }

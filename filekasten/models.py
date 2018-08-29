@@ -1,6 +1,10 @@
+import os
+
 from peewee import *
 from playhouse.sqlite_ext import *
-DATABASE="db/wiki.sqlite3"
+
+from config import FILEKASTEN_DIR
+DATABASE=os.path.join(FILEKASTEN_DIR, "db/wiki.sqlite3")
 database = SqliteDatabase(DATABASE, pragmas={
   'journal_mode': 'wal',
 })

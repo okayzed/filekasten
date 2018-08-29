@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<div class='content'>
+<div class='content mll'>
   <h1 class="clearfix">{{ page.title or page.name }}
     {% if page.filename %}
       <a href="{{url_for("get_edit_page", name=page.name) }}">
