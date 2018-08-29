@@ -21,6 +21,7 @@ body {
 
 input {
 	height: 3em;
+  padding-left: 5px;
 }
 
 .singlecol {

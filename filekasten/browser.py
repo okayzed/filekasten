@@ -3,6 +3,7 @@ import os
 
 import threading
 import signal
+
 import gi
 from gi.repository import Gtk, WebKit
 
@@ -49,10 +50,7 @@ def run_web():
 
     from multiprocessing import Process
 
-    print "MULTIPROCESS"
-    SERVER = Process(target=web.app.run, kwargs={
-	"port" : open_port,
-	"use_debugger" : True })
+    SERVER = Process(target=web.app.run, kwargs={ "port" : open_port })
     SERVER.start()
 
     print "SERVER IS", SERVER
@@ -60,16 +58,13 @@ def run_web():
 def run_browser():
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-
     run_web()
 
     Gtk.init(sys.argv)
     browser = Browser()
 
-    print "STARTING GTK MAIN THREAD"
     Gtk.main()
 
-    print "GTK MAIN THREAD OVER"
     SERVER.terminate()
     SERVER.join()
 
