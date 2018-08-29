@@ -2,39 +2,42 @@
 
 {% block body %}
 
-<h1 class="clearfix">{{ page.title or page.name }}
-  {% if page.filename %}
-    <a href="{{url_for("get_edit_page", name=page.name) }}">
-      <small class=''>edit</small>
-    </a>
+<div class='content'>
+  <h1 class="clearfix">{{ page.title or page.name }}
+    {% if page.filename %}
+      <a href="{{url_for("get_edit_page", name=page.name) }}">
+        <small class=''>edit</small>
+      </a>
 
-  {% endif %}
+    {% endif %}
 
-</h1> 
+  </h1> 
 
-<div class="clearfix mll">
+  <div class="clearfix mll ">
 
-  <div class='filename'>
-      filename: 
-      <a href="{{url_for("get_terminal_page", name=page.name) }}">
-        {{page.filename|format_dirname}}</a>/{{page.filename|format_filename}}
-  </div>
-
-  <div class='timestamp'>
-      created: {{ page.created | format_datetime}}
-  </div>
-
-  {% if page.updated != page.created %}
-    <div class='timestamp'>
-        updated: {{ page.updated | format_datetime}}
+    <div class='filename'>
+        filename: 
+        <a href="{{url_for("get_terminal_page", name=page.name, id=page.id) }}">
+          {{page.filename|format_dirname}}</a>/{{page.filename|format_filename}}
     </div>
-  {% endif %}
-</div>
 
-<div class=''>
-  <div class="{{ 'newspaper' if content|length > 3000 else 'singlecol' }}">
-    {{ content|safe }}
+    <div class='timestamp'>
+        created: {{ page.created | format_datetime}}
+    </div>
+
+    {% if page.updated != page.created %}
+      <div class='timestamp'>
+          updated: {{ page.updated | format_datetime}}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class='mll'>
+    <div class="{{ 'newspaper' if content|length > 3000 else 'singlecol' }}">
+      {{ content|safe }}
+    </div>
   </div>
 </div>
+{% include "pagelisting.html" %}
 
 {% endblock %}

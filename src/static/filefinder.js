@@ -1,7 +1,7 @@
 var FILE_FINDER = false;
 $(function() {
-  var newForm = $("<form method='POST' action='/new/' class='newpage' > <input type='hidden' name='name' class='name' /> </form>");
-  var newFile = $("<a class='mll' >Add Page</a>");
+  var newForm = $("<form method='POST' action='/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
+  var newFile = $("<a href='#' class='mll newfile' >Add Page</a>");
   newFile.on("click", function() {
       newForm.find("input.name").val(NEW_PAGE);
       newForm.submit();
@@ -15,29 +15,36 @@ $(function() {
 
     var val = $(this).val();
     var lval = val.toLowerCase();
-    if (FILE_FINDER) {
-      $(".namespace").hide();
-      var show_all = val == "";
-      $("li").each(function() {
-        var text = $(this).text().toLowerCase();
 
-        if (show_all || text.indexOf(lval) != -1) {
-          $(this).show();
-          $(this).closest(".namespace").show();
-        } else {
-          $(this).hide();
-        }
-      });
-
-      $(".namespace").each(function() {
-        var ns = $(this);
-        var text = ns.find("h2").text().toLowerCase();
-        if (show_all || text.indexOf(lval) != -1) {
-          ns.find("li").show();
-          ns.show();
-        }
-      });
+    if (val) {
+      $(".pagelisting").show().removeClass("hidden");
+      $(".content").hide();
+    } else if (!FILE_FINDER) {
+      $(".pagelisting").hide();
+      $(".content").show();
     }
+
+    $(".namespace").hide();
+    var show_all = val == "";
+    $("li").each(function() {
+      var text = $(this).text().toLowerCase();
+
+      if (show_all || text.indexOf(lval) != -1) {
+        $(this).show();
+        $(this).closest(".namespace").show();
+      } else {
+        $(this).hide();
+      }
+    });
+
+    $(".namespace").each(function() {
+      var ns = $(this);
+      var text = ns.find("h2").text().toLowerCase();
+      if (show_all || text.indexOf(lval) != -1) {
+        ns.find("li").show();
+        ns.show();
+      }
+    });
 
 
     NEW_PAGE = val;
@@ -58,6 +65,8 @@ $(function() {
       } else {
         newFile.text("Add page '" + filename + "'");
       }
+    } else {
+      newFile.text('')
     }
 
   });

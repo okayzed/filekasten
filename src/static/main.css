@@ -190,4 +190,6 @@ form.newpage,
   background-color: inherit;
 }
 
-
+.pagelisting.hidden {
+  display: none;
+}

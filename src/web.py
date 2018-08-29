@@ -110,9 +110,7 @@ def render_markdown(text):
 def index():
     return 'Off my lawn'
 
-@app.route('/wiki/')
-def get_wiki_index():
-    breadcrumbs.add("index")
+def get_pages():
     cur = models.Page.select(models.Page.name, models.Page.namespace,
         models.Page.journal, models.Page.hidden, models.Page.id)
     count = 0
@@ -137,8 +135,14 @@ def get_wiki_index():
     ns_keys = namespaces.keys()
     ns_keys.sort()
 
-    return flask.render_template("index.html", namespaces=namespaces, keys=ns_keys, total=count,
-        filefinder=True)
+    return ns_keys, namespaces, count
+
+
+@app.route('/wiki/')
+def get_wiki_index():
+    breadcrumbs.add("index")
+    k, n, count = get_pages()
+    return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True)
 
 @app.route('/wiki/<name>/')
 def get_wiki_page(name):
@@ -173,12 +177,14 @@ def get_wiki_page(name):
 
     text = render_markdown(page.content)
 
-    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, popup=popup)
+    k, n, count = get_pages()
+    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, namespaces=n, keys=k)
 
 @app.route("/wiki/<name>/terminal")
 def get_terminal_page(name):
     print "TERMINAL", name
-    cur = models.Page.get(models.Page.name == name)
+    id = flask.request.args.get('id')
+    cur = models.Page.get(models.Page.id == id)
     page = marshall_page(cur)
     metadata = page.metadata
     namespace = page.namespace
