@@ -15,6 +15,8 @@ import breadcrumbs
 import yaml
 import search
 
+import config
+
 
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
@@ -23,7 +25,7 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 
 app = flask.Flask(__name__)
 
-app.secret_key = "a_secret_key_delivered"
+app.secret_key = config.SECRET
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     if type(value) == int or type(value) == float:
@@ -386,4 +388,4 @@ def get_search():
         query=query)
 
 if __name__ == "__main__":
-    app.run(use_debugger=True)
+    app.run(use_debugger=True, port=config.PORT)

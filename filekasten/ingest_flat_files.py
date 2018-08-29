@@ -63,6 +63,9 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
     if oldpage:
       mt = datetime.datetime.fromtimestamp(stats.st_mtime)
 
+      # chop off microseconds
+      mt = mt - datetime.timedelta(microseconds=mt.microsecond)
+
       if oldpage.updated < mt:
         (oldpage
           .update(updated=mt)
@@ -104,6 +107,15 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
       page.save()
       search.index(page)
 
+def ingest_files(dirs, journals, hidden):
+    print "INGESTING FILES"
+    print "DIRS", dirs
+    for k in dirs:
+      v = dirs[k]
+      print "READING DIR", k, "INTO", v
+      path = os.path.expanduser(k)
+      path_walker(path,namespace=v,journals=journals,hidden=hidden)
+
 if __name__ == "__main__":
   args = parser.parse_args()
   if args.yaml:
@@ -112,13 +124,9 @@ if __name__ == "__main__":
 
       journals = set(d.get('journal', []))
       hidden = set(d.get('hidden', []))
+      dirs = d.get('dirs', [])
 
-      dirs = d.get('dirs')
-      for k in dirs:
-        v = dirs[k]
-        print "READING DIR", k, "INTO", v
-        path = os.path.expanduser(k)
-        path_walker(path,namespace=v,journals=journals,hidden=hidden)
+      ingest_files(dirs, journals, hidden)
 
 
   if args.dir:

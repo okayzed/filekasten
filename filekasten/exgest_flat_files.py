@@ -27,6 +27,7 @@ def marshall_post(cur):
 def export_files_to_dir(outdir):
     results = (models.Page.select())
     base_dir = os.path.normpath(outdir)
+    count = 0
     for r in results:
         # export each and every page
         dest = os.path.join(base_dir, r.namespace, r.name)
@@ -41,10 +42,14 @@ def export_files_to_dir(outdir):
 #        with open(os.path.join(basename, "restore.sh"), "a") as f:
 #            f.write("cp '%s' '%s'\n" % (dest, r.filename))
 
-        print "EXPORTING", r.filename, "TO", dest
+#        print "EXPORTING", r.filename, "TO", dest
         with open(dest, "w") as f:
             page = marshall_post(r)
             f.write(frontmatter.dumps(page))
+
+        count += 1
+
+    print "EXPORTED", count, "FILES TO", outdir
 
 if __name__ == "__main__":
   args = parser.parse_args()
