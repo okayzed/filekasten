@@ -222,6 +222,7 @@ h2 {
 }
 
 body {
+  background-color: #efefef;
 }
 
 body .dualpane {
@@ -248,9 +249,10 @@ body .dualpane {
   overflow-y: scroll;
   position: absolute;
   top: 10em;
-  bottom: 50px;
+  bottom: 10px;
   width: 25%;
   max-width: 300px;
+  border-right: 2px solid lightgray;
 }
 
 .dualpane .namespace li:nth-child(even) {
@@ -275,4 +277,8 @@ html, body {
 
 .namespace {
   direction: ltr;
+}
+
+.quicklinks {
+  height: 2em;
 }

@@ -1,8 +1,10 @@
 var FILE_FINDER = false;
 $(function() {
   if ($(".newJrnl").length > 0) {
+    console.log("RETURNING EARLY");
     return;
   }
+
 
   var fileForm = $("<form method='POST' action='/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
   var jrnlForm = $("<form method='POST' action='/journal/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
@@ -35,6 +37,7 @@ $(function() {
     if (val) {
       $(".pagelisting").show().removeClass("hidden");
       $(".content").hide();
+      $(".preview .content").show();
     } else if (!FILE_FINDER) {
       $(".pagelisting").hide();
       $(".content").show();
@@ -42,7 +45,7 @@ $(function() {
 
     $(".namespace").hide();
     var show_all = val == "";
-    $("li").each(function() {
+    $(".namespace li, li.result").each(function() {
       var text = $(this).text().toLowerCase();
 
       if (show_all || text.indexOf(lval) != -1) {
@@ -84,13 +87,15 @@ $(function() {
 
     } else {
       newFile.text('');
+      newJrnl.text('Add New Journal Entry');
+      newJrnl.show();
     }
 
     if (val[0] == '.' || val[0] == '@' || val[0] == ':') {
       newJrnl.show();
       newJrnl.text('Add journal entry to ' + val);
       newFile.hide();
-    } else {
+    } else if (val) {
       newJrnl.hide();
     }
 

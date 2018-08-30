@@ -25,12 +25,8 @@ class Browser(Gtk.Window):
 
 	self.webview.load_uri(DEFAULT_URL)
 
-        scrolled_window = Gtk.ScrolledWindow()
-        scrolled_window.add(self.webview)
-        self.add(scrolled_window)
-        scrolled_window.show_all()
-
-        self.show()
+        self.add(self.webview)
+        self.show_all()
 
 import maintenance
 def run_browser():
