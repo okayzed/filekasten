@@ -17,12 +17,13 @@ import yaml
 FILEKASTEN_FILE = os.path.join(FILEKASTEN_DIR, "config.yaml")
 
 BACKUP_DIR = os.path.join(FILEKASTEN_DIR, "export")
+JOURNAL_DIR = os.path.join(FILEKASTEN_DIR, "journal")
 
 def save_config():
     pass
 
 def load_config():
-    global DIRS, JOURNAL, HIDDEN, SECRET, BACKUP_DIR
+    global DIRS, JOURNAL, HIDDEN, SECRET, BACKUP_DIR, JOURNAL_DIR
     if os.path.exists(FILEKASTEN_FILE):
         with open(FILEKASTEN_FILE) as f:
             info = yaml.load(f.read())
@@ -32,5 +33,6 @@ def load_config():
             HIDDEN = info.get("hidden", [])
             SECRET = info.get("secret", "changemeplease")
             BACKUP_DIR = info.get("export_dir", BACKUP_DIR)
+            JOURNAL_DIR = info.get("journal_dir", JOURNAL_DIR)
 
 load_config()

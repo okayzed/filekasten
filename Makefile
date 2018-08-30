@@ -14,9 +14,7 @@ ingest: cleanfiles
 exgest:
 				rm -fr ${EXPORT_DIR}/* || true
 				mkdir ${EXPORT_DIR} || true
-				(cd ${EXPORT_DIR} && git init .) || true
 				${PYTHON} filekasten/exgest_flat_files.py -d ${EXPORT_DIR}
-				cd ${EXPORT_DIR} && git add . && git commit -a -v -m "[autocommit] `date '+%Y-%m-%d %H%M'`"
 
 cleanfiles:
 				${PYTHON} filekasten/clean_missing_files.py

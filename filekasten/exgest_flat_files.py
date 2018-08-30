@@ -2,6 +2,7 @@ import argparse
 import os
 import time
 import frontmatter
+import subprocess
 
 import models
 from flask_peewee.utils import get_dictionary_from_model
@@ -50,6 +51,35 @@ def export_files_to_dir(outdir):
         count += 1
 
     print "EXPORTED", count, "FILES TO", outdir
+
+    make_git_commit(outdir)
+
+def make_git_commit(outdir):
+    outdir = os.path.abspath(outdir)
+    print "OUTDIR", outdir
+    import shlex
+    def run_command(cmd):
+        cmd_args = shlex.split(cmd)
+        print list(cmd_args)
+        output = subprocess.check_output(cmd_args, cwd=outdir)
+
+    try:
+        run_command("/usr/bin/git status")
+    except subprocess.CalledProcessError:
+        run_command("/usr/bin/git init .")
+
+    run_command("/usr/bin/git add .")
+    from web import datetimeformat
+    date_str = datetimeformat(time.time())
+    try:
+        run_command("/usr/bin/git commit -a -v -m '[autocommit] %s'" % date_str)
+    except Exception, e:
+        # likely there is nothing to commit
+        print e
+
+
+    # we assume the outdir is the git dir for us
+    pass
 
 if __name__ == "__main__":
   args = parser.parse_args()

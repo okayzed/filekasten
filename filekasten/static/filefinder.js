@@ -1,15 +1,25 @@
 var FILE_FINDER = false;
 $(function() {
-  var newForm = $("<form method='POST' action='/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
+  var fileForm = $("<form method='POST' action='/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
+  var jrnlForm = $("<form method='POST' action='/journal/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
   var newFile = $("<a href='#' class='mll newfile' >Add Page</a>");
+  var newJrnl = $("<a href='#' class='mll newjrnl' >Add New Journal Entry </a>");
   newFile.on("click", function() {
-      newForm.find("input.name").val(NEW_PAGE);
-      newForm.submit();
+      fileForm.find("input.name").val(NEW_PAGE);
+      fileForm.submit();
+  });
+
+  newJrnl.on("click", function() {
+    jrnlForm.find("input.name").val(NEW_PAGE);
+    jrnlForm.submit();
   });
 
   newFile.hide();
   $("body").append(newFile);
-  $("body").append(newForm);
+  $("body").append(fileForm);
+  $("body").append("<br />");
+  $("body").append(newJrnl);
+  $("body").append(jrnlForm);
 
   $(".filefind").on("change paste keyup blur focus", function() {
 
@@ -65,8 +75,16 @@ $(function() {
       } else {
         newFile.text("Add page '" + filename + "'");
       }
+
     } else {
-      newFile.text('')
+      newFile.text('');
+    }
+
+    if (val[0] == '.' || val[0] == '@' || val[0] == ':') {
+      newJrnl.text('Add journal entry to ' + val);
+      newFile.hide();
+    } else {
+      newJrnl.text('');
     }
 
   });

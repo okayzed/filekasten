@@ -6,15 +6,17 @@ import time
 import markdown
 from markdown.extensions.wikilinks import WikiLinkExtension
 
+import yaml
+import shlex
 import flask
 import frontmatter
 
 import models
 import breadcrumbs
+import journal
 
-import yaml
+
 import search
-
 import config
 
 
@@ -256,7 +258,20 @@ def post_append_page():
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name, id=cur.id, ts=time.time()))
 
-# TODO: create new page
+@app.route("/journal/new/", methods=["POST"])
+def post_new_journal():
+    name = flask.request.form.get('name')
+    split = shlex.split(name)
+
+    page = journal.make_journal(split)
+    if page:
+        search.index(page)
+        return flask.redirect(flask.url_for("get_wiki_page", name=page.name, id=page.id))
+
+        
+        
+    return flask.redirect(flask.request.referrer or url_for('get_jrnl'))
+    
 @app.route("/new/", methods=["POST"])
 def post_new_page():
     args = flask.request.form
@@ -326,7 +341,8 @@ def get_jrnl():
     entries = map(marshall_page, jrnl)
     entries.sort(key=lambda w: w.created, reverse=True)
 
-    return flask.render_template("jrnl_page.html", entries=entries, render=render_markdown)
+    k, n, count = get_pages()
+    return flask.render_template("jrnl_page.html", entries=entries, render=render_markdown, namespaces=n, keys=k)
 
 def make_snippets(page, query, highlight_search):
     text = page.content
@@ -388,4 +404,10 @@ def get_search():
         query=query)
 
 if __name__ == "__main__":
-    app.run(use_debugger=True, port=config.PORT)
+    import maintenance
+
+    def sleep_idle():
+        import time
+        while True:
+            time.sleep(1)
+    maintenance.start_threads(sleep_idle)

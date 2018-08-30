@@ -8,6 +8,8 @@ import yaml
 
 import models
 import search
+import config
+
 from web import marshall_page
 
 parser = argparse.ArgumentParser(description='Import flatfiles into the sqlite DB')
@@ -109,7 +111,8 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
 
 def ingest_files(dirs, journals, hidden):
     print "INGESTING FILES"
-    print "DIRS", dirs
+    dirs[config.JOURNAL_DIR] = 'journal'
+
     for k in dirs:
       v = dirs[k]
       print "READING DIR", k, "INTO", v
