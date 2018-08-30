@@ -1,0 +1,5 @@
+#!/usr/bin/python
+import filekasten
+import sys
+
+filekasten.run_browser()

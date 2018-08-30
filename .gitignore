@@ -1,2 +1,10 @@
 *.pyc
+build/
+dist/
+export/
+MANIFEST
+db.bak/
+db/
+dev/
 
+no changes added to commit (use "git add" and/or "git commit -a")
