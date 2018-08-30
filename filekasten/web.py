@@ -140,10 +140,15 @@ def get_pages():
 
 
 @app.route('/wiki/')
-def get_wiki_index():
+def get_wiki_index(nv=False):
     breadcrumbs.add("index")
     k, n, count = get_pages()
-    return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True)
+    return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True, nv=nv)
+
+@app.route('/nv/')
+def get_nv_index():
+    return get_wiki_index(nv=True)
+    
 
 @app.route('/wiki/<name>/')
 def get_wiki_page(name):
@@ -166,7 +171,7 @@ def get_wiki_page(name):
             if i == -1:
                 return flask.render_template("wiki_select_page.html", pages=pages)
 
-            cur = pages[i] 
+            cur = pages[i]
         else:
             cur = pages[0]
 
@@ -179,7 +184,8 @@ def get_wiki_page(name):
     text = render_markdown(page.content)
 
     k, n, count = get_pages()
-    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, namespaces=n, keys=k)
+    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur,
+        namespaces=n, keys=k, popup=popup)
 
 @app.route("/wiki/<name>/terminal")
 def get_terminal_page(name):
@@ -268,10 +274,10 @@ def post_new_journal():
         search.index(page)
         return flask.redirect(flask.url_for("get_wiki_page", name=page.name, id=page.id))
 
-        
-        
+
+
     return flask.redirect(flask.request.referrer or url_for('get_jrnl'))
-    
+
 @app.route("/new/", methods=["POST"])
 def post_new_page():
     args = flask.request.form
@@ -316,7 +322,7 @@ def post_new_page():
 
     return flask.redirect(flask.url_for("get_wiki_page", name=pagename, id=page.id, ts=time.time()))
 
-    
+
 
 @app.route('/breadcrumbs/remove', methods=["POST"])
 def delete_breadcrumb():

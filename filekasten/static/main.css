@@ -5,6 +5,9 @@ body {
 }
 
 .namespace {
+}
+
+.newspaper .namespace {
   max-height: 500px;
   overflow: hidden;
   overflow-y: auto;
@@ -31,6 +34,7 @@ input {
 
 .namespace li {
   list-style: none;
+  margin-left: 0px;
 }
 
 .jrnl {
@@ -218,5 +222,57 @@ h2 {
 }
 
 body {
-  background-color: #f3f3f3;
+}
+
+body .dualpane {
+  overflow: visible;
+}
+
+.dualpane .pane {
+  overflow: visible;
+  float: left;
+  width: 100%;
+}
+
+.dualpane .preview {
+  background-color: white;
+}
+
+.dualpane .previewpane {
+  margin-left: 320px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.dualpane .pane .pagelisting {
+  overflow-y: scroll;
+  position: absolute;
+  top: 10em;
+  bottom: 50px;
+  width: 25%;
+  max-width: 300px;
+}
+
+.dualpane .namespace li:nth-child(even) {
+  background-color: #fefefe;
+}
+.dualpane .namespace li:nth-child(odd) {
+}
+
+.dualpane .pane .preview,
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
+
+.pagelisting {
+  direction: rtl;
+}
+
+.newspaper.pagelisting {
+  direction: ltr;
+}
+
+.namespace {
+  direction: ltr;
 }

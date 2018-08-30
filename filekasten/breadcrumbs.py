@@ -26,7 +26,8 @@ def render_breadcrumbs(*args):
 
 def add(name):
     crumbs = flask.session.get("breadcrumbs", [])
-    crumb = Crumb(name, flask.request.url)
+    # strip popup from breadcrumbs
+    crumb = Crumb(name, flask.request.url.replace("&popup=1", ""))
     crumbs.append(crumb)
     if len(crumbs) > 50:
         crumbs = crumbs[-50:]

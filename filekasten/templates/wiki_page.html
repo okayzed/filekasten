@@ -38,6 +38,9 @@
     </div>
   </div>
 </div>
-{% include "pagelisting.html" %}
+
+{% if not popup %}
+  {% include "pagelisting.html" %}
+{% endif %}
 
 {% endblock %}

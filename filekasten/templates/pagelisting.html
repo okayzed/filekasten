@@ -1,4 +1,4 @@
-<div class='container newspaper pagelisting {{ "hidden" if not filefinder }}' >
+<div class='{{ "newspaper" if not nv }} pagelisting {{ "hidden" if not filefinder }}' >
   {% for ns in keys %}
     <div class='namespace'>
       <h2>{{ ns }}</h2>

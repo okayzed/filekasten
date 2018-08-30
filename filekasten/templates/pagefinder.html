@@ -1,0 +1,41 @@
+{% if nv %}
+
+  <div class='dualpane clearfix'>
+    <div class="quicklinks"> </div>
+    <div class='pane col-md-3'>
+      {% include "pagelisting.html" %}
+    </div>
+
+
+
+    <div class='pane previewpane col-md-9'>
+      <div class='preview'>
+
+
+      </div>
+    </div>
+{% else %}
+  <div class=''>
+    {% include "pagelisting.html" %}
+  </div>
+{% endif %}
+
+{% if nv %}
+<script>
+  $(document).on("click", ".wikilink, .crumb a", function(e) {
+    var wikilink = $(this).closest("a");
+    if (wikilink.parent(".crumb").hasClass("home")) { return; }
+
+    var href = wikilink.attr("href")
+    var contentEl = $(".preview");
+
+
+    e.preventDefault();
+    contentEl.empty();
+
+    $.get(href + "&popup=1", function(data, res) {
+      contentEl.html(data);
+    });
+  });
+</script>
+{% endif %}

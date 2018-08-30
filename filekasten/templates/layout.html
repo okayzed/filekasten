@@ -13,8 +13,9 @@
 
 <body class='container'>
 {% block header %}
-
-  {% include "header.html" %}
+  {% if not popup %}
+    {% include "header.html" %}
+  {% endif %}
 {% endblock %}
 
 
