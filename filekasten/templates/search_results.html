@@ -10,7 +10,9 @@
         </b>
         <div class='mll mbl clearfix'>
           <div class='lfloat timestamp'> created: {{ result.created  | format_datetime }} </div>
-          <div class='mll lfloat timestamp'> updated: {{ result.updated  | format_datetime }} </div>
+          {% if not result.journal %}
+            <div class='mll lfloat timestamp'> updated: {{ result.updated  | format_datetime }} </div>
+          {% endif %}
         </div>
 
         {% for snip in result.snippets %}
