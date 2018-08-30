@@ -397,9 +397,12 @@ def get_search():
 
 
 
+    k, n, count = get_pages()
     return flask.render_template("search_results.html",
         results=results,
         search=query,
+        namespaces=n,
+        keys=k,
         highlight_search=highlight_search,
         query=query)
 

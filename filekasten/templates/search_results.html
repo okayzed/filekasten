@@ -2,23 +2,27 @@
 
 {% block body %}
 
-  {% for result in results %}
-    <div class='result mll col-md-8'> 
-      <b>
-      <a href={{ url_for('get_wiki_page', name=result.name, id=result.id) }}> {{highlight_search(result.title or result.name, query) | safe}} </a>
-      </b>
-      <div class='mll mbl clearfix'>
-        <div class='lfloat timestamp'> created: {{ result.created  | format_datetime }} </div>
-        <div class='mll lfloat timestamp'> updated: {{ result.updated  | format_datetime }} </div>
-      </div>
-
-      {% for snip in result.snippets %}
-        <div class='snippet col-md-12'>
-{{ snip|safe }}
+  <div class=''>
+    {% for result in results %}
+      <li class='result mll col-md-8'>
+        <b>
+        <a href={{ url_for('get_wiki_page', name=result.name, id=result.id) }}> {{highlight_search(result.title or result.name, query) | safe}} </a>
+        </b>
+        <div class='mll mbl clearfix'>
+          <div class='lfloat timestamp'> created: {{ result.created  | format_datetime }} </div>
+          <div class='mll lfloat timestamp'> updated: {{ result.updated  | format_datetime }} </div>
         </div>
-      {% endfor %}
+
+        {% for snip in result.snippets %}
+          <div class='snippet col-md-12'>
+  {{ snip|safe }}
+          </div>
+        {% endfor %}
 
 
-    </div>
-  {% endfor %}
+      </li>
+    {% endfor %}
+  </div>
+
+  {% include "pagelisting.html" %}
 {% endblock %}
