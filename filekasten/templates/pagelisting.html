@@ -11,6 +11,15 @@
       </ul>
     </div>
   {% endfor %}
+
+  {% if nv %}
+  <div class="quicklinks"> </div>
+  {% endif %}
 </div>
+
+{% if not nv %}
+  <div class="quicklinks"> </div>
+
+{% endif %}
 
 

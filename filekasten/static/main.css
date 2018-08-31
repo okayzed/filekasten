@@ -280,5 +280,7 @@ html, body {
 }
 
 .quicklinks {
+  clear: both;
   height: 2em;
+  direction: ltr;
 }
