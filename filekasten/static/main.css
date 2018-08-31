@@ -1,6 +1,5 @@
 body {
   margin: auto;
-  padding-bottom: 20px;
 	padding-left: 10px;
 }
 
@@ -169,6 +168,7 @@ li p {
 .breadcrumbs {
   margin-left: 10px;
   height: 40px;
+  white-space: nowrap;
 }
 
 .crumb {
@@ -223,7 +223,7 @@ h2 {
 }
 
 body {
-  background-color: #efefef;
+  background-color: #fff;
 }
 
 body .dualpane {
@@ -247,12 +247,12 @@ body .dualpane {
 }
 
 .dualpane .pane .pagelisting {
-  overflow-y: scroll;
+  overflow-y: auto;
   position: absolute;
   top: 8em;
-  margin-top: 10px;
   background-color: white;
   bottom: 10px;
+  left: 10px;
   width: 25%;
   max-width: 300px;
   border-right: 2px solid lightgray;
@@ -268,6 +268,7 @@ body .dualpane {
 html, body {
   height: 100%;
   min-height: 100%;
+  overflow: auto;
 }
 
 .pagelisting {
@@ -286,4 +287,17 @@ html, body {
   clear: both;
   height: 2em;
   direction: ltr;
+}
+
+.fixedheader {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  padding-bottom: 10px;
+  background-color: rgba(200, 200, 200, 0.8);
+}
+
+.afterheader {
+  margin-top: 8em;
 }

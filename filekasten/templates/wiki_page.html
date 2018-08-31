@@ -17,7 +17,7 @@
 
     <div class='filename'>
         filename: 
-        <a href="{{url_for("get_terminal_page", name=page.name, id=page.id) }}">
+        <a class='editlink' href="{{url_for("get_terminal_page", name=page.name, id=page.id) }}">
           {{page.filename|format_dirname}}</a>/<a class="editlink" href="{{url_for('get_edit_page', name=page.name, id=page.id) }}">{{ page.filename | format_filename }} </a>
     </div>
 
@@ -38,12 +38,13 @@
     </div>
   </div>
 
-  {% if popup %}
-    <small class='rendertime rfloat'>
-      Rendered in {{ g.request_time() }}
-    </small>
-  {% endif %}
 </div>
+
+{% if popup %}
+  <small class='rendertime rfloat'>
+    Rendered in {{ g.request_time() }}
+  </small>
+{% endif %}
 
 {% if not popup %}
   {% include "pagelisting.html" %}

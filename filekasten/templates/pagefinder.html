@@ -28,7 +28,11 @@
     function load_window_content() {
       var href = window.location.hash;
       last_location = href;
-      $.get(href.slice(1) + "&popup=1", function(data, res) {
+      var this_href = href.slice(1);
+      if (this_href.indexOf("?") == -1) { this_href += "?"; }
+      console.log("THIS HREF IS", this_href);
+
+      $.get(this_href + "&popup=1", function(data, res) {
         contentEl.html(data);
       });
 

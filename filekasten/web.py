@@ -250,12 +250,17 @@ def post_append_page():
 
     title = args.get('title')
     url = args.get('url')
-    quote = args.get('quote')
+    quote = args.get('quote', '').strip()
     comments = args.get('comments')
 
     now = datetimeformat(datetime.datetime.fromtimestamp(time.time()))
 
-    append_text = "\n-------\n**%s**\n[%s](%s) - %s\n>%s\n\n%s" % (now, url, url, title, quote.replace("\n", "\n>"), comments)
+    if quote:
+        quote_str = "\n>%s" % quote.replace("\n", "\n>")
+    else:
+        quote_str = ""
+
+    append_text = "\n-------\n**%s**\n[%s](%s) - %s%s\n\n%s" % (now, url, url, title, quote_str, comments)
     with open(cur.filename, "a") as f:
         f.write(append_text)
 

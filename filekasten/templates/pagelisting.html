@@ -1,4 +1,7 @@
 <div class='{{ "newspaper" if not nv }} pagelisting {{ "hidden" if not filefinder }}' >
+  <div class='namespace'>
+    <div class='mll total'> {{ total }} pages total </div>
+  </div>
   {% for ns in keys %}
     <div class='namespace'>
       <h2>{{ ns }}</h2>
