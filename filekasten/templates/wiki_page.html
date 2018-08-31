@@ -6,7 +6,7 @@
   <h1 class="clearfix">{{ page.title or page.name }}
     {% if page.filename %}
       <a href="{{url_for("get_edit_page", name=page.name) }}">
-        <small class=''>edit</small>
+        <small class='editlink'>edit</small>
       </a>
 
     {% endif %}
@@ -18,7 +18,7 @@
     <div class='filename'>
         filename: 
         <a href="{{url_for("get_terminal_page", name=page.name, id=page.id) }}">
-          {{page.filename|format_dirname}}</a>/<a href="{{url_for('get_edit_page', name=page.name, id=page.id) }}">{{ page.filename | format_filename }} </a>
+          {{page.filename|format_dirname}}</a>/<a class="editlink" href="{{url_for('get_edit_page', name=page.name, id=page.id) }}">{{ page.filename | format_filename }} </a>
     </div>
 
     <div class='timestamp'>

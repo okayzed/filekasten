@@ -21,20 +21,47 @@
 
 {% if nv %}
 <script>
-  $(document).on("click", ".wikilink, .crumb a", function(e) {
-    var wikilink = $(this).closest("a");
-    if (wikilink.parent(".crumb").hasClass("home")) { return; }
-
-    var href = wikilink.attr("href")
+  $(function() {
     var contentEl = $(".preview");
 
+    var last_location;
+    function load_window_content() {
+      var href = window.location.hash;
+      last_location = href;
+      $.get(href.slice(1) + "&popup=1", function(data, res) {
+        contentEl.html(data);
+      });
 
-    e.preventDefault();
-    contentEl.empty();
+    }
 
-    $.get(href + "&popup=1", function(data, res) {
-      contentEl.html(data);
+    $(window).on("hashchange", load_window_content);
+
+    $(document).on("click", ".editlink", function(e) {
+      e.preventDefault();
+      var a = $(this).closest("a");
+      var href = a.attr("href");
+      $.get(href, function() {
+        window.location.reload();
+      });
     });
+
+    $(document).on("click", ".wikilink, .crumb a", function(e) {
+      var wikilink = $(this).closest("a");
+      if (wikilink.parent(".crumb").hasClass("home")) { return; }
+
+      var href = wikilink.attr("href")
+
+
+      e.preventDefault();
+      contentEl.empty();
+
+      window.location.hash = href;
+      if (last_location == window.location.hash) {
+        load_window_content();
+      }
+    });
+
+    load_window_content();
   });
 </script>
 {% endif %}
