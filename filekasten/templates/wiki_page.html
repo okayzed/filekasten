@@ -5,7 +5,7 @@
 <div class='content mll'>
   <h1 class="clearfix">{{ page.title or page.name }}
     {% if page.filename %}
-      <a href="{{url_for("get_edit_page", name=page.name) }}">
+      <a href="{{url_for("get_edit_page", name=page.name, id=page.id) }}">
         <small class='editlink'>edit</small>
       </a>
 
@@ -37,6 +37,12 @@
       {{ content|safe }}
     </div>
   </div>
+
+  {% if popup %}
+    <small class='rendertime rfloat'>
+      Rendered in {{ g.request_time() }}
+    </small>
+  {% endif %}
 </div>
 
 {% if not popup %}

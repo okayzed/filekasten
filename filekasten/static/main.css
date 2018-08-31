@@ -168,6 +168,7 @@ li p {
 
 .breadcrumbs {
   margin-left: 10px;
+  height: 40px;
 }
 
 .crumb {
@@ -248,7 +249,9 @@ body .dualpane {
 .dualpane .pane .pagelisting {
   overflow-y: scroll;
   position: absolute;
-  top: 10em;
+  top: 8em;
+  margin-top: 10px;
+  background-color: white;
   bottom: 10px;
   width: 25%;
   max-width: 300px;
