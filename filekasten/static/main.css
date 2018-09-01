@@ -1,325 +1,320 @@
+blockquote {
+    border: 1px solid lightgray;
+    border-left: 5px solid orange;
+    padding-left: 5px;
+    font-size: 80%
+}
+
+html, body, .dualpane .pane .preview {
+    height: 100%;
+    min-height: 100%;
+    overflow: auto
+}
+
 body {
-  margin: auto;
-	padding-left: 10px;
+    margin: auto;
+    padding-left: 10px
 }
 
-.namespace {
-}
-
-.newspaper .namespace {
-  max-height: 500px;
-  overflow: hidden;
-  overflow-y: auto;
-
-}
-
-.newspaper {
-	-webkit-column-count: 3; /* Chrome, Safari, Opera */
-
-  column-count: 3;
-  column-rule: 1px solid lightblue;
-
-}
-
-input {
-	height: 3em;
-  padding-left: 10px;
-}
-
-.singlecol {
-  max-width: 900px;
-  column-count: 1;
-}
-
-.squishedcol {
-  max-width: 600px;
-}
-
-.namespace li {
-  list-style: none;
-  margin-left: 0px;
-}
-
-.jrnl {
-  display: block;
-  padding: 10px;
-  background-color: white;
-  margin: auto;
-  margin-top: 20px;
-  width: 800px;
-  padding: 20px;
-}
-
-
-.grayed {
-  background-color: #ededed;
-}
-
-.container-fluid .filename,
-.container-fluid .timestamp {
-  color: gray;
-  font-family: monospace;
-  line-height: 1.2em;
-  font-size: small;
-}
-
-.filename a {
-  font-family: monospace;
-}
-
-.snippet {
-  white-space: pre;
-  display: block;
-  background-color: white;
-  border-left: 4px solid #aaddaa;
-  padding-left: 5px;
-  font-family: monospace;
-  overflow-x: auto;
-}
-
-.result {
-  display: block;
-  border-bottom: 1px dotted gray;
-  margin-bottom: 10px;
-}
-
-.formcontrol {
-  width: 100%;
-  margin: 0px;
-}
-
-.twitter-typeahead {
-  width: 99%;
-}
-
-.header {
-  padding: 10px;
-}
-
-.header a {
-  display: inline-block;
-  padding: 10px;
-  margin-right: 10px;
-}
-
-.header a:hover {
-  color: #ffaadd;
+body {
+    background-color: #fff
 }
 
 form {
-  padding: 0px;
-  margin: 0px;
-  overflow: hidden;
-}
-
-s {
-  text-decoration: strikethrough;
-}
-
-a s {
-  background-color: #ffaadd;
-}
-
-b.match {
-  background-color: #ffaadd;
-}
-
-.editor {
-  float: left;
-}
-
-.editor .text {
-  width: 800px;
-  height: 600px;
-}
-
-.editor textarea {
-  width: 800px;
-}
-
-.editor .quote {
-  height: 200px;
-}
-
-.editor .text[name='metadata'] {
-  height: 200px;
-}
-
-.editor .title {
-  width: 800px;
-}
-
-h1 small {
-  display: inline-block;
-}
-
-li p {
-  margin: 0px;
-}
-
-.tt-suggestion {
-	background-color: #fff;
-	padding: 0px 10px;
-}
-.tt-cursor,
-.tt-suggestion:hover {
-	color: #ffaadd;
-}
-.tt-highlight {
-	color: #ffaadd;
-}
-
-.breadcrumbs {
-  margin-left: 10px;
-  height: 40px;
-  white-space: nowrap;
-  overflow: hidden !important;
-}
-
-.crumb {
-  display: inline-block;
-  padding: 5px;
-  background-color: #aaddff;
-  margin-right: 5px;
-}
-.crumb:nth-child(2) {
-  background-color: #aaffdd;
-
-}
-.home.crumb {
-  background-color: #ffaadd;
-}
-
-form.newpage,
-.crumb form {
-  padding: 0px;
-  margin: 0px;
-  display: inline;
-  background-color: inherit;
-  border: 0px;
-}
-
-.crumb form button {
-  padding: 0px;
-  margin: 0px;
-  font-size: 70%;
-  margin-left: 5px;
-  background-color: inherit;
-	border: 0px;
-	padding: 5px;
-}
-
-.crumb form button:hover {
-	background-color: lightgray;
-}
-
-.pagelisting.hidden {
-  display: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden
 }
 
 h2 {
-	font-size: 2em;
-	margin: 0px;
-	margin-left: 10px;
+    font-size: 2em;
+    margin: 0;
+    margin-left: 10px
 }
 
-.total {
-	padding-right: 10px;
+input {
+    height: 3em;
+    padding-left: 10px
 }
 
-body {
-  background-color: #fff;
+s {
+    text-decoration: strikethrough
 }
 
-body .dualpane {
-  overflow: visible;
+a s {
+    background-color: #fad
 }
 
-.dualpane .pane {
-  overflow: visible;
-  float: left;
-  width: 100%;
+h1 small {
+    display: inline-block
 }
 
-.dualpane .preview {
-  background-color: white;
+li p {
+    margin: 0
 }
 
-.dualpane .previewpane {
-  margin-left: 300px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-}
-
-.dualpane .pane .pagelisting {
-  overflow-y: auto;
-  position: absolute;
-  top: 8em;
-  background-color: white;
-  bottom: 10px;
-  left: 10px;
-  width: 25%;
-  max-width: 300px;
-  border-right: 2px solid lightgray;
-}
-
-.dualpane .namespace li:nth-child(even) {
-  background-color: #fefefe;
-}
-.dualpane .namespace li:nth-child(odd) {
-}
-
-.dualpane .pane .preview,
-html, body {
-  height: 100%;
-  min-height: 100%;
-  overflow: auto;
-}
-
-.pagelisting {
-  direction: rtl;
-}
-
-.newspaper.pagelisting {
-  direction: ltr;
-}
-
-.namespace {
-  direction: ltr;
-}
-
-.quicklinks {
-  clear: both;
-  height: 2em;
-  direction: ltr;
-}
-
-.fixedheader {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  padding-bottom: 10px;
-  background-color: rgba(200, 200, 200, 0.8);
-  z-index: 1;
+p img {
+    width: 100%
 }
 
 .afterheader {
-  margin-top: 8em;
+    margin-top: 8em
 }
 
-.quicklinks {
-  z-index: 100;
+.breadcrumbs {
+    margin-left: 10px;
+    height: 40px;
+    white-space: nowrap;
+    overflow: hidden !important
 }
 
-blockquote {
-  border: 1px solid lightgray;
-  border-left: 5px solid orange;
-  padding-left: 5px;
-  font-size: 80%;
+.crumb {
+    display: inline-block;
+    padding: 5px;
+    background-color: #adf;
+    margin-right: 5px
+}
+
+.crumb:nth-child(2) {
+    background-color: #afd
+}
+
+.editor {
+    float: left
+}
+
+.fixedheader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-bottom: 10px;
+    background-color: rgba(200, 200, 200, 0.8);
+    z-index: 1
+}
+
+.formcontrol {
+    width: 100%;
+    margin: 0
+}
+
+.grayed {
+    background-color: #ededed
+}
+
+.header {
+    padding: 10px
+}
+
+.jrnl {
+    display: block;
+    padding: 10px;
+    background-color: white;
+    margin: auto;
+    margin-top: 20px;
+    width: 800px;
+    padding: 20px
 }
 
 .mtl {
-  margin-top: 10px;
+    margin-top: 10px
+}
+
+.namespace {
+    direction: ltr
+}
+
+.newspaper {
+    -webkit-column-count: 3;
+    /* Chrome, Safari, Opera */
+    column-count: 3;
+    column-rule: 1px solid lightblue
+}
+
+.pagelisting {
+    direction: rtl
+}
+
+.quicklinks {
+    clear: both;
+    height: 2em;
+    direction: ltr
+}
+
+.quicklinks {
+    z-index: 100
+}
+
+.result {
+    display: block;
+    border-bottom: 1px dotted gray;
+    margin-bottom: 10px
+}
+
+.singlecol {
+    max-width: 900px;
+    column-count: 1
+}
+
+.snippet {
+    white-space: pre;
+    display: block;
+    background-color: white;
+    border-left: 4px solid #ada;
+    padding-left: 5px;
+    font-family: monospace;
+    overflow-x: auto
+}
+
+.squishedcol {
+    max-width: 600px
+}
+
+.total {
+    padding-right: 10px
+}
+
+.tt-cursor, .tt-suggestion:hover {
+    color: #fad
+}
+
+.tt-highlight {
+    color: #fad
+}
+
+.tt-suggestion {
+    background-color: #fff;
+    padding: 0 10px
+}
+
+.twitter-typeahead {
+    width: 99%
+}
+
+.editor textarea {
+    width: 800px
+}
+
+.filename a {
+    font-family: monospace
+}
+
+.header a {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px
+}
+
+.header a:hover {
+    color: #fad
+}
+
+.namespace li {
+    list-style: none;
+    margin-left: 0
+}
+
+b.match {
+    background-color: #fad
+}
+
+body .dualpane {
+    overflow: visible
+}
+
+form.newpage, .crumb form {
+    padding: 0;
+    margin: 0;
+    display: inline;
+    background-color: inherit;
+    border: 0
+}
+
+.crumb form button {
+    padding: 0;
+    margin: 0;
+    font-size: 70%;
+    margin-left: 5px;
+    background-color: inherit;
+    border: 0;
+    padding: 5px
+}
+
+.crumb form button:hover {
+    background-color: lightgray
+}
+
+.container-fluid .filename, .container-fluid .timestamp {
+    color: gray;
+    font-family: monospace;
+    line-height: 1.2em;
+    font-size: small
+}
+
+.dualpane .pane {
+    overflow: visible;
+    float: left;
+    width: 100%
+}
+
+.dualpane .preview {
+    background-color: white
+}
+
+.dualpane .previewpane {
+    margin-left: 300px;
+    padding-bottom: 20px;
+    margin-bottom: 20px
+}
+
+.editor .quote {
+    height: 200px
+}
+
+.editor .text {
+    width: 800px;
+    height: 600px
+}
+
+.editor .title {
+    width: 800px
+}
+
+.home.crumb {
+    background-color: #fad
+}
+
+.newspaper .namespace {
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto
+}
+
+.newspaper.pagelisting {
+    direction: ltr
+}
+
+.pagelisting.hidden {
+    display: none
+}
+
+.dualpane .namespace li:nth-child(even) {
+    background-color: #fefefe
+}
+
+.dualpane .pane .pagelisting {
+    overflow-y: auto;
+    position: absolute;
+    top: 8em;
+    background-color: white;
+    bottom: 10px;
+    left: 10px;
+    width: 25%;
+    max-width: 300px;
+    border-right: 2px solid lightgray
+}
+
+.editor .text[name="metadata"] {
+    height: 200px
 }
 
