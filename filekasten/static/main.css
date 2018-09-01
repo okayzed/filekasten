@@ -17,7 +17,7 @@ body {
 }
 
 body {
-    background-color: #fff
+    background-color: #fafafa
 }
 
 form {
@@ -32,7 +32,7 @@ h2 {
     margin-left: 10px
 }
 
-input {
+.header input[type='text']{
     height: 3em;
     padding-left: 10px
 }
@@ -75,10 +75,6 @@ p img {
     margin-right: 5px
 }
 
-.crumb:nth-child(2) {
-    background-color: #afd
-}
-
 .editor {
     float: left
 }
@@ -114,6 +110,10 @@ p img {
     margin-top: 20px;
     width: 800px;
     padding: 20px
+}
+
+.pbl {
+  padding-bottom: 10px;
 }
 
 .mtl {
@@ -318,3 +318,19 @@ form.newpage, .crumb form {
     height: 200px
 }
 
+
+body h1,body h2,body h3,body h4,body h5,body h6 {
+  margin-left: 0px;
+}
+
+.jrnl.plans {
+  border-top: 5px solid #daf;
+}
+
+.jrnl.sjrn {
+  border-top: 5px solid #adf;
+}
+
+.jrnl.journal {
+  border-top: 5px solid #add;
+}

@@ -1,4 +1,5 @@
 import flask
+import config
 
 class Crumb(dict):
     def __init__(self, name, url):
@@ -22,7 +23,9 @@ def render_breadcrumbs(*args):
         if len(ordered_crumbs) > 7:
             break
 
-    return flask.render_template("breadcrumbs.html", crumbs=ordered_crumbs)
+    nv = config.USE_NV_STYLE
+    print "NV IS", nv
+    return flask.render_template("breadcrumbs.html", crumbs=ordered_crumbs, nv=nv)
 
 def add(name):
     crumbs = flask.session.get("breadcrumbs", [])

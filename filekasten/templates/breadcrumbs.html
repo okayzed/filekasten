@@ -1,13 +1,16 @@
 <div class="clearfix breadcrumbs">
 
-  <span class='home crumb'><a tabindex="-1" href='{{ url_for('get_wiki_index') }}'>wiki</a></span>
-  <span class='nv crumb'><a tabindex="-1" href='{{ url_for('get_nv_index') }}'>notes</a></span>
+  {% if not nv %}
+    <span class='home crumb'><a tabindex="-1" href='{{ url_for('get_wiki_index') }}'>wiki</a></span>
+  {% endif %}
+
   {% for crumb in crumbs %}
     <span class='crumb'><a tabindex="-1" href='{{ crumb.url }}'>{{crumb.name}}</a>
       <form tabindex="-1" action="/breadcrumbs/remove" method="POST">
         <input type='hidden' name='name' value='{{ crumb.name }}' />
+        <input type='hidden' name='next' value='/wiki' />
         
-        <button tabindex="-1" type="submit" class='closer'>x</button>
+        <button class='postlink' tabindex="-1" type="submit" class='closer'>x</button>
       </form>
     </span>
   {% endfor %}

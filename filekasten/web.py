@@ -2,9 +2,9 @@ import re
 import os
 import datetime
 import time
+import urllib
 
 import markdown
-from markdown.extensions.wikilinks import WikiLinkExtension
 
 import yaml
 import shlex
@@ -96,7 +96,7 @@ def marshall_page(cur):
 
     return cur
 
-from md_ext import XListExtension
+from md_ext import XListExtension, WikiLinkExtension
 
 def render_markdown(text):
     return markdown.markdown(text,
@@ -144,7 +144,10 @@ def get_pages():
 
 @app.route('/wiki/')
 def get_wiki_index(nv=False):
-    breadcrumbs.add("index")
+    nv = config.USE_NV_STYLE
+    if not nv:
+        breadcrumbs.add("index")
+
     k, n, count = get_pages()
     popup = flask.request.args.get("popup")
     return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True, nv=nv, popup=popup)
@@ -184,6 +187,12 @@ def get_wiki_page(name):
 
     page = marshall_page(cur)
     popup = flask.request.args.get("popup")
+    nv = config.USE_NV_STYLE
+
+    if not popup and nv:
+        return flask.redirect(flask.url_for("get_wiki_index") + "#" + 
+            flask.url_for("get_wiki_page", name=page.name, id=page.id))
+        
 
     root,ext = os.path.splitext(page.filename)
 
@@ -194,7 +203,6 @@ def get_wiki_page(name):
 
     formatter = pygments.formatters.HtmlFormatter(linenos='table')
 
-    print "LEXER IS", lexer
     css_defs = ""
     singlecol = False
     if not lexer or type(lexer) in [pygments.lexers.MarkdownLexer, pygments.lexers.TextLexer]:
@@ -227,7 +235,8 @@ def get_terminal_page(name):
 @app.route("/wiki/<name>/edit")
 def get_edit_page(name):
     print "GETTING PAGE", name
-    cur = models.Page.get(models.Page.name == name)
+    id = flask.request.args.get('id')
+    cur = models.Page.get(models.Page.name == name, models.Page.id == id)
     page = marshall_page(cur)
     metadata = page.metadata
     namespace = page.namespace
@@ -354,8 +363,18 @@ def delete_breadcrumb():
     name = flask.request.form.get('name')
     if name:
         breadcrumbs.remove(name)
-    return flask.redirect(flask.url_for("get_wiki_index"))
 
+    print flask.request.form
+
+    next = flask.request.form.get('next', flask.url_for("get_wiki_index"))
+    next = urllib.unquote(next)
+    print "NEXT IS", next
+    return flask.redirect(next)
+
+
+@app.route('/breadcrumbs/')
+def get_breadcrumbs():
+    return breadcrumbs.render_breadcrumbs()
 
 @app.route('/jrnl/')
 def get_jrnl():
@@ -363,13 +382,19 @@ def get_jrnl():
 
     jrnl = (models.Page
         .select()
-        .where(models.Page.journal == True)
+        .where(models.Page.namespace << config.JOURNAL)
         .order_by(models.Page.created.desc())
-        .limit(n)
-        .execute())
+        .limit(n))
+
+    print jrnl.sql()
+    jrnl.execute()
 
 
     entries = map(marshall_page, jrnl)
+    for e in entries:
+        if type(e.created) == int or type(e.created) == float:
+            e.created = datetime.datetime.fromtimestamp(e.created)
+
     entries.sort(key=lambda w: w.created, reverse=True)
 
     k, n, count = get_pages()
@@ -436,6 +461,37 @@ def get_search():
         keys=k,
         highlight_search=highlight_search,
         query=query)
+
+@app.route('/settings/')
+def get_settings():
+    return flask.render_template("settings.html", 
+        config=config)
+
+@app.route('/settings/', methods=["POST"])
+def post_settings():
+    args = flask.request.form
+    print "POSTED SETTINGS", args
+    dirs = args.getlist('dir[]')
+    namespace = args.getlist('namespace[]')
+    type = args.getlist('type[]')
+
+    objects = {}
+    journals = []
+    hidden = []
+    for i in xrange(len(dirs)):
+        o = {}
+        objects[dirs[i]] = namespace[i]
+
+
+    hidden = args.get("HIDDEN", "").split(",")
+    journals = args.get("JOURNALS", "").split(",")
+    journal_dir = args.get("JOURNAL_DIR")
+    export_dir = args.get("EXPORT_DIR")
+    nv_style = args.get("use_nv_style")
+    config.save_config(dirs=objects, hidden=hidden, journal=journals, export_dir=export_dir, journal_dir=journal_dir, use_nv_style=nv_style)
+    return flask.render_template("settings.html", 
+        config=config)
+
 
 if __name__ == "__main__":
     import maintenance

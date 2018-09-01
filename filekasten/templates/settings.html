@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class='container'>
+    <form class='' autocomplete="off" method='POST' action='/settings/'>
+
+
+    <button class='rfloat' type='submit' method='POST' action='/settings/' >Save</button>
+    <h3>Note Style</h3>
+
+
+    <div class='formcontrol'>
+      <label>Use NV Style:</label> <input type='checkbox' name='use_nv_style' {{ "checked" if config.USE_NV_STYLE }} />
+    </div>
+      
+
+    <h3>Dirs to watch</h3>
+
+
+    <div class='clearfix'>
+    {% for dir in config.DIRS %}
+      <div class='card mtl col-md-3 lfloat mrl pbl'>
+        
+        <label>Dir</label><input autocomplete=off name='dir[]' class='formcontrol' type="text" value='{{ dir }}'> </input>
+        <br />
+
+        <label>Namespace</label><input autocomplete=off name='namespace[]' class='formcontrol' type="text" value='{{ config.DIRS[dir] }}'> </input>
+
+      </div>
+    {% endfor %}
+    </div>
+
+
+
+    <h3>Hidden Namespaces</h3>
+    <input class="formcontrol" name="HIDDEN" value="{{ ",".join(config.HIDDEN) }}" />
+    <h3>Journal Namespaces</h3>
+    <input class="formcontrol" name="JOURNALS" value="{{ ",".join(config.JOURNAL) }}" />
+
+    <h3>Export Dir</h3>
+
+    <input class="formcontrol" name="EXPORT_DIR" value="{{ config.BACKUP_DIR }}" />
+
+    <h3>Journal Dir</h3>
+
+    <input class="formcontrol" name="JOURNAL_DIR" value="{{ config.JOURNAL_DIR }}" />
+    </form>
+
+  </div>
+{% endblock %}
