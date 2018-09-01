@@ -1,7 +1,7 @@
 var FILE_FINDER = false;
+
 $(function() {
-  if ($(".newJrnl").length > 0) {
-    console.log("RETURNING EARLY");
+  if ($(".newjrnl").length > 0 || $(".newfile").length > 0) {
     return;
   }
 
@@ -29,7 +29,11 @@ $(function() {
   $(".quicklinks").append(newJrnl);
   $(".quicklinks").append(jrnlForm);
 
-  $(".filefind").on("change paste keyup blur focus", function() {
+  $(document).on("change paste keyup blur focus", ".filefind", function(el) {
+
+
+    newJrnl = $(".newjrnl");
+    newFile = $(".newfile");
 
     var val = $(this).val();
     var lval = val.toLowerCase();

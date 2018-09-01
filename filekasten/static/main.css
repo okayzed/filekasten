@@ -301,3 +301,7 @@ html, body {
 .afterheader {
   margin-top: 8em;
 }
+
+.quicklinks {
+  z-index: 100;
+}

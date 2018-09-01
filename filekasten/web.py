@@ -143,7 +143,8 @@ def get_pages():
 def get_wiki_index(nv=False):
     breadcrumbs.add("index")
     k, n, count = get_pages()
-    return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True, nv=nv)
+    popup = flask.request.args.get("popup")
+    return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True, nv=nv, popup=popup)
 
 @app.route('/nv/')
 def get_nv_index():

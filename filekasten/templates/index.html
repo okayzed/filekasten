@@ -3,6 +3,8 @@
 {% block body %}
 
 
-{% include "pagefinder.html" %}
+{% if not popup %}
+  {% include "pagefinder.html" %}
+{% endif %}
 
 {% endblock %}

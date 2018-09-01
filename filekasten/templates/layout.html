@@ -16,11 +16,11 @@
 
 <body class='container'>
 {% block header %}
-  <div class='{{ "fixedheader" if not popup }}'>
-    {% if not popup %}
-      {% include "header.html" %}
-    {% endif %}
-  </div>
+  {% if not popup %}
+    <div class='fixedheader'>
+        {% include "header.html" %}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% if not popup %}
@@ -29,6 +29,9 @@
 
 
 {% block body %} {% endblock %}
+
+{% include "footer.html" %}
+
 </body>
 
 </html>
