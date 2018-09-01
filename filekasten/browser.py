@@ -3,12 +3,14 @@ import os
 
 import threading
 import signal
+import subprocess
 
 import gi
 from gi.repository import Gtk, WebKit
 
 import config
 
+WIKI_URL = "http://localhost:32333/"
 DEFAULT_URL="http://localhost:32333/wiki"
 class Browser(Gtk.Window):
     def __init__(self, *args, **kwargs):
@@ -23,10 +25,26 @@ class Browser(Gtk.Window):
         settings.set_property("enable-java-applet", False)
         settings.set_property("enable-plugins", False)
 
+        self.webview.connect("navigation-policy-decision-requested", self.navigate)
 	self.webview.load_uri(DEFAULT_URL)
 
         self.add(self.webview)
         self.show_all()
+
+    def navigate(self, view, frame, request, action, decision):
+        uri = request.get_uri()
+        print "URI", uri
+        if (uri.startswith(WIKI_URL)):
+            return False
+        else:
+            decision.ignore()
+            uri = request.get_uri()
+            subprocess.call(["xdg-open", uri])
+            return True
+        return False
+
+
+
 
 class Inspector(Gtk.Window):
     def __init__(self, view, *args, **kwargs):
