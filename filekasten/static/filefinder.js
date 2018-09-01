@@ -43,7 +43,6 @@ $(function() {
       $(".content").hide();
       $(".preview .content").show();
     } else if (!FILE_FINDER) {
-      $(".pagelisting").hide();
       $(".content").show();
     }
 
@@ -52,7 +51,7 @@ $(function() {
     $(".namespace li, li.result").each(function() {
       var text = $(this).text().toLowerCase();
 
-      if (show_all || text.indexOf(lval) != -1) {
+      if (show_all || text.indexOf(lval) != -1 || !lval) {
         $(this).show();
         $(this).closest(".namespace").show();
       } else {
@@ -63,7 +62,7 @@ $(function() {
     $(".namespace").each(function() {
       var ns = $(this);
       var text = ns.find("h2").text().toLowerCase();
-      if (show_all || text.indexOf(lval) != -1) {
+      if (show_all || text.indexOf(lval) != -1 || !lval) {
         ns.find("li").show();
         ns.show();
       }

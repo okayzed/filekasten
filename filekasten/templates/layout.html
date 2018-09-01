@@ -6,7 +6,7 @@
 
 {% if not popup %}
   <script type="text/javascript" src="/static/jquery-3.3.1.min.js"> </script>
-  <link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
+  <link rel="stylesheet" href={{ url_for('static', filename="bootstrap.css") }} />
   <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
   <link rel="stylesheet" href={{ url_for('static', filename="reset.css") }} />
   <link rel="stylesheet" href={{ url_for('static', filename="scrollers.css") }} />
@@ -14,7 +14,7 @@
 
 </head>
 
-<body class='container'>
+<body class='container-fluid'>
 {% block header %}
   {% if not popup %}
     <div class='fixedheader'>

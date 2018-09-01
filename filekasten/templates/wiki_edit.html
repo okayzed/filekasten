@@ -9,7 +9,7 @@ Editing <a target="_blank" href="{{ url_for('get_wiki_page', name=name) }}">{{ n
 <link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
 <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
 
-<div class='container editor clearfix'>
+<div class='container-fluid editor clearfix'>
   <form action="{{ url_for('post_edit_page', name=name) }}" method='post'>
     <div>
       name: <br />

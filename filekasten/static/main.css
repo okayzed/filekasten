@@ -51,8 +51,8 @@ input {
   background-color: #ededed;
 }
 
-.container .filename,
-.container .timestamp {
+.container-fluid .filename,
+.container-fluid .timestamp {
   color: gray;
   font-family: monospace;
   line-height: 1.2em;
@@ -169,6 +169,7 @@ li p {
   margin-left: 10px;
   height: 40px;
   white-space: nowrap;
+  overflow: hidden !important;
 }
 
 .crumb {
@@ -241,7 +242,7 @@ body .dualpane {
 }
 
 .dualpane .previewpane {
-  margin-left: 320px;
+  margin-left: 300px;
   padding-bottom: 20px;
   margin-bottom: 20px;
 }
@@ -296,6 +297,7 @@ html, body {
   right: 0px;
   padding-bottom: 10px;
   background-color: rgba(200, 200, 200, 0.8);
+  z-index: 1;
 }
 
 .afterheader {
@@ -305,3 +307,16 @@ html, body {
 .quicklinks {
   z-index: 100;
 }
+
+blockquote {
+  margin-left: 25px;
+  border: 1px solid lightgray;
+  border-left: 5px solid orange;
+  padding-left: 5px;
+  font-size: 80%;
+}
+
+.mtl {
+  margin-top: 10px;
+}
+
