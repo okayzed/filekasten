@@ -2,6 +2,12 @@
 
 {% block body %}
 
+{% if css_defs %}
+  <style>
+    {{ css_defs }}
+  </style>
+{% endif %}
+
 <div class='content mll'>
   <h1 class="clearfix">{{ page.title or page.name }}
     {% if page.filename %}
@@ -11,12 +17,12 @@
 
     {% endif %}
 
-  </h1> 
+  </h1>
 
   <div class="clearfix mll ">
 
     <div class='filename'>
-        filename: 
+        filename:
         <a class='editlink' href="{{url_for("get_terminal_page", name=page.name, id=page.id) }}">
           {{page.filename|format_dirname}}</a>/<a class="editlink" href="{{url_for('get_edit_page', name=page.name, id=page.id) }}">{{ page.filename | format_filename }} </a>
     </div>
@@ -33,7 +39,7 @@
   </div>
 
   <div class='mll mtl'>
-    <div class="{{ 'newspaper' if content|length > 3000 else 'singlecol' }}">
+    <div class="{{ 'singlecol' if singlecol or content|length < 3000 else 'newspaper' }} {{ 'squishedcol' if content|length < 3000 }}">
       {{ content|safe }}
     </div>
   </div>

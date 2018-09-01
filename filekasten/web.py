@@ -19,6 +19,10 @@ import journal
 import search
 import config
 
+import pygments
+import pygments.lexers
+import pygments.formatters
+
 
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
@@ -100,7 +104,6 @@ def render_markdown(text):
         extensions=[
             WikiLinkExtension(base_url='/wiki/'),
 	    XListExtension(),
-            "markdown_checklist.extension",
             "markdown.extensions.footnotes",
             "markdown.extensions.codehilite",
             "markdown.extensions.fenced_code",
@@ -149,7 +152,7 @@ def get_wiki_index(nv=False):
 @app.route('/nv/')
 def get_nv_index():
     return get_wiki_index(nv=True)
-    
+
 
 @app.route('/wiki/<name>/')
 def get_wiki_page(name):
@@ -182,11 +185,28 @@ def get_wiki_page(name):
     page = marshall_page(cur)
     popup = flask.request.args.get("popup")
 
-    text = render_markdown(page.content)
+    root,ext = os.path.splitext(page.filename)
+
+    try:
+        lexer = pygments.lexers.get_lexer_for_filename(page.filename)
+    except pygments.lexers.ClassNotFound:
+        lexer = None
+
+    formatter = pygments.formatters.HtmlFormatter(linenos='table')
+
+    print "LEXER IS", lexer
+    css_defs = ""
+    singlecol = False
+    if not lexer or type(lexer) in [pygments.lexers.MarkdownLexer, pygments.lexers.TextLexer]:
+        text = render_markdown(page.content)
+    else:
+        text = pygments.highlight(page.content, lexer, formatter)
+        css_defs = formatter.get_style_defs()
+        singlecol = True
 
     k, n, count = get_pages()
-    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur,
-        namespaces=n, keys=k, popup=popup)
+    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, css_defs=css_defs,
+        namespaces=n, keys=k, popup=popup, singlecol=singlecol)
 
 @app.route("/wiki/<name>/terminal")
 def get_terminal_page(name):
@@ -198,7 +218,6 @@ def get_terminal_page(name):
     namespace = page.namespace
 
     print "PAGE IS", cur
-
 
     import editor
     os.system("xfce4-terminal --working-directory='%s'" % (os.path.dirname(cur.filename)))

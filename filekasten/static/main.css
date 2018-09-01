@@ -23,12 +23,16 @@ body {
 
 input {
 	height: 3em;
-  padding-left: 5px;
+  padding-left: 10px;
 }
 
 .singlecol {
-  max-width: 600px;
+  max-width: 900px;
   column-count: 1;
+}
+
+.squishedcol {
+  max-width: 600px;
 }
 
 .namespace li {
@@ -309,7 +313,6 @@ html, body {
 }
 
 blockquote {
-  margin-left: 25px;
   border: 1px solid lightgray;
   border-left: 5px solid orange;
   padding-left: 5px;
