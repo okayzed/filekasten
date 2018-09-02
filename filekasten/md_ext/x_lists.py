@@ -10,16 +10,21 @@ from markdown.preprocessors import Preprocessor
 from markdown.blockprocessors import OListProcessor, UListProcessor
 import re
 
-MYREGEX = re.compile(r'^[ ]{0,4}[x][ ]+(.*)')
-SECONDREGEX = re.compile(r'^[ ]{0,4}[*] \[x\][ ]+(.*)')
+MYREGEX = re.compile(r'^([ ]{0,4})[x][ ]+(.*)')
+SECONDREGEX = re.compile(r'^([ ]{0,4})[*] \[x\][ ]+(.*)')
 class XUListProcessor(Preprocessor):
     def run(self, lines):
         new_lines = []
         for line in lines:
-            if MYREGEX.match(line):
-                line = "* <s class='strikethrough'>%s</s>" % (line)
-            if SECONDREGEX.match(line):
-                line = "* <s class='strikethrough'>%s</s>" % (line.strip("* "))
+            m = MYREGEX.match(line)
+            if m:
+                space = m.group(1)
+                line = "%s* <s class='strikethrough'>%s</s>" % (space, line)
+
+            m = SECONDREGEX.match(line)
+            if m:
+                space = m.group(1)
+                line = "%s* <s class='strikethrough'>%s</s>" % (space, line.strip("* "))
 
             new_lines.append(line)
         return new_lines
