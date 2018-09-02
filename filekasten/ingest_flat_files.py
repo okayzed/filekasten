@@ -55,7 +55,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
     # TODO: check the config for regexes, i guess
     include = False
     exclude = False
-    for r in config.INCLUDE_RE:
+    for r in config.opts.INCLUDE_RE:
         if not r:
             continue
 
@@ -64,7 +64,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
             break
 
     if not include:
-        for r in config.EXCLUDE_RE:
+        for r in config.opts.EXCLUDE_RE:
             if not r:
                 continue
 
@@ -159,7 +159,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
 
 def ingest_files(dirs, journals, hidden):
     print "INGESTING FILES"
-    dirs[config.JOURNAL_DIR] = 'journal'
+    dirs[config.opts.JOURNAL_DIR] = 'journal'
 
     for k in dirs:
       v = dirs[k]

@@ -31,7 +31,7 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 
 app = flask.Flask(__name__)
 
-app.secret_key = config.SECRET
+app.secret_key = config.opts.SECRET
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     if type(value) == int or type(value) == float:
@@ -144,7 +144,7 @@ def get_pages():
 
 @app.route('/wiki/')
 def get_wiki_index(nv=False):
-    nv = config.USE_NV_STYLE
+    nv = config.opts.USE_NV_STYLE
     if not nv:
         breadcrumbs.add("index")
 
@@ -187,7 +187,7 @@ def get_wiki_page(name):
 
     page = marshall_page(cur)
     popup = flask.request.args.get("popup")
-    nv = config.USE_NV_STYLE
+    nv = config.opts.USE_NV_STYLE
 
     if not popup and nv:
         return flask.redirect(flask.url_for("get_wiki_index") + "#" +
@@ -382,7 +382,7 @@ def get_jrnl():
 
     jrnl = (models.Page
         .select()
-        .where(models.Page.namespace << config.JOURNAL)
+        .where(models.Page.namespace << config.opts.JOURNALS)
         .order_by(models.Page.created.desc())
         .limit(n))
 
@@ -483,17 +483,10 @@ def post_settings():
         objects[dirs[i]] = namespace[i]
 
 
-    hidden = args.get("HIDDEN", "").split(",")
-    journals = args.get("JOURNALS", "").split(",")
-    journal_dir = args.get("JOURNAL_DIR")
-    export_dir = args.get("EXPORT_DIR")
-    nv_style = args.get("use_nv_style")
-
-    include_re = args.get("INCLUDE_RE", "").split(",")
-    exclude_re = args.get("EXCLUDE_RE", "").split(",")
-
-    config.save_config(dirs=objects, hidden=hidden, journal=journals, export_dir=export_dir,
-        journal_dir=journal_dir, use_nv_style=nv_style, include_re=include_re, exclude_re=exclude_re)
+    config.set("DIRS", objects)
+    config.set("USE_NV_STYLE", args.get("USE_NV_STYLE", ""))
+    config.update(args)
+    config.save_config()
 
     return flask.render_template("settings.html", config=config)
 

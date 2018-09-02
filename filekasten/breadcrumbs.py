@@ -23,7 +23,7 @@ def render_breadcrumbs(*args):
         if len(ordered_crumbs) > 7:
             break
 
-    nv = config.USE_NV_STYLE
+    nv = config.opts.USE_NV_STYLE
     return flask.render_template("breadcrumbs.html", crumbs=ordered_crumbs, nv=nv)
 
 def add(name):

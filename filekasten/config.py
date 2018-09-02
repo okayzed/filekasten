@@ -1,71 +1,86 @@
 import os
+import dotmap
+import yaml
 
 PROFILE=os.environ.get("PROFILE", "default")
 FILEKASTEN_DIR = os.path.expanduser("~/.local/share/filekasten/%s" % (PROFILE))
+FILEKASTEN_FILE = os.path.join(FILEKASTEN_DIR, "config.yaml.new")
 if not os.path.exists(FILEKASTEN_DIR):
     os.makedirs(FILEKASTEN_DIR)
 
-PORT = 32333
+opts = dotmap.DotMap()
 
-# secret key for flask session
-SECRET = "changemeplease"
+STRING_KEYS = {}
+LIST_KEYS = {}
 
 
-DIRS = []
-JOURNAL = []
-HIDDEN = []
+def add_config_string(prop, default=None, name=None):
+    STRING_KEYS[prop] = prop
+    opts[prop] = default
 
-import yaml
-FILEKASTEN_FILE = os.path.join(FILEKASTEN_DIR, "config.yaml")
+def add_config_string_list(prop, default=[], name=None):
+    LIST_KEYS[prop] = prop
+    opts[prop] = default
 
-BACKUP_DIR = os.path.join(FILEKASTEN_DIR, "export")
-JOURNAL_DIR = os.path.join(FILEKASTEN_DIR, "journal")
 
-INCLUDE_RE = ""
-EXCLUDE_RE = ""
+def update(args):
+    for arg in args:
+        set(arg, args[arg])
 
-USE_NV_STYLE = False
-
-def save_config(dirs={}, hidden=[], journal=[], export_dir="", journal_dir="",
-        use_nv_style=False, exclude_re="", include_re=""):
-    yaml_obj = {}
-    yaml_obj["dirs"] = dirs
-    yaml_obj["hidden"] = hidden
-    yaml_obj["journal"] = journal
-    yaml_obj["export_dir"] = export_dir
-    yaml_obj["journal_dir"] = journal_dir
-
-    yaml_obj["exclude_re"] = exclude_re
-    yaml_obj["include_re"] = include_re
-
-    yaml_obj["use_nv_style"] = use_nv_style
-
+def save_config():
+#    print "SAVING CONFIG", opts.toDict()
     with open(FILEKASTEN_FILE, "w") as f:
-        info = f.write(yaml.safe_dump(yaml_obj))
+        info = f.write(yaml.safe_dump(opts.toDict(), default_flow_style=False))
 
-    load_config()
+    read_config()
 
-def load_config():
-    global DIRS, JOURNAL, HIDDEN, SECRET, BACKUP_DIR, JOURNAL_DIR, USE_NV_STYLE
-    global EXCLUDE_RE, INCLUDE_RE
+def read_config():
     if os.path.exists(FILEKASTEN_FILE):
         with open(FILEKASTEN_FILE) as f:
             info = yaml.load(f.read())
 
-            DIRS = info.get("dirs", {})
-            JOURNAL = info.get("journal", [])
-            HIDDEN = info.get("hidden", [])
-            SECRET = info.get("secret", "changemeplease")
-            BACKUP_DIR = info.get("export_dir", BACKUP_DIR)
-            JOURNAL_DIR = info.get("journal_dir", JOURNAL_DIR)
-            USE_NV_STYLE = info.get("use_nv_style", USE_NV_STYLE)
-            INCLUDE_RE = info.get("include_re", ",".join(INCLUDE_RE))
-            EXCLUDE_RE = info.get("exclude_re", ",".join(EXCLUDE_RE))
+        for key in info:
+            if key in STRING_KEYS:
+                prop = STRING_KEYS[key]
+                opts[prop] = info[key]
+#                print "READ KEY", prop, opts[prop], type(info[key])
+            if key in LIST_KEYS:
+                prop = LIST_KEYS[key]
+                if type(info[key]) == str:
+                    opts[prop] = info[key].split(",")
+                else:
+                    opts[prop] = info[key]
+#                print "READ KEY", prop, opts[prop], type(info[key])
 
-            if type(INCLUDE_RE) == str:
-                INCLUDE_RE = INCLUDE_RE.split(",")
 
-            if type(EXCLUDE_RE) == str:
-                EXCLUDE_RE = EXCLUDE_RE.split(",")
+def set(name, value):
+    if not name in STRING_KEYS and not name in LIST_KEYS:
+        print "NO SUCH CONFIG KEY: %s, IGNORING" % name
+        return
 
-load_config()
+    if name in STRING_KEYS:
+        prop = STRING_KEYS[name]
+        opts[prop] = value
+
+    elif name in LIST_KEYS:
+        prop = LIST_KEYS[name]
+
+        if type(value) == str:
+            opts[prop] = value.split(",")
+        else:
+            opts[prop] = value
+
+#print "FILEKASTENDIR", FILEKASTEN_DIR
+add_config_string("SECRET", default="changemeplease")
+add_config_string("PORT", default=32333)
+add_config_string("EXPORT_DIR", default=os.path.join(FILEKASTEN_DIR, "export"))
+add_config_string("JOURNAL_DIR", default=os.path.join(FILEKASTEN_DIR, "journal"))
+add_config_string("USE_NV_STYLE", default="")
+add_config_string_list("DIRS", default={})
+add_config_string_list("JOURNALS", [])
+add_config_string_list("HIDDEN", default=[])
+add_config_string_list("INCLUDE_RE", default="")
+add_config_string_list("EXCLUDE_RE", default="")
+add_config_string_list("HIDDEN_EXT", default="")
+
+read_config()

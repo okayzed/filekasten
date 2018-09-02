@@ -1,7 +1,7 @@
 import config
 
 def find_free_port():
-    return config.PORT
+    return config.opts.PORT
 
 
 from multiprocessing import Value
@@ -14,10 +14,10 @@ import time
 import ingest_flat_files, exgest_flat_files, clean_missing_files
 def do_index():
     clean_missing_files.clean_missing_files()
-    ingest_flat_files.ingest_files(config.DIRS, config.JOURNAL, config.HIDDEN)
+    ingest_flat_files.ingest_files(config.opts.DIRS, config.opts.JOURNAL, config.opts.HIDDEN)
 
 def do_export():
-    exgest_flat_files.export_files_to_dir(config.BACKUP_DIR)
+    exgest_flat_files.export_files_to_dir(config.opts.BACKUP_DIR)
 
 def run_indexer():
     last_export = time.time() - 1

@@ -6,3 +6,4 @@ python-frontmatter
 babel
 flask_peewee
 Pygments
+dotmap

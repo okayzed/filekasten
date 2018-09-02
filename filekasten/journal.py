@@ -7,7 +7,7 @@ import subprocess
 
 import models
 
-JOURNAL_DIR = config.JOURNAL_DIR
+JOURNAL_DIR = config.opts.JOURNAL_DIR
 if not os.path.exists(JOURNAL_DIR):
     os.makedirs(JOURNAL_DIR)
 
