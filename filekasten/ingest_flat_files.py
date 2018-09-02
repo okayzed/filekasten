@@ -5,6 +5,7 @@ import time
 import frontmatter
 import datetime
 import yaml
+import re
 
 import models
 import search
@@ -21,13 +22,22 @@ parser.add_argument('-y', '--yaml', help='yaml config file for importing', defau
 def main():
   pass
 
+textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
+def is_binary(filename):
+    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+    return is_binary_string(open(filename, 'rb').read(1024))
+
 
 def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
   if not visited:
     visited = {}
 
   now = time.time()
-  files = os.listdir(dir)
+  try:
+      files = os.listdir(dir)
+  except:
+    return
+
   for file in files:
     fname = os.path.join(dir, file)
     aname = os.path.abspath(fname)
@@ -42,8 +52,40 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
       continue
 
     basename, ext = os.path.splitext(file)
-    if ext == ".html" or ext == ".css":
-      continue
+    # TODO: check the config for regexes, i guess
+    include = False
+    exclude = False
+    for r in config.INCLUDE_RE:
+        if not r:
+            continue
+
+        if re.match(r, file):
+            include = True
+            break
+
+    if not include:
+        for r in config.EXCLUDE_RE:
+            if not r:
+                continue
+
+            if re.search(r, file):
+                exclude = True
+                break
+
+    if exclude:
+        print "EXCLUDING", file
+        continue
+
+    if ext in [".html", ".css", ".json"] or file.find(".input") != -1 or file.find(".output") != -1:
+        print "SKIPPING KNOWN EXTENSIONS", file
+        continue
+
+    if file.find("icfpc") != -1:
+        continue
+
+    if stats.st_size > 1024 * 1024:
+        print "SKIPPING", aname, "ITS TOO BIG"
+        continue
 
 
     if os.path.isdir(fname) and not fname in visited:
@@ -53,6 +95,9 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
 
     visited[fname] = True
 
+
+    if is_binary(aname):
+        continue
 
     with open(fname, "r") as f:
       content = f.read()
@@ -106,8 +151,11 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
         hidden=namespace in hidden,
         )
 
-      page.save()
-      search.index(page)
+      try:
+          search.index(page)
+          page.save()
+      except:
+          print "COULDNT INDEX PAGE", page.name
 
 def ingest_files(dirs, journals, hidden):
     print "INGESTING FILES"
@@ -127,7 +175,7 @@ if __name__ == "__main__":
 
       journals = set(d.get('journal', []))
       hidden = set(d.get('hidden', []))
-      dirs = d.get('dirs', [])
+      dirs = d.get('dirs', {})
 
       ingest_files(dirs, journals, hidden)
 

@@ -190,9 +190,9 @@ def get_wiki_page(name):
     nv = config.USE_NV_STYLE
 
     if not popup and nv:
-        return flask.redirect(flask.url_for("get_wiki_index") + "#" + 
+        return flask.redirect(flask.url_for("get_wiki_index") + "#" +
             flask.url_for("get_wiki_page", name=page.name, id=page.id))
-        
+
 
     root,ext = os.path.splitext(page.filename)
 
@@ -464,7 +464,7 @@ def get_search():
 
 @app.route('/settings/')
 def get_settings():
-    return flask.render_template("settings.html", 
+    return flask.render_template("settings.html",
         config=config)
 
 @app.route('/settings/', methods=["POST"])
@@ -488,9 +488,14 @@ def post_settings():
     journal_dir = args.get("JOURNAL_DIR")
     export_dir = args.get("EXPORT_DIR")
     nv_style = args.get("use_nv_style")
-    config.save_config(dirs=objects, hidden=hidden, journal=journals, export_dir=export_dir, journal_dir=journal_dir, use_nv_style=nv_style)
-    return flask.render_template("settings.html", 
-        config=config)
+
+    include_re = args.get("INCLUDE_RE", "").split(",")
+    exclude_re = args.get("EXCLUDE_RE", "").split(",")
+
+    config.save_config(dirs=objects, hidden=hidden, journal=journals, export_dir=export_dir,
+        journal_dir=journal_dir, use_nv_style=nv_style, include_re=include_re, exclude_re=exclude_re)
+
+    return flask.render_template("settings.html", config=config)
 
 
 if __name__ == "__main__":

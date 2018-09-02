@@ -2,7 +2,7 @@
 
 {% block body %}
   <div class='container'>
-    <form class='' autocomplete="off" method='POST' action='/settings/'>
+    <form class='mbl pbl' autocomplete="off" method='POST' action='/settings/'>
 
 
     <button class='rfloat' type='submit' method='POST' action='/settings/' >Save</button>
@@ -10,17 +10,37 @@
 
 
     <div class='formcontrol'>
-      <label>Use NV Style:</label> <input type='checkbox' name='use_nv_style' {{ "checked" if config.USE_NV_STYLE }} />
+      <label for='use_nv_style'>Use NV Style:</label>
+      <input id='use_nv_style' type='checkbox' name='use_nv_style' {{ "checked" if config.USE_NV_STYLE }} />
     </div>
-      
+
 
     <h3>Dirs to watch</h3>
 
 
-    <div class='clearfix'>
+    <a class='adddir' href='#'>Add Dir</a>
+    <script>
+      function addDir() {
+        console.log("ADD DIR");
+
+        var dirEl = $("<dir class='cart mtl col-md-3 lfloat mrl pbl' />");
+        dirEl.append("<label>Dir</label>");
+        dirEl.append("<input autocomplete=off name='dir[]' class='formcontrol' type='text' />");
+        dirEl.append("<br />");
+        dirEl.append("<label>Namespace</label>");
+        dirEl.append("<input autocomplete=off name='namespace[]' class='formcontrol' type='text' />");
+
+        $(".dirs").append(dirEl);
+
+      }
+
+      $(document).on("click", ".adddir", addDir);
+    </script>
+
+    <div class='clearfix dirs'>
     {% for dir in config.DIRS %}
       <div class='card mtl col-md-3 lfloat mrl pbl'>
-        
+
         <label>Dir</label><input autocomplete=off name='dir[]' class='formcontrol' type="text" value='{{ dir }}'> </input>
         <br />
 
@@ -44,6 +64,14 @@
     <h3>Journal Dir</h3>
 
     <input class="formcontrol" name="JOURNAL_DIR" value="{{ config.JOURNAL_DIR }}" />
+
+    <h3>Exclude RE</h3>
+
+    <input class="formcontrol" name="EXCLUDE_RE" value="{{ ",".join(config.EXCLUDE_RE) }}" />
+
+    <h3>Include RE</h3>
+
+    <input class="formcontrol" name="INCLUDE_RE" value="{{ ",".join(config.INCLUDE_RE) }}" />
     </form>
 
   </div>

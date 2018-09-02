@@ -21,7 +21,7 @@ def do_export():
 
 def run_indexer():
     last_export = time.time() - 1
-    last_index = time.time() - 1
+    last_index = time.time() - INDEX_INTERVAL
     import config
     while INDEXING.value:
         time.sleep(1)

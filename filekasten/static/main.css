@@ -280,6 +280,12 @@ form.newpage, .crumb form {
     width: 800px
 }
 
+.editor .formcontrol,
+.editor input {
+  width: 800px;
+  border: 1px solid lightgray;
+}
+
 .home.crumb {
     background-color: #fad
 }

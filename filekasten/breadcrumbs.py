@@ -24,7 +24,6 @@ def render_breadcrumbs(*args):
             break
 
     nv = config.USE_NV_STYLE
-    print "NV IS", nv
     return flask.render_template("breadcrumbs.html", crumbs=ordered_crumbs, nv=nv)
 
 def add(name):
