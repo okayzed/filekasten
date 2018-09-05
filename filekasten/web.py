@@ -34,19 +34,6 @@ import components
 from components import *
 components.install(app)
 
-def get_page_listing(filefinder=False, nv=False):
-    k, n, count = get_pages()
-    popup = flask.request.args.get("popup")
-    return PageListing(
-        namespaces=n,
-        total=count,
-        popup=popup,
-        filefinder=filefinder,
-        keys=k,
-        nv=nv
-    )
-
-
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     if type(value) == int or type(value) == float:
@@ -107,9 +94,18 @@ def marshall_page(cur):
 
     return cur
 
-@app.route('/')
-def index():
-    return 'Off my lawn'
+def get_page_listing(filefinder=False, nv=False):
+    k, n, count = get_pages()
+    popup = flask.request.args.get("popup")
+    return PageListing(
+        namespaces=n,
+        total=count,
+        popup=popup,
+        filefinder=filefinder,
+        keys=k,
+        nv=nv
+    )
+
 
 def get_pages():
     cur = models.Page.select(models.Page.name, models.Page.namespace,
@@ -138,6 +134,10 @@ def get_pages():
 
     return ns_keys, namespaces, count
 
+
+@app.route('/')
+def index():
+    return 'Off my lawn'
 
 @app.route('/wiki/')
 def get_wiki_index(nv=False):
@@ -423,13 +423,11 @@ def get_search():
         r.snippets = search.make_snippets(page, query, highlight_search)
 
 
-
-    k, n, count = get_pages()
+    pagelisting = get_page_listing()
     return flask.render_template("search_results.html",
         results=results,
         search=query,
-        namespaces=n,
-        keys=k,
+        pagelisting=pagelisting,
         highlight_search=highlight_search,
         query=query)
 
