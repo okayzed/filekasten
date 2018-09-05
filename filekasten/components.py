@@ -1,6 +1,7 @@
 import pydgeon
 import os
 
+from pydgeon import FlaskPage
 
 class WikiIndex(pydgeon.FlaskPage):
     pass
@@ -15,6 +16,9 @@ class PageListing(pydgeon.BackboneComponent):
     pass
 
 class PageFinder(pydgeon.BackboneComponent):
+    pass
+
+class NVViewer(pydgeon.BackboneComponent):
     pass
 
 class Typeahead(pydgeon.BackboneComponent):

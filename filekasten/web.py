@@ -171,7 +171,11 @@ def get_wiki_index(nv=False):
     pf = False
     if nv and not popup:
         pf = True
-    pagefinder = PageFinder(nv=nv, popup=popup, pagelisting=pagelisting).marshal(page_finder=pf)
+        component = NVViewer(pagelisting=pagelisting)
+    else:
+        component = pagelisting
+
+    pagefinder = PageFinder(component=component).marshal(page_finder=pf)
 
     return WikiIndex(template="index.html", pagefinder=pagefinder).render()
 
@@ -297,7 +301,7 @@ def get_append_page():
 
     typeahead = Typeahead().marshal(options=[p.name for p in pages])
 
-    return WikiPage(template="wiki_append.html", url=url, title=title, quote=quote,
+    return FlaskPage(template="wiki_append.html", url=url, title=title, quote=quote,
         pages=append_to, typeahead=typeahead).render()
 
 @app.route("/append/", methods=["POST"])
@@ -427,7 +431,7 @@ def get_jrnl():
     entries.sort(key=lambda w: w.created, reverse=True)
 
     pagelisting = get_page_listing(nv=False)
-    return WikiPage(template="jrnl_page.html",
+    return FlaskPage(template="jrnl_page.html",
         entries=entries, render=render_markdown, pagelisting=pagelisting).render()
 
 @app.route('/search/')
