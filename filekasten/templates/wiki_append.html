@@ -6,9 +6,6 @@
   <h1>Append to page</h1>
 </div>
 
-<link rel="stylesheet" href={{ url_for('static', filename="mini-default.css") }} />
-<link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
-
 <div class='container-fluid editor clearfix'>
   <form action="{{ url_for('post_append_page') }}" method='post' style='width: 800px'>
     <button type='submit' class='mbl' >

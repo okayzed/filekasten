@@ -24,6 +24,7 @@ import pygments.lexers
 import pygments.formatters
 
 
+
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
 
@@ -31,28 +32,9 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 
 app = flask.Flask(__name__)
 
-import pydgeon
-pydgeon.install(app)
-
-pydgeon.Component.set_base_dir(os.path.join(app.root_path, "components"))
-
-class WikiIndex(pydgeon.FlaskPage):
-    pass
-
-class WikiPage(pydgeon.FlaskPage):
-    pass
-
-class SearchBar(pydgeon.BackboneComponent, pydgeon.MustacheComponent):
-    pass
-
-class PageListing(pydgeon.BackboneComponent):
-    pass
-
-class PageFinder(pydgeon.BackboneComponent):
-    pass
-
-class Typeahead(pydgeon.BackboneComponent):
-    pass
+import components
+from components import *
+components.install(app)
 
 def get_page_listing(filefinder=False, nv=False):
     k, n, count = get_pages()
@@ -315,8 +297,8 @@ def get_append_page():
 
     typeahead = Typeahead().marshal(options=[p.name for p in pages])
 
-    return flask.render_template("wiki_append.html", url=url, title=title, quote=quote,
-        pages=append_to, typeahead=typeahead)
+    return WikiPage(template="wiki_append.html", url=url, title=title, quote=quote,
+        pages=append_to, typeahead=typeahead).render()
 
 @app.route("/append/", methods=["POST"])
 def post_append_page():
@@ -445,36 +427,8 @@ def get_jrnl():
     entries.sort(key=lambda w: w.created, reverse=True)
 
     pagelisting = get_page_listing(nv=False)
-    return flask.render_template("jrnl_page.html",
-        entries=entries, render=render_markdown, pagelisting=pagelisting)
-
-def make_snippets(page, query, highlight_search):
-    text = page.content
-    lines = text.split("\n")
-
-    snippets = []
-    prev = None
-    snippet = []
-    index = 0
-    for line in lines:
-
-        line = "%s:%s" % (index, highlight_search(line, query))
-        index += 1
-        if line.find(query) != -1:
-            if prev and not snippet:
-                snippet.append(prev)
-            snippet.append(line)
-        elif snippet:
-            snippet.append(line)
-            snippets.append("\n".join(snippet))
-            snippet = []
-
-        prev = line
-
-    if snippet:
-        snippets.append("\n".join(snippet))
-
-    return snippets
+    return WikiPage(template="jrnl_page.html",
+        entries=entries, render=render_markdown, pagelisting=pagelisting).render()
 
 @app.route('/search/')
 def get_search():
@@ -497,7 +451,7 @@ def get_search():
 
     for r in results:
         page = marshall_page(r)
-        r.snippets = make_snippets(page, query, highlight_search)
+        r.snippets = search.make_snippets(page, query, highlight_search)
 
 
 

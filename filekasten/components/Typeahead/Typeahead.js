@@ -3,7 +3,7 @@ require("./typeahead.jquery");
 module.exports = {
   initialize: function(ctx) {
     console.log("CREATING QUERY TYPEAHEAD", ctx);
-    var states = ctx.options;
+    var options = ctx.options;
     var substringMatcher = function(strs) {
       return function findMatches(q, cb) {
         var matches, substringRegex;

@@ -5,10 +5,10 @@ blockquote {
     font-size: 80%
 }
 
-html, body, .dualpane .pane .preview {
+.dualpane .pane .preview {
     height: 100%;
     min-height: 100%;
-    overflow: auto
+    overflow: visible;
 }
 
 body {
@@ -312,7 +312,7 @@ form.newpage, .crumb form {
 
 .dualpane .pane .pagelisting {
     overflow-y: auto;
-    position: absolute;
+    position: fixed;
     top: 8em;
     background-color: white;
     bottom: 10px;
