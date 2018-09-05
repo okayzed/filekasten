@@ -46,9 +46,10 @@ class SearchBar(pydgeon.BackboneComponent, pydgeon.MustacheComponent):
     pass
 
 class PageListing(pydgeon.BackboneComponent):
-    def render(self):
-        return super(pydgeon.BackboneComponent, self).render()
+    pass
 
+class PageFinder(pydgeon.BackboneComponent):
+    pass
 
 def get_page_listing(filefinder=False, nv=False):
     k, n, count = get_pages()
@@ -182,8 +183,12 @@ def get_wiki_index(nv=False):
 
     popup = flask.request.args.get("popup")
     pagelisting = get_page_listing(filefinder=True, nv=nv)
+    pf = False
+    if nv and not popup:
+        pf = True
+    pagefinder = PageFinder(nv=nv, popup=popup, pagelisting=pagelisting).marshal(page_finder=pf)
 
-    return WikiIndex(template="index.html", pagelisting=pagelisting, nv=nv, popup=popup).render()
+    return WikiIndex(template="index.html", pagefinder=pagefinder).render()
 
 @app.route('/nv/')
 def get_nv_index():
