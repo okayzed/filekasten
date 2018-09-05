@@ -1,0 +1,11 @@
+<div class='jrnl card {{ entry.namespace.replace("/", "_") }}'>
+  <div class='timestamp text-center mbl'>
+    <a href="{{ url_for("get_wiki_page", name=entry.name) }}">
+      {{ entry.created | format_datetime}}
+    </a>
+  </div>
+
+  <div class='title'> {{ title | safe }} </div>
+  <div class='text'>{{ content | safe }} </div>
+
+</div>

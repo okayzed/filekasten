@@ -3,16 +3,7 @@
 {% block body %}
   <div class='container-fluid content clearfix'>
     {% for entry in entries %}
-      <div class='jrnl card {{ entry.namespace.replace("/", "_") }}'>
-        <div class='timestamp text-center mbl'>
-          <a href="{{ url_for("get_wiki_page", name=entry.name) }}">
-            {{ entry.created | format_datetime}}
-          </a>
-        </div>
-        <div class='title'> {{ (render(entry.title)) | safe }} </div>
-        <div class='text'>{{ (render(entry.content)) | safe }} </div>
-
-      </div>
+      {{ CC("JournalEntry", entry=entry) }}
     {% endfor %}
   </div>
 

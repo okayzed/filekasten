@@ -19,10 +19,6 @@ import journal
 import search
 import config
 
-import pygments
-import pygments.lexers
-import pygments.formatters
-
 
 
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -31,7 +27,9 @@ TEMPLATE_DIR=os.path.join(CUR_DIR, "templates")
 NOTE_DIR = os.path.expanduser("~/Notes")
 
 app = flask.Flask(__name__)
+app.secret_key = config.opts.SECRET
 
+# install pydgeon component library
 import components
 from components import *
 components.install(app)
@@ -49,7 +47,6 @@ def get_page_listing(filefinder=False, nv=False):
     )
 
 
-app.secret_key = config.opts.SECRET
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     if type(value) == int or type(value) == float:
@@ -60,10 +57,6 @@ def datetimeformat(value, format='%Y-%m-%d %H:%M'):
 app.jinja_env.filters['format_datetime'] = datetimeformat
 app.jinja_env.filters['format_dirname'] = lambda w: os.path.dirname(w or "???")
 app.jinja_env.filters['format_filename'] = lambda w: os.path.basename(w or "???")
-
-def yaml_dump(dict):
-    s = yaml.dump(dict, default_flow_style=False)
-    return s.strip("{}")
 
 @app.before_request
 def before_request():
@@ -113,20 +106,6 @@ def marshall_page(cur):
     cur.text = text
 
     return cur
-
-from md_ext import XListExtension, WikiLinkExtension
-
-def render_markdown(text):
-    return markdown.markdown(text,
-        tab_length=2,
-        extensions=[
-            WikiLinkExtension(base_url='/wiki/'),
-	    XListExtension(),
-            "markdown.extensions.footnotes",
-            "markdown.extensions.codehilite",
-            "markdown.extensions.fenced_code",
-            "markdown.extensions.tables"]
-    )
 
 @app.route('/')
 def index():
@@ -221,28 +200,14 @@ def get_wiki_page(name):
             flask.url_for("get_wiki_page", name=page.name, id=page.id))
 
 
-    root,ext = os.path.splitext(page.filename)
-
-    try:
-        lexer = pygments.lexers.get_lexer_for_filename(page.filename)
-    except pygments.lexers.ClassNotFound:
-        lexer = None
-
-    formatter = pygments.formatters.HtmlFormatter(linenos='table')
-
-    css_defs = ""
-    singlecol = False
-    if not lexer or type(lexer) in [pygments.lexers.MarkdownLexer, pygments.lexers.TextLexer]:
-        text = render_markdown(page.content)
-    else:
-        text = pygments.highlight(page.content, lexer, formatter)
-        css_defs = formatter.get_style_defs()
-        singlecol = True
 
     pagelisting = get_page_listing(nv=False)
 
-    return WikiPage(template="wiki_page.html", content=text, meta=page, page=cur, css_defs=css_defs,
-        pagelisting=pagelisting, popup=popup, singlecol=singlecol).marshal(
+    return WikiPage(template="wiki_page.html",
+            page=page,
+            pagelisting=pagelisting,
+            popup=popup,
+        ).marshal(
             page=cur.name, pageid=page.id
         ).render()
 
@@ -431,8 +396,8 @@ def get_jrnl():
     entries.sort(key=lambda w: w.created, reverse=True)
 
     pagelisting = get_page_listing(nv=False)
-    return FlaskPage(template="jrnl_page.html",
-        entries=entries, render=render_markdown, pagelisting=pagelisting).render()
+    return JournalPage(template="jrnl_page.html",
+        entries=entries, pagelisting=pagelisting).render()
 
 @app.route('/search/')
 def get_search():
