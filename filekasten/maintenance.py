@@ -47,7 +47,7 @@ def run_web():
     DEFAULT_URL="http://localhost:%s/wiki" % open_port
 
     try:
-        web.app.run(port=open_port)
+        web.app.run(port=open_port, threaded=True)
     finally:
         INDEXING.value = False
 
