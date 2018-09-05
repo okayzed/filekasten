@@ -51,6 +51,9 @@ class PageListing(pydgeon.BackboneComponent):
 class PageFinder(pydgeon.BackboneComponent):
     pass
 
+class Typeahead(pydgeon.BackboneComponent):
+    pass
+
 def get_page_listing(filefinder=False, nv=False):
     k, n, count = get_pages()
     popup = flask.request.args.get("popup")
@@ -310,7 +313,10 @@ def get_append_page():
     append_to.sort(key=lambda w: w.created, reverse=True)
 
 
-    return flask.render_template("wiki_append.html", url=url, title=title, quote=quote, pages=append_to)
+    typeahead = Typeahead().marshal(options=[p.name for p in pages])
+
+    return flask.render_template("wiki_append.html", url=url, title=title, quote=quote,
+        pages=append_to, typeahead=typeahead)
 
 @app.route("/append/", methods=["POST"])
 def post_append_page():

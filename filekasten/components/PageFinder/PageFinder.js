@@ -3,7 +3,7 @@ module.exports = {
     if (!ctx.page_finder) {
       return;
     }
-    var contentEl = $(".preview");
+    var contentEl = this.el.find(".preview");
 
     var last_location;
 
