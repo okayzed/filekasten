@@ -108,6 +108,7 @@ p img {
     background-color: white;
     margin: auto;
     margin-top: 20px;
+    margin-right: 20px;
     width: 800px;
     padding: 20px
 }
@@ -340,4 +341,11 @@ body h1,body h2,body h3,body h4,body h5,body h6 {
 
 .jrnl.journal {
   border-top: 5px solid #add;
+}
+
+.jrnl {
+  width: 300px;
+  float: left;
+  height: 200px;
+  overflow: auto;
 }

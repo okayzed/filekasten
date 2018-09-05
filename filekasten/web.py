@@ -31,6 +31,17 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 
 app = flask.Flask(__name__)
 
+import pydgeon
+pydgeon.install(app)
+
+pydgeon.Component.set_base_dir(os.path.join(app.root_path, "components"))
+
+class WikiPage(pydgeon.FlaskPage):
+    pass
+
+class SearchBar(pydgeon.BackboneComponent):
+    pass
+
 app.secret_key = config.opts.SECRET
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
@@ -213,8 +224,11 @@ def get_wiki_page(name):
         singlecol = True
 
     k, n, count = get_pages()
-    return flask.render_template("wiki_page.html", content=text, meta=page, page=cur, css_defs=css_defs,
-        namespaces=n, keys=k, popup=popup, singlecol=singlecol)
+
+    return WikiPage(template="wiki_page.html", content=text, meta=page, page=cur, css_defs=css_defs,
+        namespaces=n, keys=k, popup=popup, singlecol=singlecol).marshal(
+            page=cur.name, pageid=page.id
+        ).render()
 
 @app.route("/wiki/<name>/terminal")
 def get_terminal_page(name):

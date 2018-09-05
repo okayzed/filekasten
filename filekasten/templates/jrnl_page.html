@@ -4,7 +4,7 @@
   <div class='container-fluid content'>
     {% for entry in entries %}
       <div class='jrnl card {{ entry.namespace.replace("/", "_") }}'>
-        <div class='rfloat timestamp'>
+        <div class='timestamp text-center mbl'>
           <a href="{{ url_for("get_wiki_page", name=entry.name) }}">
             {{ entry.created | format_datetime}}
           </a>

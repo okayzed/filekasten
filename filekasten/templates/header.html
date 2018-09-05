@@ -8,7 +8,7 @@
 	</span>
 
 
-  {% include "searchbar.html" %}
+  {{ CC("SearchBar").marshal(file_finder=filefinder and not popup) }}
 
 </div>
 
