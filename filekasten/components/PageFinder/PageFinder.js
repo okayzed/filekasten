@@ -1,9 +1,11 @@
 module.exports = {
   initialize: function(ctx) {
     console.log("LOADED PAGEFINDER", this.$el);
-    var time = performance.timing.loadEventEnd - performance.timing.connectStart;
-    $(".perftime").text("Full page Load " + time/1000.0 + "s");
-    console.log("TIMING IS", time);
+    if (window.performance && performance.timing) {
+      var time = performance.timing.loadEventEnd - performance.timing.connectStart;
+      $(".perftime").text("Full page Load " + time/1000.0 + "s");
+      console.log("TIMING IS", time);
+    }
 
     if (!ctx.page_finder) {
       return;
