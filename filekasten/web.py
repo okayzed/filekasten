@@ -36,11 +36,32 @@ pydgeon.install(app)
 
 pydgeon.Component.set_base_dir(os.path.join(app.root_path, "components"))
 
+class WikiIndex(pydgeon.FlaskPage):
+    pass
+
 class WikiPage(pydgeon.FlaskPage):
     pass
 
-class SearchBar(pydgeon.BackboneComponent):
+class SearchBar(pydgeon.BackboneComponent, pydgeon.MustacheComponent):
     pass
+
+class PageListing(pydgeon.BackboneComponent):
+    def render(self):
+        return super(pydgeon.BackboneComponent, self).render()
+
+
+def get_page_listing(filefinder=False, nv=False):
+    k, n, count = get_pages()
+    popup = flask.request.args.get("popup")
+    return PageListing(
+        namespaces=n,
+        total=count,
+        popup=popup,
+        filefinder=filefinder,
+        keys=k,
+        nv=nv
+    )
+
 
 app.secret_key = config.opts.SECRET
 import datetime
@@ -159,9 +180,10 @@ def get_wiki_index(nv=False):
     if not nv:
         breadcrumbs.add("index")
 
-    k, n, count = get_pages()
     popup = flask.request.args.get("popup")
-    return flask.render_template("index.html", namespaces=n, keys=k, total=count, filefinder=True, nv=nv, popup=popup)
+    pagelisting = get_page_listing(filefinder=True, nv=nv)
+
+    return WikiIndex(template="index.html", pagelisting=pagelisting, nv=nv, popup=popup).render()
 
 @app.route('/nv/')
 def get_nv_index():
@@ -223,10 +245,10 @@ def get_wiki_page(name):
         css_defs = formatter.get_style_defs()
         singlecol = True
 
-    k, n, count = get_pages()
+    pagelisting = get_page_listing(nv=False)
 
     return WikiPage(template="wiki_page.html", content=text, meta=page, page=cur, css_defs=css_defs,
-        namespaces=n, keys=k, popup=popup, singlecol=singlecol).marshal(
+        pagelisting=pagelisting, popup=popup, singlecol=singlecol).marshal(
             page=cur.name, pageid=page.id
         ).render()
 
@@ -411,8 +433,9 @@ def get_jrnl():
 
     entries.sort(key=lambda w: w.created, reverse=True)
 
-    k, n, count = get_pages()
-    return flask.render_template("jrnl_page.html", entries=entries, render=render_markdown, namespaces=n, keys=k)
+    pagelisting = get_page_listing(nv=False)
+    return flask.render_template("jrnl_page.html",
+        entries=entries, render=render_markdown, pagelisting=pagelisting)
 
 def make_snippets(page, query, highlight_search):
     text = page.content

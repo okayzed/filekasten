@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class='container-fluid content'>
+  <div class='container-fluid content clearfix'>
     {% for entry in entries %}
       <div class='jrnl card {{ entry.namespace.replace("/", "_") }}'>
         <div class='timestamp text-center mbl'>
@@ -16,5 +16,7 @@
     {% endfor %}
   </div>
 
-  {% include "pagelisting.html" %}
+  <div class='clearfix'> </div>
+
+  {{ pagelisting }}
 {% endblock %}

@@ -2,7 +2,7 @@
 
   <div class='dualpane clearfix'>
     <div class='pane'>
-      {% include "pagelisting.html" %}
+      {{ pagelisting }}
     </div>
 
 
@@ -15,7 +15,7 @@
     </div>
 {% else %}
   <div class=''>
-    {% include "pagelisting.html" %}
+    {{ pagelisting }}
   </div>
 {% endif %}
 
@@ -63,7 +63,7 @@
       var form = $(this).closest("form");
       var params = form.serialize();
       $.post(form.attr("action"), params, function() {
-        refresh_crumbs(); 
+        refresh_crumbs();
       });
     });
 
