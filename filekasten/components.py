@@ -29,12 +29,12 @@ class WikiIndex(pydgeon.FlaskPage):
 class JournalPage(pydgeon.FlaskPage):
     pass
 
-class JournalEntry(pydgeon.BackboneComponent):
+class JournalEntry(pydgeon.JinjaComponent):
     def __prep__(self):
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)
 
-class WikiPage(pydgeon.FlaskPage):
+class WikiPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
     def __prep__(self):
         page = self.context.page
         root,ext = os.path.splitext(page.filename)
@@ -63,16 +63,16 @@ class WikiPage(pydgeon.FlaskPage):
 class SearchBar(pydgeon.BackboneComponent, pydgeon.MustacheComponent):
     pass
 
-class PageListing(pydgeon.BackboneComponent):
+class PageListing(pydgeon.JinjaComponent):
     pass
 
-class PageFinder(pydgeon.BackboneComponent):
+class PageFinder(pydgeon.BackboneComponent, pydgeon.JinjaComponent):
     pass
 
-class NVViewer(pydgeon.BackboneComponent):
+class NVViewer(pydgeon.JinjaComponent):
     pass
 
-class Typeahead(pydgeon.BackboneComponent):
+class Typeahead(pydgeon.BackboneComponent, pydgeon.JinjaComponent):
     pass
 
 def install(app):
