@@ -2,7 +2,7 @@ EXPORT_DIR="export"
 PYTHON=python
 
 web:
-				find ./filekasten -name "*.py" -o -name "*.html" -o -name "*.css" -o -name "*.js" | entr -r ${PYTHON} filekasten/web.py
+				find -L ./filekasten -name "*.py" -o -name "*.html" -o -name "*.css" -o -name "*.js" | entr -r ${PYTHON} filekasten/web.py
 
 clean:
 				rm ./db/wiki.sqlite3

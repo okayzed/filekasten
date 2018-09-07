@@ -9,8 +9,11 @@ import pygments
 import pygments.lexers
 import pygments.formatters
 
+from pydgeon.util import memoize
+
 from md_ext import XListExtension, WikiLinkExtension
 
+@memoize
 def render_markdown(text):
     return markdown.markdown(text,
         tab_length=2,

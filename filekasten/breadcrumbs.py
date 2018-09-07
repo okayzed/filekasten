@@ -1,30 +1,40 @@
 import flask
 import config
 
+import pydgeon
+
 class Crumb(dict):
     def __init__(self, name, url):
         self['name'] = name
         self['url'] = url
 
+class Breadcrumbs(pydgeon.JinjaComponent, pydgeon.ServerBridge):
+    def __prep__(self):
+        crumbs = flask.session.get("breadcrumbs", [])
+        seen = {}
+        ordered_crumbs = []
+        for crumb in reversed(crumbs):
+            if crumb.get("name") in seen:
+                continue
 
+            seen[crumb.get("name")] = True
 
-def render_breadcrumbs(*args):
-    crumbs = flask.session.get("breadcrumbs", [])
-    seen = {}
-    ordered_crumbs = []
-    for crumb in reversed(crumbs):
-        if crumb.get("name") in seen:
-            continue
+            ordered_crumbs.append(crumb)
 
-        seen[crumb.get("name")] = True
+            if len(ordered_crumbs) > 7:
+                break
 
-        ordered_crumbs.append(crumb)
+        nv = config.opts.USE_NV_STYLE
 
-        if len(ordered_crumbs) > 7:
-            break
+        self.context.crumbs = ordered_crumbs
+        self.context.nv = nv
 
-    nv = config.opts.USE_NV_STYLE
-    return flask.render_template("breadcrumbs.html", crumbs=ordered_crumbs, nv=nv)
+        self.set_ref("breadcrumbs")
+
+@Breadcrumbs.api
+def refresh(self):
+    b = Breadcrumbs()
+    self.replace_html(b.render())
 
 def add(name):
     crumbs = flask.session.get("breadcrumbs", [])

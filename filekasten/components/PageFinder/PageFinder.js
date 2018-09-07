@@ -16,12 +16,9 @@ module.exports = {
     var last_location;
 
     function refresh_crumbs() {
-      $.get("/breadcrumbs/", function(crumbs) {
-        $(".breadcrumbs").empty();
-        $(".breadcrumbs").replaceWith(crumbs);
-      });
-
+      $C._refs.breadcrumbs.refresh();
     }
+
     function load_window_content() {
       var href = window.location.hash;
       last_location = href;

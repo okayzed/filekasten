@@ -30,8 +30,8 @@ app = flask.Flask(__name__)
 app.secret_key = config.opts.SECRET
 
 # install pydgeon component library
-import components
 from components import *
+import components
 components.install(app)
 
 import datetime
@@ -49,7 +49,7 @@ app.jinja_env.filters['format_filename'] = lambda w: os.path.basename(w or "???"
 def before_request():
     flask.g.request_start_time = time.time()
     flask.g.request_time = lambda: "%.5fs" % (time.time() - flask.g.request_start_time)
-    flask.g.render_breadcrumbs = breadcrumbs.render_breadcrumbs
+    flask.g.render_breadcrumbs = lambda: breadcrumbs.Breadcrumbs().set_ref("breadcrumbs")
 
 
 def readfile(fname):
