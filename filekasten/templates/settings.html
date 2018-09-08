@@ -19,23 +19,6 @@
 
 
     <a class='adddir' href='#'>Add Dir</a>
-    <script>
-      function addDir() {
-        console.log("ADD DIR");
-
-        var dirEl = $("<dir class='cart mtl col-md-3 lfloat mrl pbl' />");
-        dirEl.append("<label>Dir</label>");
-        dirEl.append("<input autocomplete=off name='dir[]' class='formcontrol' type='text' />");
-        dirEl.append("<br />");
-        dirEl.append("<label>Namespace</label>");
-        dirEl.append("<input autocomplete=off name='namespace[]' class='formcontrol' type='text' />");
-
-        $(".dirs").append(dirEl);
-
-      }
-
-      $(document).on("click", ".adddir", addDir);
-    </script>
 
     <div class='clearfix dirs'>
     {% for dir in config.opts.DIRS %}

@@ -63,6 +63,9 @@ class WikiPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
         self.context.css_defs = css_defs
         self.context.singlecol = singlecol
 
+class SettingsPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
+    pass
+
 class SearchBar(pydgeon.BackboneComponent, pydgeon.MustacheComponent):
     pass
 

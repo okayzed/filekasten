@@ -433,8 +433,11 @@ def get_search():
 
 @app.route('/settings/')
 def get_settings():
-    return flask.render_template("settings.html",
-        config=config)
+
+    sp = SettingsPage(template="settings.html")
+    sp.context.update(config=config)
+
+    return sp.render()
 
 @app.route('/settings/', methods=["POST"])
 def post_settings():

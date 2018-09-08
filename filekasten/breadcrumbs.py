@@ -8,7 +8,7 @@ class Crumb(dict):
         self['name'] = name
         self['url'] = url
 
-class Breadcrumbs(pydgeon.JinjaComponent, pydgeon.ServerBridge):
+class Breadcrumbs(pydgeon.JinjaComponent, pydgeon.ServerBridge, pydgeon.BackboneComponent):
     def __prep__(self):
         crumbs = flask.session.get("breadcrumbs", [])
         seen = {}
