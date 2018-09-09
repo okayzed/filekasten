@@ -156,7 +156,7 @@ def get_wiki_index(nv=False):
 
     pagefinder = PageFinder(component=component).marshal(page_finder=pf)
 
-    return WikiIndex(template="index.html", pagefinder=pagefinder).render()
+    return WikiIndex(template="index.html", pagefinder=pagefinder, popup=popup).render()
 
 @app.route('/nv/')
 def get_nv_index():

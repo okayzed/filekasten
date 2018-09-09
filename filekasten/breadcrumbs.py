@@ -9,7 +9,7 @@ class Crumb(dict):
         self['url'] = url
 
 class Breadcrumbs(pydgeon.JinjaComponent, pydgeon.ServerBridge, pydgeon.BackboneComponent):
-    def __prep__(self):
+    def __prepare__(self):
         crumbs = flask.session.get("breadcrumbs", [])
         seen = {}
         ordered_crumbs = []

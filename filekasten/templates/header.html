@@ -20,5 +20,7 @@
   </small>
 </div>
 
-{{ g.render_breadcrumbs() }}
+{% if not popup %}
+  {{ g.render_breadcrumbs() }}
+{% endif %}
 

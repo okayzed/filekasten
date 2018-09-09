@@ -33,12 +33,12 @@ class JournalPage(pydgeon.FlaskPage):
     pass
 
 class JournalEntry(pydgeon.JinjaComponent):
-    def __prep__(self):
+    def __prepare__(self):
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)
 
 class WikiPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
-    def __prep__(self):
+    def __prepare__(self):
         page = self.context.page
         root,ext = os.path.splitext(page.filename)
 
@@ -83,4 +83,4 @@ class Typeahead(pydgeon.BackboneComponent, pydgeon.JinjaComponent):
 
 def install(app):
     pydgeon.Component.set_base_dir(os.path.join(app.root_path, "components"))
-    pydgeon.install(app)
+    pydgeon.register_blueprint(app)
