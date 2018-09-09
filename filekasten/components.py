@@ -1,7 +1,7 @@
-import pydgeon
+import pudgy
 import os
 
-from pydgeon import FlaskPage
+from pudgy import FlaskPage
 
 import markdown
 
@@ -9,7 +9,7 @@ import pygments
 import pygments.lexers
 import pygments.formatters
 
-from pydgeon.util import memoize
+from pudgy.util import memoize
 
 from md_ext import XListExtension, WikiLinkExtension
 
@@ -26,18 +26,18 @@ def render_markdown(text):
             "markdown.extensions.tables"]
     )
 
-class WikiIndex(pydgeon.FlaskPage):
+class WikiIndex(pudgy.FlaskPage):
     pass
 
-class JournalPage(pydgeon.FlaskPage):
+class JournalPage(pudgy.FlaskPage):
     pass
 
-class JournalEntry(pydgeon.JinjaComponent):
+class JournalEntry(pudgy.JinjaComponent):
     def __prepare__(self):
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)
 
-class WikiPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
+class WikiPage(pudgy.FlaskPage, pudgy.BackboneComponent):
     def __prepare__(self):
         page = self.context.page
         root,ext = os.path.splitext(page.filename)
@@ -63,24 +63,24 @@ class WikiPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
         self.context.css_defs = css_defs
         self.context.singlecol = singlecol
 
-class SettingsPage(pydgeon.FlaskPage, pydgeon.BackboneComponent):
+class SettingsPage(pudgy.FlaskPage, pudgy.BackboneComponent):
     pass
 
-class SearchBar(pydgeon.BackboneComponent, pydgeon.MustacheComponent):
+class SearchBar(pudgy.BackboneComponent, pudgy.MustacheComponent):
     pass
 
-class PageListing(pydgeon.JinjaComponent):
+class PageListing(pudgy.JinjaComponent):
     pass
 
-class PageFinder(pydgeon.BackboneComponent, pydgeon.JinjaComponent):
+class PageFinder(pudgy.BackboneComponent, pudgy.JinjaComponent):
     pass
 
-class NVViewer(pydgeon.JinjaComponent):
+class NVViewer(pudgy.JinjaComponent):
     pass
 
-class Typeahead(pydgeon.BackboneComponent, pydgeon.JinjaComponent):
+class Typeahead(pudgy.BackboneComponent, pudgy.JinjaComponent):
     pass
 
 def install(app):
-    pydgeon.Component.set_base_dir(os.path.join(app.root_path, "components"))
-    pydgeon.register_blueprint(app)
+    pudgy.Component.set_base_dir(os.path.join(app.root_path, "components"))
+    pudgy.register_blueprint(app)

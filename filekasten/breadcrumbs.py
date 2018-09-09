@@ -1,14 +1,14 @@
 import flask
 import config
 
-import pydgeon
+import pudgy
 
 class Crumb(dict):
     def __init__(self, name, url):
         self['name'] = name
         self['url'] = url
 
-class Breadcrumbs(pydgeon.JinjaComponent, pydgeon.ServerBridge, pydgeon.BackboneComponent):
+class Breadcrumbs(pudgy.JinjaComponent, pudgy.ServerBridge, pudgy.BackboneComponent):
     def __prepare__(self):
         crumbs = flask.session.get("breadcrumbs", [])
         seen = {}
