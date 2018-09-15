@@ -29,6 +29,7 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 app = flask.Flask(__name__)
 app.secret_key = config.opts.SECRET
 
+
 # install pudgy component library
 from components import *
 import components

@@ -84,3 +84,4 @@ class Typeahead(pudgy.BackboneComponent, pudgy.JinjaComponent):
 def install(app):
     pudgy.Component.set_base_dir(os.path.join(app.root_path, "components"))
     pudgy.register_blueprint(app)
+    app.after_request(pudgy.compress_request)
