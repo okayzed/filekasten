@@ -97,6 +97,12 @@ def marshall_page(cur):
 
     return cur
 
+def get_entry_listing(entries):
+    entrylisting = EntryListing()
+    entrylisting.async()
+    entrylisting.context.update(entries=entries)
+    return entrylisting
+
 def get_page_listing(filefinder=False, nv=False):
     k, n, count = get_pages()
     popup = flask.request.args.get("popup")
@@ -377,42 +383,36 @@ def delete_breadcrumb():
 def get_breadcrumbs():
     return breadcrumbs.render_breadcrumbs()
 
-@app.route('/jrnl/')
-def get_jrnl():
-    n = flask.request.args.get('n', 30)
-
+def get_journal_entries(page, per_page):
     jrnl = (models.Page
         .select()
         .where(models.Page.namespace << config.opts.JOURNALS)
         .order_by(models.Page.created.desc())
-        .limit(n))
+        .paginate(page, per_page))
 
-    print jrnl.sql()
-    now = time.time()
     jrnl.execute()
-    end = time.time()
-    print "SQL QUERY TOOK", end - now
 
 
-    now = time.time()
-    entries = map(marshall_page, jrnl)
-    es = []
-    for e in entries:
-        if type(e.created) == int or type(e.created) == float:
-            e.created = datetime.datetime.fromtimestamp(e.created)
+    return map(marshall_page, jrnl)
 
-        es.append(JournalEntry(entry=e))
+@app.route('/jrnl/')
+def get_jrnl():
+    n = flask.request.args.get('n', 50)
 
-
-
-    entries.sort(key=lambda w: w.created, reverse=True)
-    end = time.time()
-    print "MARSHALLING TOOK", end - now
-
+    entries = get_journal_entries(1, n)
+    entrylisting = get_entry_listing(entries)
     pagelisting = get_page_listing(nv=False)
+
+    entries = get_journal_entries(2, n)
+    entrylisting2 = get_entry_listing(entries)
     now = time.time()
-    ret= JournalPage(template="jrnl_page.html",
-        entries=es, pagelisting=pagelisting).render()
+
+    ret= JournalPage(
+            template="jrnl_page.html",
+            entrylisting=entrylisting,
+            pagelisting=pagelisting,
+            entrylisting2=entrylisting2,
+        ).pipeline()
     end = time.time()
     print "RENDERING TOOK", end - now
     return ret

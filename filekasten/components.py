@@ -12,6 +12,7 @@ import pygments.formatters
 from pudgy.util import memoize
 
 from md_ext import XListExtension, WikiLinkExtension
+import datetime
 
 @memoize
 def render_markdown(text):
@@ -32,12 +33,25 @@ class WikiIndex(pudgy.FlaskPage):
 class JournalPage(pudgy.FlaskPage):
     pass
 
+class EntryListing(pudgy.JinjaComponent, pudgy.Pagelet):
+    def __prepare__(self):
+        es = []
+        for e in self.context.entries:
+            if type(e.created) == int or type(e.created) == float:
+                e.created = datetime.datetime.fromtimestamp(e.created)
+
+            es.append(JournalEntry(entry=e))
+
+        self.context.entries = es
+
 class JournalEntry(pudgy.MustacheComponent):
     def __prepare__(self):
         from web import datetimeformat
+        import flask
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)
         self.context.entry.format_created = datetimeformat(self.context.entry.created)
+        self.context.entry.url = flask.url_for("get_wiki_page", name=self.context.entry.name)
 
 class WikiPage(pudgy.FlaskPage, pudgy.BackboneComponent):
     def __prepare__(self):

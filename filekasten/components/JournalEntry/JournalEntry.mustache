@@ -1,6 +1,6 @@
 <div class='jrnl card {{ entry.namespace.replace("/", "_") }}'>
   <div class='timestamp text-center mbl'>
-    <a href="{{ url_for("get_wiki_page", name=entry.name) }}">
+    <a href="{{ entry.url }}" >
       {{ entry.format_created }}
     </a>
   </div>
