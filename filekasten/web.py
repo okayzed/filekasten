@@ -5,6 +5,7 @@ import time
 import urllib
 
 import markdown
+import jinja2
 
 import yaml
 import shlex
@@ -28,6 +29,7 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 
 app = flask.Flask(__name__)
 app.secret_key = config.opts.SECRET
+
 
 
 # install pudgy component library
@@ -386,19 +388,34 @@ def get_jrnl():
         .limit(n))
 
     print jrnl.sql()
+    now = time.time()
     jrnl.execute()
+    end = time.time()
+    print "SQL QUERY TOOK", end - now
 
 
+    now = time.time()
     entries = map(marshall_page, jrnl)
+    es = []
     for e in entries:
         if type(e.created) == int or type(e.created) == float:
             e.created = datetime.datetime.fromtimestamp(e.created)
 
+        es.append(JournalEntry(entry=e))
+
+
+
     entries.sort(key=lambda w: w.created, reverse=True)
+    end = time.time()
+    print "MARSHALLING TOOK", end - now
 
     pagelisting = get_page_listing(nv=False)
-    return JournalPage(template="jrnl_page.html",
-        entries=entries, pagelisting=pagelisting).render()
+    now = time.time()
+    ret= JournalPage(template="jrnl_page.html",
+        entries=es, pagelisting=pagelisting).render()
+    end = time.time()
+    print "RENDERING TOOK", end - now
+    return ret
 
 @app.route('/search/')
 def get_search():

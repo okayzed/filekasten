@@ -3,7 +3,7 @@
 {% block body %}
   <div class='container-fluid content clearfix'>
     {% for entry in entries %}
-      {{ CC("JournalEntry", entry=entry) }}
+      {{ entry }}
     {% endfor %}
   </div>
 

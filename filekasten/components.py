@@ -32,10 +32,12 @@ class WikiIndex(pudgy.FlaskPage):
 class JournalPage(pudgy.FlaskPage):
     pass
 
-class JournalEntry(pudgy.JinjaComponent):
+class JournalEntry(pudgy.MustacheComponent):
     def __prepare__(self):
+        from web import datetimeformat
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)
+        self.context.entry.format_created = datetimeformat(self.context.entry.created)
 
 class WikiPage(pudgy.FlaskPage, pudgy.BackboneComponent):
     def __prepare__(self):
