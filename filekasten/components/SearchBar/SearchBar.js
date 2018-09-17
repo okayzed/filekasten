@@ -1,12 +1,14 @@
 var NEW_PAGE;
 var FILE_FINDER = false;
 
+var $ = require("jquery");
+
 module.exports = {
   initialize: function(ctx) {
     FILE_FINDER = ctx.file_finder;
     console.log("FILE FINDER IS", FILE_FINDER);
 
-    if ($(".newjrnl").length > 0 || $(".newfile").length > 0) {
+    if (this.$el.find(".newjrnl").length > 0 || this.$el.find(".newfile").length > 0) {
       return;
     }
 
@@ -34,7 +36,7 @@ module.exports = {
     $(".quicklinks").append(newJrnl);
     $(".quicklinks").append(jrnlForm);
 
-    $(document).on("change paste keyup blur focus", ".filefind", function(el) {
+    this.$el.on("change paste keyup blur focus", ".filefind", function(el) {
 
 
       newJrnl = $(".newjrnl");

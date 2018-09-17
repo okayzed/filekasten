@@ -2,9 +2,9 @@
 
 {% block body %}
   <div class='container-fluid content clearfix'>
-    {{ entrylisting }}
-
-    {{ entrylisting2 }}
+    {% for e in entries %}
+      {{ e }}
+    {% endfor %}
   </div>
 
   <div class='clearfix'> </div>

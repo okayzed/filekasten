@@ -399,22 +399,21 @@ def get_journal_entries(page, per_page):
 def get_jrnl():
     n = flask.request.args.get('n', 50)
 
-    entries = get_journal_entries(1, n)
-    entrylisting = get_entry_listing(entries)
-    pagelisting = get_page_listing(nv=False)
+    es = []
+    for i in xrange(1, 3):
+        entries = get_journal_entries(i, n)
+        entrylisting = get_entry_listing(entries)
+#        entrylisting.set_delay(i-1)
+        es.append(entrylisting)
 
-    entries = get_journal_entries(2, n)
-    entrylisting2 = get_entry_listing(entries)
-    now = time.time()
+
+    pagelisting = get_page_listing(nv=False)
 
     ret= JournalPage(
             template="jrnl_page.html",
-            entrylisting=entrylisting,
+            entries=es,
             pagelisting=pagelisting,
-            entrylisting2=entrylisting2,
         ).pipeline()
-    end = time.time()
-    print "RENDERING TOOK", end - now
     return ret
 
 @app.route('/search/')

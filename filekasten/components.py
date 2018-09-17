@@ -33,7 +33,14 @@ class WikiIndex(pudgy.FlaskPage):
 class JournalPage(pudgy.FlaskPage):
     pass
 
-class EntryListing(pudgy.JinjaComponent, pudgy.Pagelet):
+class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
+    def __init__(self, *args, **kwargs):
+        self.delay = 0
+        super(EntryListing, self).__init__(*kwargs, **kwargs)
+
+    def set_delay(self, d):
+        self.delay = d
+
     def __prepare__(self):
         es = []
         for e in self.context.entries:
@@ -43,6 +50,7 @@ class EntryListing(pudgy.JinjaComponent, pudgy.Pagelet):
             es.append(JournalEntry(entry=e))
 
         self.context.entries = es
+
 
 class JournalEntry(pudgy.MustacheComponent):
     def __prepare__(self):
@@ -98,6 +106,7 @@ class Typeahead(pudgy.BackboneComponent, pudgy.JinjaComponent):
     pass
 
 def install(app):
+    pudgy.add_to_prelude("jquery", os.path.join(app.static_folder, "jquery-3.3.1.min.js"))
     pudgy.Component.set_base_dir(os.path.join(app.root_path, "components"))
     pudgy.register_blueprint(app)
     app.after_request(pudgy.compress_request)
