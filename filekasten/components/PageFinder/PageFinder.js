@@ -1,4 +1,4 @@
-var $ = require("jquery");
+var $ = $require("jquery");
 
 module.exports = {
   initialize: function(ctx) {
@@ -13,7 +13,7 @@ module.exports = {
     var last_location;
 
     function refresh_crumbs() {
-      $C._refs.breadcrumbs.refresh();
+      $P._refs.breadcrumbs.refresh();
     }
 
     function load_window_content() {

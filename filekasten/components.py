@@ -46,7 +46,7 @@ class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
         for e in self.context.entries:
             if type(e.created) == int or type(e.created) == float:
                 e.created = datetime.datetime.fromtimestamp(e.created)
-
+    
             es.append(JournalEntry(entry=e))
 
         self.context.entries = es
@@ -60,6 +60,7 @@ class JournalEntry(pudgy.MustacheComponent):
         self.context.content = render_markdown(self.context.entry.content)
         self.context.entry.format_created = datetimeformat(self.context.entry.created)
         self.context.entry.url = flask.url_for("get_wiki_page", name=self.context.entry.name)
+        self.context.namespace = self.context.entry.namespace;
 
 class WikiPage(pudgy.FlaskPage, pudgy.BackboneComponent):
     def __prepare__(self):
@@ -107,6 +108,7 @@ class Typeahead(pudgy.BackboneComponent, pudgy.JinjaComponent):
 
 def install(app):
     pudgy.add_to_prelude("jquery", os.path.join(app.static_folder, "jquery-3.3.1.min.js"))
-    pudgy.Component.set_base_dir(os.path.join(app.root_path, "components"))
+    pudgy.add_prelude_line("window.jQuery = window.$ = require('jquery')")
+
     pudgy.register_blueprint(app)
     app.after_request(pudgy.compress_request)

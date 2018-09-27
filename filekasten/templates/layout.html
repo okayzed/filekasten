@@ -1,16 +1,14 @@
-<!DOCTYPE HTML>
 <html>
 
 <head>
 <title>{% block title %}{% endblock %}</title>
 
 {% if not popup %}
-  <link rel="stylesheet" href={{ url_for('static', filename="bootstrap.css") }} />
-  <link rel="stylesheet" href={{ url_for('static', filename="reset.css") }} />
-  <link rel="stylesheet" href={{ url_for('static', filename="scrollers.css") }} />
-  <link rel="stylesheet" href={{ url_for('static', filename="main.css") }} />
+  {{ add_stylesheet("bootstrap.css") }}
+  {{ add_stylesheet("reset.css") }}
+  {{ add_stylesheet("scrollers.css") }}
+  {{ add_stylesheet("main.css") }}
 {% endif %}
-
 </head>
 
 {% block header %}

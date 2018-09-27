@@ -421,6 +421,7 @@ def get_search():
     args = flask.request.args
     query = args.get('q')
     breadcrumbs.add("search: " + query)
+    popup = flask.request.args.get("popup")
 
     results = (models.Page.select()
         .join(
@@ -441,12 +442,13 @@ def get_search():
 
 
     pagelisting = get_page_listing()
-    return flask.render_template("search_results.html",
+    return FlaskPage(template="search_results.html",
         results=results,
         search=query,
+        popup=popup,
         pagelisting=pagelisting,
         highlight_search=highlight_search,
-        query=query)
+        query=query).render()
 
 @app.route('/settings/')
 def get_settings():

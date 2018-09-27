@@ -28,6 +28,6 @@ def open(fname):
         raise Exception("Path does not exist")
 
     editor = os.environ.get("EDITOR", "vim")
-    command = terminal + " " + editor + " " + fname
+    command = "%s %s '%s'" % (terminal, editor, fname)
     status = call(command)
     return status

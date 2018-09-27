@@ -34,7 +34,7 @@ class Breadcrumbs(pudgy.JinjaComponent, pudgy.ServerBridge, pudgy.BackboneCompon
 @Breadcrumbs.api
 def refresh(self):
     b = Breadcrumbs()
-    self.replace_html(b.render())
+    self.html(b.render())
 
 def add(name):
     crumbs = flask.session.get("breadcrumbs", [])

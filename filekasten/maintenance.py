@@ -17,7 +17,7 @@ def do_index():
     ingest_flat_files.ingest_files(config.opts.DIRS, config.opts.JOURNAL, config.opts.HIDDEN)
 
 def do_export():
-    exgest_flat_files.export_files_to_dir(config.opts.BACKUP_DIR)
+    exgest_flat_files.export_files_to_dir(config.opts.EXPORT_DIR)
 
 def run_indexer():
     last_export = time.time() - 1

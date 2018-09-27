@@ -1,7 +1,7 @@
 var NEW_PAGE;
 var FILE_FINDER = false;
 
-var $ = require("jquery");
+var $ = $require("jquery");
 
 module.exports = {
   initialize: function(ctx) {
