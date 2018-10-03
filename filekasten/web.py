@@ -123,7 +123,7 @@ def get_pages():
 
     namespaces = {}
     for page in cur:
-        if page.journal or page.hidden:
+        if page.journal or page.hidden or page.namespace in config.opts.JOURNALS:
             continue
 
         if not page.namespace in namespaces:
