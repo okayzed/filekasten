@@ -1,4 +1,6 @@
 import config
+import os
+import sys
 
 def find_free_port():
     return config.opts.PORT
@@ -13,11 +15,22 @@ import time
 
 import ingest_flat_files, exgest_flat_files, clean_missing_files
 def do_index():
-    clean_missing_files.clean_missing_files()
-    ingest_flat_files.ingest_files(config.opts.DIRS, config.opts.JOURNAL, config.opts.HIDDEN)
+    child_pid = os.fork()
+    if child_pid == 0:
+        clean_missing_files.clean_missing_files()
+        ingest_flat_files.ingest_files(config.opts.DIRS, config.opts.JOURNAL, config.opts.HIDDEN)
+        sys.exit(0)
+    else:
+        os.waitpid(child_pid, 0)
 
 def do_export():
-    exgest_flat_files.export_files_to_dir(config.opts.EXPORT_DIR)
+    child_pid = os.fork()
+    if child_pid == 0:
+        print "EXPORTING IN CHILD PID"
+        exgest_flat_files.export_files_to_dir(config.opts.EXPORT_DIR)
+        sys.exit(0)
+    else:
+        os.waitpid(child_pid, 0)
 
 def run_indexer():
     last_export = time.time() - 1
