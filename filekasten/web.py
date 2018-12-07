@@ -30,6 +30,8 @@ NOTE_DIR = os.path.expanduser("~/Notes")
 app = flask.Flask(__name__)
 app.secret_key = config.opts.SECRET
 
+app.config["SESSION_COOKIE_NAME"] = "filekasten"
+
 
 
 # install pudgy component library

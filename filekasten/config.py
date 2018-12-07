@@ -1,5 +1,5 @@
 import os
-import dotmap
+import addict
 import yaml
 
 PROFILE=os.environ.get("PROFILE", "default")
@@ -8,7 +8,7 @@ FILEKASTEN_FILE = os.path.join(FILEKASTEN_DIR, "config.yaml.new")
 if not os.path.exists(FILEKASTEN_DIR):
     os.makedirs(FILEKASTEN_DIR)
 
-opts = dotmap.DotMap()
+opts = addict.Dict()
 
 STRING_KEYS = {}
 LIST_KEYS = {}

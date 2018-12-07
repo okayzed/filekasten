@@ -25,4 +25,4 @@ build:
 				${PYTHON} setup.py sdist
 
 install:
-				sudo ${PYTHON} -m pip install dist/filekasten-0.0.1.tar.gz --upgrade
+				sudo ${PYTHON} -m pip install dist/filekasten-0.0.2.tar.gz --upgrade

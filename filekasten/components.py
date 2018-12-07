@@ -11,7 +11,7 @@ import pygments.formatters
 
 from pudgy.util import memoize
 
-from md_ext import XListExtension, WikiLinkExtension
+from md_ext import XListExtension
 import datetime
 
 @memoize
@@ -19,7 +19,6 @@ def render_markdown(text):
     return markdown.markdown(text,
         tab_length=2,
         extensions=[
-            WikiLinkExtension(base_url='/wiki/'),
             XListExtension(),
             "markdown.extensions.footnotes",
             "markdown.extensions.codehilite",

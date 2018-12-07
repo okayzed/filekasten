@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='filekasten',
-    version='0.0.1',
+    version='0.0.2',
     author='okay',
     author_email='okay.zed+jt@gmail.com',
     include_package_data=True,
@@ -21,6 +21,8 @@ setup(
         "python-frontmatter",
         "babel",
         "flask_peewee",
+        "addict",
+        "pudgy",
     ],
     )
 

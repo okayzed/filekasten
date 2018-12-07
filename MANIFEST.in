@@ -1,3 +1,4 @@
 include filekasten/templates/*.html
 include filekasten/static/*.css
 include filekasten/static/*.js
+recursive-include filekasten/components/ *.js *.jsx *.sass *.css *.html *.mustache
