@@ -350,6 +350,25 @@ body h1,body h2,body h3,body h4,body h5,body h6 {
   overflow: auto;
 }
 
+.todolisting .jrnl {
+  width: 90%;
+  max-width: 800px;
+  max-height: 500px;
+  height: auto;
+  clear: both;
+  overflow: hidden;
+  float: left;
+}
+
+.todolisting .JournalEntry {
+  margin-bottom: 20px;
+}
+
+.todolisting .timestamp {
+  float: right;
+  margin-right: 5px;
+}
+
 body p {
   margin-bottom: 1rem;
 }

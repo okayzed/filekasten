@@ -397,6 +397,20 @@ def get_journal_entries(page, per_page):
 
     return map(marshall_page, jrnl)
 
+def get_todo_entries(page, per_page):
+    todo = (models.Page.select()
+        .join(
+            models.PageIndex,
+            on=(models.Page.id == models.PageIndex.rowid))
+        .where(models.PageIndex.match("todo"))
+        .order_by(models.Page.updated.desc())
+
+        )
+    todo.execute()
+
+
+    return map(marshall_page, todo)
+
 @app.route('/jrnl/')
 def get_jrnl():
     n = flask.request.args.get('n', 50)
@@ -409,10 +423,43 @@ def get_jrnl():
         es.append(entrylisting)
 
 
-    pagelisting = get_page_listing(nv=False)
+    nv = config.opts.USE_NV_STYLE
+    pagelisting = get_page_listing(filefinder=True, nv=nv)
+    pf = False
+    if nv:
+        component = NVViewer(pagelisting=pagelisting)
+    else:
+        component = pagelisting
 
     ret= JournalPage(
             template="jrnl_page.html",
+            entries=es,
+            pagelisting=pagelisting,
+        ).pipeline()
+    return ret
+
+@app.route('/todo')
+def get_todo():
+    n = flask.request.args.get('n', 50)
+
+    es = []
+    for i in xrange(1, 3):
+        entries = get_todo_entries(i, n)
+        entrylisting = get_entry_listing(entries)
+    #        entrylisting.set_delay(i-1)
+        es.append(entrylisting)
+
+
+    nv = config.opts.USE_NV_STYLE
+    pagelisting = get_page_listing(filefinder=True, nv=nv)
+    pf = False
+    if nv:
+        component = NVViewer(pagelisting=pagelisting)
+    else:
+        component = pagelisting
+
+    ret= TodoPage(
+            template="todo_page.html",
             entries=es,
             pagelisting=pagelisting,
         ).pipeline()

@@ -19,7 +19,7 @@ def render_markdown(text):
     return markdown.markdown(text,
         tab_length=2,
         extensions=[
-            WikiLinkExtension(base_url='/wiki/'),
+            WikiLinkExtension(base_url='/wiki/', end_url=".md"),
             XListExtension(),
             "markdown.extensions.footnotes",
             "markdown.extensions.codehilite",
@@ -31,6 +31,9 @@ class WikiIndex(pudgy.FlaskPage):
     pass
 
 class JournalPage(pudgy.FlaskPage):
+    pass
+
+class TodoPage(pudgy.FlaskPage):
     pass
 
 class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
