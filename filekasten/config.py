@@ -30,7 +30,7 @@ def update(args):
 def save_config():
 #    print "SAVING CONFIG", opts.toDict()
     with open(FILEKASTEN_FILE, "w") as f:
-        info = f.write(yaml.safe_dump(opts.toDict(), default_flow_style=False))
+        info = f.write(yaml.safe_dump(opts.to_dict(), default_flow_style=False))
 
     read_config()
 
@@ -38,6 +38,9 @@ def read_config():
     if os.path.exists(FILEKASTEN_FILE):
         with open(FILEKASTEN_FILE) as f:
             info = yaml.load(f.read())
+
+        if not info:
+            return
 
         for key in info:
             if key in STRING_KEYS:
