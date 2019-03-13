@@ -39,6 +39,9 @@ from components import *
 import components
 components.install(app)
 
+import pudgy
+pudgy.use_jquery()
+
 import datetime
 def datetimeformat(value, format='%Y-%m-%d %H:%M'):
     if type(value) == int or type(value) == float:
@@ -261,13 +264,14 @@ def get_append_page():
     title = args.get('title', '')
     url = args.get('url', '')
     quote = args.get('quote', '')
+    search = args.get('search', '')
 
     pages = list(models.Page.select(models.Page.name, models.Page.namespace,
         models.Page.journal, models.Page.hidden).execute());
 
     append_to = []
     for page in pages:
-        if page.journal or page.hidden:
+        if page.journal or page.hidden or page.namespace in config.opts.JOURNALS:
             continue
 
         append_to.append(page)
@@ -275,10 +279,10 @@ def get_append_page():
     append_to.sort(key=lambda w: w.created, reverse=True)
 
 
-    typeahead = Typeahead().marshal(options=[p.name for p in pages])
+    typeahead = Typeahead().marshal(options=[p.name for p in append_to])
 
     return FlaskPage(template="wiki_append.html", url=url, title=title, quote=quote,
-        pages=append_to, typeahead=typeahead).render()
+        pages=append_to, typeahead=typeahead, search=search).render()
 
 @app.route("/append/", methods=["POST"])
 def post_append_page():
