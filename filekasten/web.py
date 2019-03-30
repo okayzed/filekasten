@@ -288,7 +288,41 @@ def get_append_page():
 def post_append_page():
     args = flask.request.form
     name = args.get('name')
-    cur = models.Page.get(models.Page.name == name)
+
+    # TODO: get or create needs to create this file if it doesn't exist
+    cur = models.Page.select().where(models.Page.name == name)
+    if len(cur) == 0:
+        name = os.path.normpath(name)
+        if name.find("..") != -1 or name[0] == '/':
+            print "INVALID PATH", name
+            return "INVALID PAGE NAME: %s, PLEASE REMOVE THE '..' and leading '/'" % (name)
+
+        namespace, pagename = os.path.split(name)
+        path = os.path.join(NOTE_DIR, namespace)
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        page_path = os.path.join(path, pagename)
+
+        aname = os.path.abspath(page_path)
+        with open(page_path, "a") as f:
+            f.write("")
+
+        created = time.time()
+        cur = models.Page(
+          name=pagename,
+          title='',
+          created=created,
+          filename=aname,
+          namespace=namespace,
+          journal=False,
+          hidden=False,
+          type="markdown",
+          updated=created
+          )
+        search.index(cur)
+
+        cur.save()
 
     title = args.get('title')
     url = args.get('url')

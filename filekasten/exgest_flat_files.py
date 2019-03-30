@@ -38,8 +38,8 @@ def export_files_to_dir(outdir):
         except:
             pass
 
-        with open(os.path.join(basename, "diff.sh"), "a") as f:
-            f.write("diff -y '%s' '%s'\n" % (dest, r.filename))
+#        with open(os.path.join(basename, "diff.sh"), "a") as f:
+#            f.write("diff -y '%s' '%s'\n" % (dest, r.filename))
 #        with open(os.path.join(basename, "restore.sh"), "a") as f:
 #            f.write("cp '%s' '%s'\n" % (dest, r.filename))
 
