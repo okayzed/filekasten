@@ -323,6 +323,8 @@ def post_append_page():
         search.index(cur)
 
         cur.save()
+    else:
+        cur = cur[0]
 
     title = args.get('title')
     url = args.get('url')
