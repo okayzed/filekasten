@@ -19,6 +19,7 @@ import journal
 
 import search
 import config
+import terminal
 
 
 
@@ -237,7 +238,7 @@ def get_terminal_page(name):
     print "PAGE IS", cur
 
     import editor
-    os.system("xfce4-terminal --working-directory='%s'" % (os.path.dirname(cur.filename)))
+    os.system("%s --working-directory='%s'" % (terminal.CMD, os.path.dirname(cur.filename)))
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name, id=page.id))
 

@@ -1,6 +1,8 @@
 import os, tempfile
 import subprocess
 
+import terminal
+
 def call(cmd):
     subprocess.call(cmd, shell=True)
 
@@ -11,8 +13,8 @@ def edit(content=''):
         f.write(content)
         f.flush()
 
-    terminal = "xfce4-terminal -x"
-    command = terminal + " " + editor + " " + f.name
+    cmd = "%s -x" % (terminal.CMD)
+    command = cmd + " " + editor + " " + f.name
     status = call(command)
     f.seek(0, 0)
     text = f.read()
@@ -22,12 +24,12 @@ def edit(content=''):
 
 def open(fname):
     basedir = os.path.dirname(fname)
-    terminal = "/usr/bin/xfce4-terminal --working-directory='%s' -x" % basedir
+    cmd = "%s --working-directory='%s' -x" % (terminal.CMD, basedir)
 
     if not os.path.exists(fname):
         raise Exception("Path does not exist")
 
     editor = os.environ.get("EDITOR", "vim")
-    command = "%s %s '%s'" % (terminal, editor, fname)
+    command = "%s %s '%s'" % (cmd, editor, fname)
     status = call(command)
     return status

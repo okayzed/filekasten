@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import config
 import os
 import tempfile
@@ -6,6 +8,7 @@ import frontmatter
 import subprocess
 
 import models
+import terminal
 
 JOURNAL_DIR = config.opts.JOURNAL_DIR
 if not os.path.exists(JOURNAL_DIR):
@@ -14,7 +17,7 @@ if not os.path.exists(JOURNAL_DIR):
 EDITOR = os.environ.get("EDITOR", "vim")
 # @journal
 # :group1 :group2
-def make_journal(args):
+def make_journal(args, inline=False):
     groups = []
     tags = []
     journal = None
@@ -46,10 +49,10 @@ def make_journal(args):
     frontmatter.dump(post, f)
     f.close()
 
-    terminal = "xfce4-terminal -x"
+    cmd = "%s -x" % (terminal.CMD)
     editor = os.environ.get("EDITOR", "vim")
 
-    command = terminal + " " + editor + " " + fname
+    command = cmd + " " + editor + " " + fname
     ret = subprocess.call(command, shell=True)
     newpost = frontmatter.load(open(fname, "r"))
     os.remove(fname)
@@ -66,6 +69,8 @@ def make_journal(args):
         basedir,filename = os.path.split(fname)
         page = models.Page(filename=aname, name=filename, namespace='journal', journal=True, hidden=True)
         page.save()
-        print "SAVED JOURNAL ENTRY TO", fname
         return page
 
+if __name__ == "__main__":
+    import sys
+    make_journal(sys.argv, inline=True)
