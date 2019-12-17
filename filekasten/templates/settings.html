@@ -14,6 +14,17 @@
       <input id='use_nv_style' type='checkbox' name='USE_NV_STYLE' {{ "checked" if config.opts.USE_NV_STYLE }} />
     </div>
 
+    <h3>Dark Mode</h3>
+    <div class='formcontrol'>
+      <label for='use_dark_mode'>Dark Mode:</label>
+      <input id='use_dark_mode' type='checkbox' name='USE_DARK_MODE' {{ "checked" if config.opts.USE_DARK_MODE }} />
+
+      <br />
+
+      <input id='dark_mode_start' type='input' name='DARK_MODE_START' value={{config.opts.DARK_MODE_START}} /> to
+      <input id='dark_mode_end' type='input' name='DARK_MODE_END' value={{config.opts.DARK_MODE_END}} />
+    </div>
+
 
     <h3>Dirs to watch</h3>
 

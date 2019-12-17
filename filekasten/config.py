@@ -14,6 +14,27 @@ STRING_KEYS = {}
 LIST_KEYS = {}
 
 
+def check_dark_mode():
+    if not opts.USE_DARK_MODE:
+        return False
+    import dateparse
+
+    start = dateparse.parse_time(opts.DARK_MODE_START)
+    end = dateparse.parse_time(opts.DARK_MODE_END)
+
+    if start > end:
+        end += (60 * 60 * 24)
+
+    import time
+    t = time.time()
+    print("START", start, "END", end, t)
+    if t > start and t < end:
+        return True
+
+
+
+    return False
+
 def add_config_string(prop, default=None, name=None):
     STRING_KEYS[prop] = prop
     opts[prop] = default
@@ -79,6 +100,9 @@ add_config_string("PORT", default=32333)
 add_config_string("EXPORT_DIR", default=os.path.join(FILEKASTEN_DIR, "export"))
 add_config_string("JOURNAL_DIR", default=os.path.join(FILEKASTEN_DIR, "journal"))
 add_config_string("USE_NV_STYLE", default="")
+add_config_string("USE_DARK_MODE", default="")
+add_config_string("DARK_MODE_START", default="5pm")
+add_config_string("DARK_MODE_END", default="8:00am")
 add_config_string_list("DIRS", default={})
 add_config_string_list("JOURNALS", [])
 add_config_string_list("HIDDEN", default=[])

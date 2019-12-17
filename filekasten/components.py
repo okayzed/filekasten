@@ -14,6 +14,8 @@ from pudgy.util import memoize
 from md_ext import XListExtension, WikiLinkExtension
 import datetime
 
+import config
+
 @memoize
 def render_markdown(text):
     return markdown.markdown(text,
@@ -27,13 +29,18 @@ def render_markdown(text):
             "markdown.extensions.tables"]
     )
 
-class WikiIndex(pudgy.FlaskPage):
+class BasePage(pudgy.FlaskPage):
+    def __init__(self, *args, **kwargs):
+        super(BasePage, self).__init__(*args, **kwargs)
+        self.context.config = config
+
+class WikiIndex(BasePage):
     pass
 
-class JournalPage(pudgy.FlaskPage):
+class JournalPage(BasePage):
     pass
 
-class TodoPage(pudgy.FlaskPage):
+class TodoPage(BasePage):
     pass
 
 class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
@@ -65,7 +72,7 @@ class JournalEntry(pudgy.MustacheComponent):
         self.context.entry.url = flask.url_for("get_wiki_page", name=self.context.entry.name)
         self.context.namespace = self.context.entry.namespace;
 
-class WikiPage(pudgy.FlaskPage, pudgy.BackboneComponent):
+class WikiPage(BasePage, pudgy.BackboneComponent):
     def __prepare__(self):
         page = self.context.page
         root,ext = os.path.splitext(page.filename)
@@ -91,7 +98,7 @@ class WikiPage(pudgy.FlaskPage, pudgy.BackboneComponent):
         self.context.css_defs = css_defs
         self.context.singlecol = singlecol
 
-class SettingsPage(pudgy.FlaskPage, pudgy.BackboneComponent):
+class SettingsPage(BasePage, pudgy.BackboneComponent):
     pass
 
 class SearchBar(pudgy.BackboneComponent, pudgy.MustacheComponent):

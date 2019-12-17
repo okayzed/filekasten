@@ -1,3 +1,18 @@
+$jrnl_color: #fafafa;
+$bg_color_light: #fefefe;
+$bg_color_dark: #ddd;
+$fg_color_light: rgb(50, 50, 50);
+
+$dm_jrnl_color_light: rgb(100, 100, 100);
+$dm_bg_color_light: rgb(50, 50, 50);
+$dm_bg_color_dark: rgba(70, 70, 70, 0.8);
+$dm_fg_color_light: rgb(200, 200, 200);
+
+.pagelisting ul {
+  padding-left: 5px;
+  margin-right: 5px;
+}
+
 blockquote {
     border: 1px solid lightgray;
     border-left: 5px solid orange;
@@ -13,11 +28,9 @@ blockquote {
 
 body {
     margin: auto;
-    padding-left: 10px
-}
-
-body {
-    background-color: #fafafa
+    padding-left: 10px;
+    background-color: $bg_color_light;
+    color: $fg_color_light;
 }
 
 form {
@@ -85,7 +98,7 @@ p img {
     left: 0;
     right: 0;
     padding-bottom: 10px;
-    background-color: rgba(200, 200, 200, 0.8);
+    background-color: $bg_color_dark;
     z-index: 1
 }
 
@@ -105,9 +118,9 @@ p img {
 .jrnl {
     display: block;
     padding: 10px;
-    background-color: white;
+    background-color: $jrnl_color;
     margin: auto;
-    margin-top: 20px;
+    margin-bottom: 20px;
     margin-right: 20px;
     width: 800px;
     padding: 20px
@@ -160,7 +173,7 @@ p img {
 .snippet {
     white-space: pre;
     display: block;
-    background-color: white;
+    background-color: $bg_color_light;
     border-left: 4px solid #ada;
     padding-left: 5px;
     font-family: monospace;
@@ -259,7 +272,7 @@ form.newpage, .crumb form {
 }
 
 .dualpane .preview {
-    background-color: white
+    background-color: $bg_color_light;
 }
 
 .dualpane .previewpane {
@@ -310,16 +323,16 @@ form.newpage, .crumb form {
     background-color: #fefefe
 }
 
-.dualpane .pane .pagelisting {
+.pane .pagelisting {
     overflow-y: auto;
     position: fixed;
     top: 8em;
-    background-color: white;
+    background-color: $bg_color_light;
     bottom: 10px;
     left: 10px;
     width: 25%;
     max-width: 300px;
-    border-right: 2px solid lightgray
+    border-right: 2px solid $bg_color_dark;
 }
 
 .editor .text[name="metadata"] {
@@ -375,4 +388,74 @@ body p {
 
 .postlink {
   cursor: pointer;
+}
+
+
+.dark-mode {
+  body {
+    color: $dm_fg_color_light;
+    background-color: $dm_bg_color_light;
+    a {
+      color: #fafabb;
+    }
+
+  }
+
+  .jrnl {
+    background-color: $dm_bg_color_dark;
+    color: $dm_fg_color_light;
+  }
+
+  .pane .pagelisting {
+    background-color: $dm_bg_color_dark;
+    color: $dm_fg_color_light;
+    border-right: 2px solid $dm_bg_color_light;
+  }
+
+  .dualpane .namespace li:nth-child(even) {
+      background-color: $dm_bg_color_light;
+  }
+
+  .card, .fixedheader {
+    background-color: $dm_bg_color_dark;
+  }
+
+  .crumb {
+    background-color: $dm_bg_color_light;
+  }
+
+  .grayed {
+    background-color: rgb(50, 50, 50);
+  }
+
+  input {
+    border: 0px;
+    background-color: #555;
+    color: $dm_fg_color_light;
+  }
+
+  .jrnl.plans {
+    border-top: 5px solid #95a;
+  }
+
+  .jrnl.sjrn {
+    border-top: 5px solid #59a;
+  }
+
+  .jrnl.journal {
+    border-top: 5px solid #599;
+  }
+
+  .dualpane .preview {
+    background-color: $dm_bg_color_light;
+  }
+
+  .dualpane .preview pre {
+    color: #fff;
+  }
+  .snippet, textarea {
+    background-color: $dm_bg_color_light;
+    color: $dm_fg_color_light;
+  }
+
 }

@@ -20,6 +20,8 @@ import journal
 import search
 import config
 import terminal
+import dark_mode
+
 
 
 
@@ -282,7 +284,7 @@ def get_append_page():
 
     typeahead = Typeahead().marshal(options=[p.name for p in append_to])
 
-    return FlaskPage(template="wiki_append.html", url=url, title=title, quote=quote,
+    return BasePage(template="wiki_append.html", url=url, title=title, quote=quote,
         pages=append_to, typeahead=typeahead, search=search).render()
 
 @app.route("/append/", methods=["POST"])
@@ -532,7 +534,7 @@ def get_search():
 
 
     pagelisting = get_page_listing()
-    return FlaskPage(template="search_results.html",
+    return BasePage(template="search_results.html",
         results=results,
         search=query,
         popup=popup,
@@ -544,7 +546,6 @@ def get_search():
 def get_settings():
 
     sp = SettingsPage(template="settings.html")
-    sp.context.update(config=config)
 
     return sp.render()
 
@@ -566,6 +567,9 @@ def post_settings():
 
     config.set("DIRS", objects)
     config.set("USE_NV_STYLE", args.get("USE_NV_STYLE", ""))
+    config.set("USE_DARK_MODE", args.get("USE_DARK_MODE", ""))
+    config.set("DARK_MODE_START", args.get("DARK_MODE_START", ""))
+    config.set("DARK_MODE_END", args.get("DARK_MODE_END", ""))
     config.update(args)
     config.save_config()
 
