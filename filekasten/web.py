@@ -107,7 +107,7 @@ def marshall_page(cur):
 
 def get_entry_listing(entries):
     entrylisting = EntryListing()
-    entrylisting.async()
+    entrylisting.run_async()
     entrylisting.context.update(entries=entries)
     return entrylisting
 
