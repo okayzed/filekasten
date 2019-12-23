@@ -22,13 +22,17 @@ def check_dark_mode():
     start = dateparse.parse_time(opts.DARK_MODE_START)
     end = dateparse.parse_time(opts.DARK_MODE_END)
 
-    if start > end:
-        end += (60 * 60 * 24)
-
     import time
     t = time.time()
     print("START", start, "END", end, t)
+
     if t > start and t < end:
+        return True
+
+    if start > end and t > start and t < end + (60*60*24):
+        return True
+
+    if start > end and t > start - (60*60*24) and t < end:
         return True
 
 
