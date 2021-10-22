@@ -3,8 +3,8 @@ List that supports 'x' mark at beginning
 =======================================
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 from markdown import Extension
 from markdown.preprocessors import Preprocessor
 from markdown.blockprocessors import OListProcessor, UListProcessor

@@ -4,10 +4,10 @@ import time
 import frontmatter
 import subprocess
 
-import models
+from . import models
 from flask_peewee.utils import get_dictionary_from_model
 
-from web import marshall_page
+from .web import marshall_page
 
 # this will export a directory full of files and a script to copy them into their original
 # directories
@@ -50,17 +50,17 @@ def export_files_to_dir(outdir):
 
         count += 1
 
-    print "EXPORTED", count, "FILES TO", outdir
+    print("EXPORTED", count, "FILES TO", outdir)
 
     make_git_commit(outdir)
 
 def make_git_commit(outdir):
     outdir = os.path.abspath(outdir)
-    print "OUTDIR", outdir
+    print("OUTDIR", outdir)
     import shlex
     def run_command(cmd):
         cmd_args = shlex.split(cmd)
-        print list(cmd_args)
+        print(list(cmd_args))
         output = subprocess.check_output(cmd_args, cwd=outdir)
 
     try:
@@ -69,13 +69,13 @@ def make_git_commit(outdir):
         run_command("/usr/bin/git init .")
 
     run_command("/usr/bin/git add .")
-    from web import datetimeformat
+    from .web import datetimeformat
     date_str = datetimeformat(time.time())
     try:
         run_command("/usr/bin/git commit -a -v -m '[autocommit] %s'" % date_str)
-    except Exception, e:
+    except Exception as e:
         # likely there is nothing to commit
-        print e
+        print(e)
 
 
     # we assume the outdir is the git dir for us

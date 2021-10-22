@@ -1,9 +1,9 @@
-import models
+from . import models
 import sys
 import os
 
+from importlib import reload
 reload(sys)
-sys.setdefaultencoding("utf-8")
 
 
 def index(page):
@@ -15,11 +15,11 @@ def index(page):
     except models.PageIndex.DoesNotExist:
         et = None
 
-    if type(content) != unicode:
-        content = unicode(content, "utf-8")
+    if type(content) != str:
+        content = str(content, "utf-8")
 
     if not et:
-        print "INDEXING", page.name
+        print("INDEXING", page.name)
         sql = models.PageIndex.insert(
             name=page.name, 
             content=content,
@@ -28,7 +28,7 @@ def index(page):
         sql.execute()
 
     else:
-        print "UPD INDEXING", page.name
+        print("UPD INDEXING", page.name)
         et.update(
             name=page.name,
             content=content,

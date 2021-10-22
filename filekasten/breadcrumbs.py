@@ -1,7 +1,7 @@
 import flask
-import config
+from . import config
 
-import pudgy
+from . import pudgy
 
 class Crumb(dict):
     def __init__(self, name, url):
@@ -49,5 +49,5 @@ def add(name):
 
 def remove(name):
     crumbs = flask.session.get("breadcrumbs", [])
-    crumbs = filter(lambda w: w.get("name") != name, crumbs)
+    crumbs = [w for w in crumbs if w.get("name") != name]
     flask.session["breadcrumbs"] = crumbs

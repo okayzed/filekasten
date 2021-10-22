@@ -6,9 +6,10 @@ import signal
 import subprocess
 
 import gi
-from gi.repository import Gtk, WebKit
+gi.require_version('WebKit2', '4.0')
+from gi.repository import Gtk, WebKit2
 
-import config
+from . import config
 
 WIKI_URL = "http://localhost:32333/"
 DEFAULT_URL="http://localhost:32333/wiki"
@@ -19,21 +20,21 @@ class Browser(Gtk.Window):
         self.connect("destroy", Gtk.main_quit)
         self.set_size_request(1200,700)
 
-        self.webview = WebKit.WebView()
+        self.webview = WebKit2.WebView()
 
         settings = self.webview.get_settings()
         settings.set_property("enable-java-applet", False)
         settings.set_property("enable-plugins", False)
 
         self.webview.connect("navigation-policy-decision-requested", self.navigate)
-	self.webview.load_uri(DEFAULT_URL)
+        self.webview.load_uri(DEFAULT_URL)
 
         self.add(self.webview)
         self.show_all()
 
     def navigate(self, view, frame, request, action, decision):
         uri = request.get_uri()
-        print "URI", uri
+        print("URI", uri)
         if (uri.startswith(WIKI_URL)):
             return False
         else:
@@ -51,12 +52,12 @@ class Inspector(Gtk.Window):
         super(Inspector, self).__init__(*args, **kwargs)
         self.set_size_request(1200,700)
         self.webview = view
-        settings = WebKit.WebSettings()
+        settings = WebKit2.WebSettings()
         settings.set_property('enable-developer-extras', True)
         view.set_settings(settings)
 
 
-        self.webview = WebKit.WebView()
+        self.webview = WebKit2.WebView()
         self.inspector = view.get_inspector()
 
         self.inspector.connect("inspect-web-view", self.inspect)
@@ -65,7 +66,7 @@ class Inspector(Gtk.Window):
         self.add(self.scrolled_window)
         self.scrolled_window.show()
 
-        self.webview = WebKit.WebView()
+        self.webview = WebKit2.WebView()
         self.scrolled_window.add(self.webview)
 
     def inspect(self,inspector,view,*a,**kw):
@@ -74,12 +75,12 @@ class Inspector(Gtk.Window):
         return self.webview
 
 
-import maintenance
+from . import maintenance
 def run_browser():
     def run_gtk_browser():
         Gtk.init(sys.argv)
         browser = Browser()
-	inspector = Inspector(browser.webview)
+        inspector = Inspector(browser.webview)
 
 
         Gtk.main()

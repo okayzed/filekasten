@@ -1,7 +1,7 @@
-import pudgy
+from . import pudgy
 import os
 
-from pudgy import FlaskPage
+from .pudgy import FlaskPage
 
 import markdown
 
@@ -9,12 +9,12 @@ import pygments
 import pygments.lexers
 import pygments.formatters
 
-from pudgy.util import memoize
+from .pudgy.util import memoize
 
-from md_ext import XListExtension, WikiLinkExtension
+from .md_ext import XListExtension, WikiLinkExtension
 import datetime
 
-import config
+from . import config
 
 @memoize
 def render_markdown(text):
@@ -64,7 +64,7 @@ class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
 
 class JournalEntry(pudgy.MustacheComponent):
     def __prepare__(self):
-        from web import datetimeformat
+        from .web import datetimeformat
         import flask
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)

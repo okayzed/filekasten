@@ -1,7 +1,7 @@
 import os, tempfile
 import subprocess
 
-import terminal
+from . import terminal
 
 def call(cmd):
     subprocess.call(cmd, shell=True)

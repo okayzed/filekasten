@@ -3,7 +3,7 @@ import os
 from peewee import *
 from playhouse.sqlite_ext import *
 
-from config import FILEKASTEN_DIR
+from .config import FILEKASTEN_DIR
 if not os.path.exists(os.path.join(FILEKASTEN_DIR, "db")):
     os.makedirs(os.path.join(FILEKASTEN_DIR, "db"))
 
@@ -52,5 +52,4 @@ def create_tables():
     with database:
         database.create_tables([Page, PageIndex])
 
-if __name__ == "__main__":
     create_tables()

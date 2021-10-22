@@ -14,17 +14,23 @@ STRING_KEYS = {}
 LIST_KEYS = {}
 
 
+def check_in(ns, possible):
+    for p in possible:
+        if ns.find(p) == 0:
+            return True
+    return False
+
 def check_dark_mode():
     if not opts.USE_DARK_MODE:
         return False
-    import dateparse
+    from . import dateparse
 
     start = dateparse.parse_time(opts.DARK_MODE_START)
     end = dateparse.parse_time(opts.DARK_MODE_END)
 
     import time
     t = time.time()
-    print("START", start, "END", end, t)
+    print(("START", start, "END", end, t))
 
     if t > start and t < end:
         return True
@@ -83,7 +89,7 @@ def read_config():
 
 def set(name, value):
     if not name in STRING_KEYS and not name in LIST_KEYS:
-        print "NO SUCH CONFIG KEY: %s, IGNORING" % name
+        print("NO SUCH CONFIG KEY: %s, IGNORING" % name)
         return
 
     if name in STRING_KEYS:

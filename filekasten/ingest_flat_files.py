@@ -7,11 +7,12 @@ import datetime
 import yaml
 import re
 
-import models
-import search
-import config
+from . import models
+from . import search
+from . import config
+from .config import check_in
 
-from web import marshall_page
+from .web import marshall_page
 
 parser = argparse.ArgumentParser(description='Import flatfiles into the sqlite DB')
 parser.add_argument('-d', '--dir', help='import files from dir')
@@ -26,7 +27,6 @@ textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
 def is_binary(filename):
     is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
     return is_binary_string(open(filename, 'rb').read(1024))
-
 
 def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
   if not visited:
@@ -73,18 +73,18 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
                 break
 
     if exclude:
-        print "EXCLUDING", file
+        print("EXCLUDING", file)
         continue
 
     if ext in [".html", ".css", ".json"] or file.find(".input") != -1 or file.find(".output") != -1:
-        print "SKIPPING KNOWN EXTENSIONS", file
+        print("SKIPPING KNOWN EXTENSIONS", file)
         continue
 
     if file.find("icfpc") != -1:
         continue
 
     if stats.st_size > 1024 * 1024:
-        print "SKIPPING", aname, "ITS TOO BIG"
+        print("SKIPPING", aname, "ITS TOO BIG")
         continue
 
 
@@ -100,7 +100,11 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
         continue
 
     with open(fname, "r") as f:
-      content = f.read()
+      try:
+        content = f.read()
+      except:
+        print("SKIPPING", aname, "CANT READ CONTENT")
+        continue
 
     try:
       oldpage = models.Page.get(models.Page.filename == aname)
@@ -121,7 +125,7 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
 
         search.index(oldpage)
     else:
-      print "INGESTING", fname, "INTO", namespace
+      print("INGESTING", fname, "INTO", namespace)
       try:
           mp = frontmatter.loads(content)
       except:
@@ -147,23 +151,23 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
         namespace=namespace,
         type="markdown",
         updated=stats.st_mtime,
-        journal=namespace in journals,
-        hidden=namespace in hidden,
+        journal=check_in(namespace, journals),
+        hidden=check_in(namespace, hidden),
         )
 
       try:
           search.index(page)
           page.save()
       except:
-          print "COULDNT INDEX PAGE", page.name
+          print("COULDNT INDEX PAGE", page.name)
 
 def ingest_files(dirs, journals, hidden):
-    print "INGESTING FILES"
+    print("INGESTING FILES")
     dirs[config.opts.JOURNAL_DIR] = 'journal'
 
     for k in dirs:
       v = dirs[k]
-      print "READING DIR", k, "INTO", v
+      print("READING DIR", k, "INTO", v)
       path = os.path.expanduser(k)
       path_walker(path,namespace=v,journals=journals,hidden=hidden)
 

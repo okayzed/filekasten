@@ -1,3 +1,3 @@
-from x_lists  import XListExtension
-from wikilinks import WikiLinkExtension
+from .x_lists  import XListExtension
+from .wikilinks import WikiLinkExtension
 

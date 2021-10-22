@@ -1,4 +1,6 @@
-import config
+from . import config
+from importlib import reload
+
 import os
 import sys
 
@@ -13,7 +15,7 @@ INDEX_INTERVAL=60
 EXPORT_INTERVAL=60*60
 import time
 
-import ingest_flat_files, exgest_flat_files, clean_missing_files
+from . import ingest_flat_files, exgest_flat_files, clean_missing_files
 def do_index():
     child_pid = os.fork()
     if child_pid == 0:
@@ -26,7 +28,7 @@ def do_index():
 def do_export():
     child_pid = os.fork()
     if child_pid == 0:
-        print "EXPORTING IN CHILD PID"
+        print("EXPORTING IN CHILD PID")
         exgest_flat_files.export_files_to_dir(config.opts.EXPORT_DIR)
         sys.exit(0)
     else:
@@ -35,7 +37,7 @@ def do_export():
 def run_indexer():
     last_export = time.time() - 1
     last_index = time.time() - 1
-    import config
+    from . import config
     while INDEXING.value:
         time.sleep(1)
         reload(config)
@@ -51,10 +53,10 @@ def run_indexer():
             do_export()
             last_export = now
 
-    print "DONE INDEXING"
+    print("DONE INDEXING")
 
 def run_web():
-    import web
+    from . import web
     global DEFAULT_URL, INDEXING
     open_port = find_free_port()
     DEFAULT_URL="http://localhost:%s/wiki" % open_port

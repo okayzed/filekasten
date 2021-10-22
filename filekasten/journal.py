@@ -1,14 +1,14 @@
-from __future__ import print_function
 
-import config
+
+from . import config
 import os
 import tempfile
 import time
 import frontmatter
 import subprocess
 
-import models
-import terminal
+from . import models
+from . import terminal
 
 JOURNAL_DIR = config.opts.JOURNAL_DIR
 if not os.path.exists(JOURNAL_DIR):

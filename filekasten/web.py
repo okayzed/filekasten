@@ -2,7 +2,7 @@ import re
 import os
 import datetime
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import markdown
 import jinja2
@@ -12,15 +12,15 @@ import shlex
 import flask
 import frontmatter
 
-import models
-import breadcrumbs
-import journal
+from . import models
+from . import breadcrumbs
+from . import journal
 
 
-import search
-import config
-import terminal
-import dark_mode
+from . import search
+from . import config
+from . import terminal
+from . import dark_mode
 
 
 
@@ -38,11 +38,11 @@ app.config["SESSION_COOKIE_NAME"] = "filekasten"
 
 
 # install pudgy component library
-from components import *
-import components
+from .components import *
+from . import components
 components.install(app)
 
-import pudgy
+from . import pudgy
 pudgy.use_jquery()
 
 import datetime
@@ -124,6 +124,7 @@ def get_page_listing(filefinder=False, nv=False):
     )
 
 
+from .config import check_in
 def get_pages():
     cur = models.Page.select(models.Page.name, models.Page.namespace,
         models.Page.journal, models.Page.hidden, models.Page.id)
@@ -131,7 +132,7 @@ def get_pages():
 
     namespaces = {}
     for page in cur:
-        if page.journal or page.hidden or page.namespace in config.opts.JOURNALS:
+        if page.journal or page.hidden or check_in(page.namespace, config.opts.JOURNALS) or check_in(page.namespace, config.opts.HIDDEN):
             continue
 
         if not page.namespace in namespaces:
@@ -146,7 +147,7 @@ def get_pages():
     for ns in namespaces:
         namespaces[ns].sort(key=lambda w: w.name.lower())
 
-    ns_keys = namespaces.keys()
+    ns_keys = list(namespaces.keys())
     ns_keys.sort()
 
     return ns_keys, namespaces, count
@@ -230,33 +231,33 @@ def get_wiki_page(name):
 
 @app.route("/wiki/<name>/terminal")
 def get_terminal_page(name):
-    print "TERMINAL", name
+    print("TERMINAL", name)
     id = flask.request.args.get('id')
     cur = models.Page.get(models.Page.id == id)
     page = marshall_page(cur)
     metadata = page.metadata
     namespace = page.namespace
 
-    print "PAGE IS", cur
+    print("PAGE IS", cur)
 
-    import editor
+    from . import editor
     os.system("%s --working-directory='%s'" % (terminal.CMD, os.path.dirname(cur.filename)))
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name, id=page.id))
 
 @app.route("/wiki/<name>/edit")
 def get_edit_page(name):
-    print "GETTING PAGE", name
+    print("GETTING PAGE", name)
     id = flask.request.args.get('id')
     cur = models.Page.get(models.Page.name == name, models.Page.id == id)
     page = marshall_page(cur)
     metadata = page.metadata
     namespace = page.namespace
 
-    print "PAGE IS", cur
+    print("PAGE IS", cur)
 
 
-    import editor
+    from . import editor
     status = editor.open(cur.filename)
 
     return flask.redirect(flask.url_for("get_wiki_page", name=name, id=cur.id))
@@ -297,7 +298,7 @@ def post_append_page():
     if len(cur) == 0:
         name = os.path.normpath(name)
         if name.find("..") != -1 or name[0] == '/':
-            print "INVALID PATH", name
+            print("INVALID PATH", name)
             return "INVALID PAGE NAME: %s, PLEASE REMOVE THE '..' and leading '/'" % (name)
 
         namespace, pagename = os.path.split(name)
@@ -373,7 +374,7 @@ def post_new_page():
     if len(page) == 0:
         name = os.path.normpath(name)
         if name.find("..") != -1 or name[0] == '/':
-            print "INVALID PATH", name
+            print("INVALID PATH", name)
             return "INVALID PAGE NAME: %s, PLEASE REMOVE THE '..' and leading '/'" % (name)
 
         namespace, pagename = os.path.split(name)
@@ -403,7 +404,7 @@ def post_new_page():
 
         page.save()
     else:
-        print "PAGE ALREADY EXISTS", name
+        print("PAGE ALREADY EXISTS", name)
         pagename = name
 
     return flask.redirect(flask.url_for("get_wiki_page", name=pagename, id=page.id, ts=time.time()))
@@ -416,11 +417,11 @@ def delete_breadcrumb():
     if name:
         breadcrumbs.remove(name)
 
-    print flask.request.form
+    print(flask.request.form)
 
     next = flask.request.form.get('next', flask.url_for("get_wiki_index"))
-    next = urllib.unquote(next)
-    print "NEXT IS", next
+    next = urllib.parse.unquote(next)
+    print("NEXT IS", next)
     return flask.redirect(next)
 
 
@@ -438,8 +439,21 @@ def get_journal_entries(page, per_page):
     jrnl.execute()
 
 
-    return map(marshall_page, jrnl)
+    return list(map(marshall_page, jrnl))
 
+def get_plan_entries(page, per_page):
+    todo = (models.Page.select()
+        .join(
+            models.PageIndex,
+            on=(models.Page.id == models.PageIndex.rowid))
+        .where(models.PageIndex.match("plans"))
+        .order_by(models.Page.updated.desc())
+
+        )
+    todo.execute()
+
+
+    return list(map(marshall_page, todo))
 def get_todo_entries(page, per_page):
     todo = (models.Page.select()
         .join(
@@ -452,14 +466,14 @@ def get_todo_entries(page, per_page):
     todo.execute()
 
 
-    return map(marshall_page, todo)
+    return list(map(marshall_page, todo))
 
 @app.route('/jrnl/')
 def get_jrnl():
     n = flask.request.args.get('n', 50)
 
     es = []
-    for i in xrange(1, 3):
+    for i in range(1, 3):
         entries = get_journal_entries(i, n)
         entrylisting = get_entry_listing(entries)
 #        entrylisting.set_delay(i-1)
@@ -481,12 +495,39 @@ def get_jrnl():
         ).pipeline()
     return ret
 
+@app.route('/plan')
+def get_plans():
+    n = flask.request.args.get('n', 50)
+
+    es = []
+    for i in range(1, 3):
+        entries = get_plan_entries(i, n)
+        entrylisting = get_entry_listing(entries)
+    #        entrylisting.set_delay(i-1)
+        es.append(entrylisting)
+
+
+    nv = config.opts.USE_NV_STYLE
+    pagelisting = get_page_listing(filefinder=True, nv=nv)
+    pf = False
+    if nv:
+        component = NVViewer(pagelisting=pagelisting)
+    else:
+        component = pagelisting
+
+    ret= TodoPage(
+            template="todo_page.html",
+            entries=es,
+            pagelisting=pagelisting,
+        ).pipeline()
+    return ret
+
 @app.route('/todo')
 def get_todo():
     n = flask.request.args.get('n', 50)
 
     es = []
-    for i in xrange(1, 3):
+    for i in range(1, 3):
         entries = get_todo_entries(i, n)
         entrylisting = get_entry_listing(entries)
     #        entrylisting.set_delay(i-1)
@@ -552,7 +593,7 @@ def get_settings():
 @app.route('/settings/', methods=["POST"])
 def post_settings():
     args = flask.request.form
-    print "POSTED SETTINGS", args
+    print("POSTED SETTINGS", args)
     dirs = args.getlist('dir[]')
     namespace = args.getlist('namespace[]')
     type = args.getlist('type[]')
@@ -560,7 +601,7 @@ def post_settings():
     objects = {}
     journals = []
     hidden = []
-    for i in xrange(len(dirs)):
+    for i in range(len(dirs)):
         o = {}
         objects[dirs[i]] = namespace[i]
 
@@ -577,7 +618,7 @@ def post_settings():
 
 
 if __name__ == "__main__":
-    import maintenance
+    from . import maintenance
 
     def sleep_idle():
         import time
