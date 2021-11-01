@@ -10,6 +10,8 @@ import subprocess
 from . import models
 from . import terminal
 
+import addict
+
 JOURNAL_DIR = config.opts.JOURNAL_DIR
 if not os.path.exists(JOURNAL_DIR):
     os.makedirs(JOURNAL_DIR)
@@ -46,7 +48,8 @@ def make_journal(args, inline=False):
     post = frontmatter.loads("")
     post.metadata = meta
 
-    frontmatter.dump(post, f)
+    content = frontmatter.dumps(post)
+    f.write(content)
     f.close()
 
     cmd = "%s -x" % (terminal.CMD)

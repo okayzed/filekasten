@@ -1,6 +1,6 @@
 $jrnl_color: #fafafa;
-$bg_color_light: #fefefe;
-$bg_color_dark: #ddd;
+$bg_color_light: rgb(248, 252, 248);
+$bg_color_dark: darken($bg_color_light, 4%);
 $fg_color_light: rgb(50, 50, 50);
 
 $dm_jrnl_color_light: rgb(100, 100, 100);
@@ -21,7 +21,6 @@ blockquote {
 }
 
 .dualpane .pane .preview {
-    height: 100%;
     min-height: 100%;
     overflow: visible;
 }
@@ -59,7 +58,7 @@ a s {
 }
 
 h1 small {
-    display: inline-block
+    display: inline-block;
 }
 
 li p {
@@ -74,7 +73,7 @@ p img {
     margin-top: 8em
 }
 
-.breadcrumbs {
+.breadbun {
     margin-left: 10px;
     height: 40px;
     white-space: nowrap;
@@ -84,8 +83,9 @@ p img {
 .crumb {
     display: inline-block;
     padding: 5px;
-    background-color: #adf;
-    margin-right: 5px
+    margin-right: 5px;
+    border: 1px solid gray;
+    text-align: center;
 }
 
 .editor {
@@ -145,9 +145,6 @@ p img {
     column-rule: 1px solid lightblue
 }
 
-.pagelisting {
-    direction: rtl
-}
 
 .quicklinks {
     clear: both;
@@ -311,10 +308,6 @@ form.newpage, .crumb form {
     overflow-y: auto
 }
 
-.newspaper.pagelisting {
-    direction: ltr
-}
-
 .pagelisting.hidden {
     display: none
 }
@@ -323,17 +316,38 @@ form.newpage, .crumb form {
     background-color: #fefefe
 }
 
-.pane .pagelisting {
+.nv.pagelisting {
     overflow-y: auto;
     position: fixed;
     top: 8em;
-    background-color: $bg_color_light;
     bottom: 10px;
     left: 10px;
-    width: 25%;
-    max-width: 300px;
     border-right: 2px solid $bg_color_dark;
+    z-index: 10;
 }
+
+.nv.pagelisting {
+    width: 300px;
+    max-width: 300px;
+    float: left;
+}
+
+.TodoPage .newspaper.pagelisting,
+.JournalPage .newspaper.pagelisting {
+  display: none; 
+}
+
+.newspaper .pagelisting {
+    direction: ltr;
+    right: inherit;
+    width: 100%;
+    max-width: 100%;
+    top: inherit;
+    position: absolute;
+    bottom: 0px;
+
+}
+
 
 .editor .text[name="metadata"] {
     height: 200px
@@ -357,15 +371,10 @@ body h1,body h2,body h3,body h4,body h5,body h6 {
 }
 
 .jrnl {
-  width: 300px;
   float: left;
   height: 200px;
   overflow: auto;
-}
-
-.todolisting .jrnl {
-  width: 90%;
-  max-width: 800px;
+  width: 100%;
   max-height: 500px;
   height: auto;
   clear: both;
@@ -373,11 +382,11 @@ body h1,body h2,body h3,body h4,body h5,body h6 {
   float: left;
 }
 
-.todolisting .JournalEntry {
+.jrnl .JournalEntry {
   margin-bottom: 20px;
 }
 
-.todolisting .timestamp {
+.jrnl .timestamp {
   float: right;
   margin-right: 5px;
 }

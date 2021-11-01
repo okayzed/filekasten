@@ -33,7 +33,7 @@ class Breadcrumbs(pudgy.JinjaComponent, pudgy.ServerBridge, pudgy.BackboneCompon
 
 @Breadcrumbs.api
 def refresh(self):
-    b = Breadcrumbs()
+    b = Breadcrumbs(popup=True)
     self.html(b.render())
 
 def add(name):

@@ -280,7 +280,10 @@ def get_append_page():
 
         append_to.append(page)
 
-    append_to.sort(key=lambda w: w.created, reverse=True)
+    try:
+        append_to.sort(key=lambda w: w.created, reverse=True)
+    except:
+        pass
 
 
     typeahead = Typeahead().marshal(options=[p.name for p in append_to])
@@ -441,6 +444,17 @@ def get_journal_entries(page, per_page):
 
     return list(map(marshall_page, jrnl))
 
+def get_recent_entries(page, per_page):
+    todo = (models.Page.select()
+        .join(
+            models.PageIndex,
+            on=(models.Page.id == models.PageIndex.rowid))
+        .order_by(models.Page.updated.desc())
+        .paginate(page, per_page))
+
+    todo.execute()
+    return list(map(marshall_page, todo))
+
 def get_plan_entries(page, per_page):
     todo = (models.Page.select()
         .join(
@@ -448,8 +462,8 @@ def get_plan_entries(page, per_page):
             on=(models.Page.id == models.PageIndex.rowid))
         .where(models.PageIndex.match("plans"))
         .order_by(models.Page.updated.desc())
+        .paginate(page, per_page))
 
-        )
     todo.execute()
 
 
@@ -490,6 +504,33 @@ def get_jrnl():
 
     ret= JournalPage(
             template="jrnl_page.html",
+            entries=es,
+            pagelisting=pagelisting,
+        ).pipeline()
+    return ret
+
+@app.route('/recent')
+def get_recent():
+    n = flask.request.args.get('n', 10)
+
+    es = []
+    for i in range(1, 3):
+        entries = get_recent_entries(i, n)
+        entrylisting = get_entry_listing(entries)
+    #        entrylisting.set_delay(i-1)
+        es.append(entrylisting)
+
+
+    nv = config.opts.USE_NV_STYLE
+    pagelisting = get_page_listing(filefinder=True, nv=nv)
+    pf = False
+    if nv:
+        component = NVViewer(pagelisting=pagelisting)
+    else:
+        component = pagelisting
+
+    ret= TodoPage(
+            template="todo_page.html",
             entries=es,
             pagelisting=pagelisting,
         ).pipeline()

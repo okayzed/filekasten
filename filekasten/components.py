@@ -56,6 +56,8 @@ class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
         for e in self.context.entries:
             if type(e.created) == int or type(e.created) == float:
                 e.created = datetime.datetime.fromtimestamp(e.created)
+            if type(e.updated) == int or type(e.updated) == float:
+                e.updated = datetime.datetime.fromtimestamp(e.updated)
     
             es.append(JournalEntry(entry=e))
 
@@ -69,6 +71,7 @@ class JournalEntry(pudgy.MustacheComponent):
         self.context.title = render_markdown(self.context.entry.title)
         self.context.content = render_markdown(self.context.entry.content)
         self.context.entry.format_created = datetimeformat(self.context.entry.created)
+        self.context.entry.format_updated = datetimeformat(self.context.entry.updated)
         self.context.entry.url = flask.url_for("get_wiki_page", name=self.context.entry.name)
         self.context.namespace = self.context.entry.namespace;
 

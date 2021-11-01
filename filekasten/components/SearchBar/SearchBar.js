@@ -1,4 +1,4 @@
-var NEW_PAGE;
+var NEW_PAGE, NEW_TEXT;
 var FILE_FINDER = false;
 
 var $ = $require("jquery");
@@ -14,7 +14,7 @@ module.exports = {
 
 
     var fileForm = $("<form method='POST' action='/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
-    var jrnlForm = $("<form method='POST' action='/journal/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> </form>");
+    var jrnlForm = $("<form method='POST' action='/journal/new/' class='newpage row' > <input type='hidden' name='name' class='name' /> <input type='hidden' name='text' class='text' /></form>");
     var newFile = $("<a href='#' class='mll newfile' >Add Page</a>");
     var newJrnl = $("<a href='#' class='mll newjrnl' >Add New Journal Entry </a>");
 
@@ -26,6 +26,7 @@ module.exports = {
 
     newJrnl.on("click", function() {
       jrnlForm.find("input.name").val(NEW_PAGE);
+      jrnlForm.find("input.text").val(NEW_TEXT);
       jrnlForm.submit();
     });
 
@@ -100,6 +101,8 @@ module.exports = {
         newJrnl.text('Add New Journal Entry');
         newJrnl.show();
       }
+
+      // runSearchPlugins(val);
 
       if (val[0] == '.' || val[0] == '@' || val[0] == ':') {
         newJrnl.show();

@@ -1,6 +1,10 @@
 <div class='jrnl card {{ entry.namespace }}'>
   <div class='timestamp text-center mbl'>
     <a href="{{ entry.url }}" >
+      {{ entry.format_updated }}
+    </a>
+    /
+    <a href="{{ entry.url }}" >
       {{ entry.format_created }}
     </a>
   </div>

@@ -40,7 +40,7 @@
   </div>
 
   <div class='mll mtl'>
-    <div class="{{ 'singlecol' if singlecol or content|length < 3000 else 'newspaper' }} {{ 'squishedcol' if content|length < 3000 }}">
+    <div class="singlecol {{ 'squishedcol' if content|length < 3000 }}">
       {{ content|safe }}
     </div>
   </div>
@@ -48,7 +48,7 @@
 </div>
 
 {% if popup %}
-  <small class='rendertime rfloat'>
+  <small class='rendertime lfloat'>
     Rendered in {{ g.request_time() }}
   </small>
 {% endif %}

@@ -1,4 +1,4 @@
-<div class="clearfix breadcrumbs">
+<div class="clearfix breadbun">
 
   {% if not nv %}
     <span class='home crumb'><a tabindex="-1" href='{{ url_for('get_wiki_index') }}'>wiki</a></span>
@@ -9,7 +9,7 @@
         <input type='hidden' name='name' value='{{ crumb.name }}' />
         <input type='hidden' name='next' value='/wiki' />
         
-        <button class='postlink' tabindex="-1" type="submit" class='closer'>x</button>
+        <button class='postlink' tabindex="-1" type="submit" class='closer'>X</button>
       </form>
     </span>
   {% endfor %}
