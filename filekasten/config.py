@@ -16,6 +16,9 @@ LIST_KEYS = {}
 
 def check_in(ns, possible):
     for p in possible:
+        if not possible:
+            continue
+
         if ns.find(p) == 0:
             return True
     return False
@@ -68,7 +71,7 @@ def save_config():
 def read_config():
     if os.path.exists(FILEKASTEN_FILE):
         with open(FILEKASTEN_FILE) as f:
-            info = yaml.load(f.read())
+            info = yaml.load(f.read(), Loader=yaml.SafeLoader)
 
         if not info:
             return

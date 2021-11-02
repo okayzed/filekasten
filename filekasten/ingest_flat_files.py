@@ -96,7 +96,11 @@ def path_walker(dir, visited=None, namespace=None, journals=None, hidden=None):
     visited[fname] = True
 
 
-    if is_binary(aname):
+    try:
+        if is_binary(aname):
+            continue
+    except Exception as e:
+        print("Exception importing file: ", e)
         continue
 
     with open(fname, "r") as f:

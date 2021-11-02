@@ -1,7 +1,8 @@
-from . import pudgy
 import os
 
-from .pudgy import FlaskPage
+import pudgy
+from pudgy import FlaskPage
+from pudgy.util import memoize
 
 import markdown
 
@@ -9,7 +10,6 @@ import pygments
 import pygments.lexers
 import pygments.formatters
 
-from .pudgy.util import memoize
 
 from .md_ext import XListExtension, WikiLinkExtension
 import datetime

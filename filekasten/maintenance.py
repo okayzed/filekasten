@@ -1,5 +1,8 @@
 from . import config
-from importlib import reload
+try:
+    from importlib import reload
+except:
+    pass
 
 import os
 import sys
@@ -36,7 +39,7 @@ def do_export():
 
 def run_indexer():
     last_export = time.time() - 1
-    last_index = time.time() - 1
+    last_index = time.time() - INDEX_INTERVAL
     from . import config
     while INDEXING.value:
         time.sleep(1)

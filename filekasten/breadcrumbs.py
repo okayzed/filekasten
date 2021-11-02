@@ -1,7 +1,7 @@
 import flask
 from . import config
 
-from . import pudgy
+import pudgy
 
 class Crumb(dict):
     def __init__(self, name, url):

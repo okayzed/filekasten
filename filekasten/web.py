@@ -2,7 +2,7 @@ import re
 import os
 import datetime
 import time
-import urllib.request, urllib.parse, urllib.error
+from six.moves import urllib
 
 import markdown
 import jinja2
@@ -42,7 +42,7 @@ from .components import *
 from . import components
 components.install(app)
 
-from . import pudgy
+import pudgy
 pudgy.use_jquery()
 
 import datetime

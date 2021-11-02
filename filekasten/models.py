@@ -52,4 +52,5 @@ def create_tables():
     with database:
         database.create_tables([Page, PageIndex])
 
+if __name__ == "__main__":
     create_tables()

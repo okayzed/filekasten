@@ -8,3 +8,4 @@ peewee
 pudgy>=0.2.0
 Pygments
 python-frontmatter
+six

@@ -2,10 +2,6 @@ from . import models
 import sys
 import os
 
-from importlib import reload
-reload(sys)
-
-
 def index(page):
     with open(page.filename) as f:
         content = f.read()
