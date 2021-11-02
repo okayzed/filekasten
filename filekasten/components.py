@@ -59,7 +59,7 @@ class EntryListing(pudgy.JinjaComponent, pudgy.NoJSPagelet):
             if type(e.updated) == int or type(e.updated) == float:
                 e.updated = datetime.datetime.fromtimestamp(e.updated)
     
-            es.append(JournalEntry(entry=e))
+            es.append(JournalEntry(entry=e, compact=self.context.compact))
 
         self.context.entries = es
 
@@ -69,6 +69,7 @@ class JournalEntry(pudgy.MustacheComponent):
         from .web import datetimeformat
         import flask
         self.context.title = render_markdown(self.context.entry.title)
+        self.context.filename = self.context.entry.filename
         self.context.content = render_markdown(self.context.entry.content)
         self.context.entry.format_created = datetimeformat(self.context.entry.created)
         self.context.entry.format_updated = datetimeformat(self.context.entry.updated)

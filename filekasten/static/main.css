@@ -382,8 +382,16 @@ body h1,body h2,body h3,body h4,body h5,body h6 {
   float: left;
 }
 
-.jrnl .JournalEntry {
+.jrnl .JournalEntry .card {
   margin-bottom: 20px;
+}
+
+.jrnl.compact {
+  padding: 5px;
+}
+
+.jrnl .JournalEntry .card.compact {
+  margin-bottom: 0px;
 }
 
 .jrnl .timestamp {

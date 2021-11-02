@@ -1,4 +1,4 @@
-<div class='jrnl card {{ entry.namespace }}'>
+<div class='jrnl card {{ 'compact' if compact }} {{ entry.namespace }} '>
   <div class='timestamp text-center mbl'>
     <a href="{{ entry.url }}" >
       {{ entry.format_updated }}
@@ -9,7 +9,15 @@
     </a>
   </div>
 
+ 
+ {{#compact}}
+    <a href="{{ entry.url }}" >
+      <span class='title'> {{ &filename }} </span>
+    </a>
+ {{/compact}}
+ {{^compact}}
   <div class='title'> {{ &title }} </div>
   <div class='text'>{{ &content}} </div>
+ {{/compact}}
 
 </div>

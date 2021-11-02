@@ -105,10 +105,10 @@ def marshall_page(cur):
 
     return cur
 
-def get_entry_listing(entries):
+def get_entry_listing(entries, compact=False):
     entrylisting = EntryListing()
     entrylisting.run_async()
-    entrylisting.context.update(entries=entries)
+    entrylisting.context.update(entries=entries, compact=compact)
     return entrylisting
 
 def get_page_listing(filefinder=False, nv=False):
@@ -468,6 +468,7 @@ def get_plan_entries(page, per_page):
 
 
     return list(map(marshall_page, todo))
+
 def get_todo_entries(page, per_page):
     todo = (models.Page.select()
         .join(
@@ -516,7 +517,7 @@ def get_recent():
     es = []
     for i in range(1, 3):
         entries = get_recent_entries(i, n)
-        entrylisting = get_entry_listing(entries)
+        entrylisting = get_entry_listing(entries, compact=True)
     #        entrylisting.set_delay(i-1)
         es.append(entrylisting)
 
@@ -529,7 +530,7 @@ def get_recent():
     else:
         component = pagelisting
 
-    ret= TodoPage(
+    ret = TodoPage(
             template="todo_page.html",
             entries=es,
             pagelisting=pagelisting,
