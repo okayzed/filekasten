@@ -63,7 +63,7 @@ def make_journal(args, inline=False):
     if newpost.content and newpost.content.strip() != "":
 
         fd, fname = tempfile.mkstemp(dir=JOURNAL_DIR, prefix='post', suffix='cli')
-        f = os.fdopen(fd, "w")
+        f = os.fdopen(fd, "wb")
 
         frontmatter.dump(newpost, f)
         f.close()
